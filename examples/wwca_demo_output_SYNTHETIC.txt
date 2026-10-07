@@ -1,0 +1,165 @@
+=== SYNTHETIC DATA — illustrates the method only ===
+
+Example chain (involvement 0):
+outcome.none
+  end.runway_excursion  <Outcome>
+    crit.loc_ground  <Sequence>
+      act.pilot.directional_control [C]  <Rule>
+        env.wx.wind [F]  <Rule>
+
+QA: 20000 involvements, 0 unmapped rows, 0 inversions, edges by provenance {"Default": 44, "Explicit": 17754, "Outcome": 20000, "Rule": 18989, "Sequence": 22723}
+
+TIER end gran=0
+  N = 20000  (fatal 3792)
+  bucket                                  n incidence [95% CI]   attribution [CI]  fatal%
+  end.collision                       11318  56.6% [55.9,57.3]  37.9% [37.4,38.5]   29.0
+  end.forced_landing                   8316  41.6% [40.9,42.3]  20.8% [20.5,21.1]    9.6
+  end.hard_landing                     2197  11.0% [10.6,11.4]  11.0% [10.6,11.3]    0.0
+  end.runway_excursion                 1980   9.9% [ 9.5,10.3]   9.9% [ 9.4,10.3]    0.3
+  (none at this tier)                  1946   9.7% [ 9.3,10.1]   9.7% [ 9.3,10.1]    0.2
+  end.gear_up                          1117   5.6% [ 5.3, 5.9]   5.6% [ 5.3, 5.9]    0.0
+  end.nose_over                         859   4.3% [ 4.0, 4.6]   2.1% [ 2.0, 2.3]    6.6
+  end.midair                            317   1.6% [ 1.4, 1.8]   1.6% [ 1.4, 1.7]   71.3
+  end.cfit                              266   1.3% [ 1.2, 1.5]   1.3% [ 1.2, 1.5]   80.5
+
+TIER critical gran=0
+  N = 20000  (fatal 3792)
+  bucket                                  n incidence [95% CI]   attribution [CI]  fatal%
+  crit.power_loss.total                7457  37.3% [36.6,38.0]  37.3% [36.6,38.0]    9.9
+  (none at this tier)                  4755  23.8% [23.2,24.4]  23.8% [23.1,24.3]   17.6
+  crit.loc_ground                      3926  19.6% [19.1,20.2]  19.6% [19.1,20.2]    0.2
+  crit.stall_spin                      1895   9.5% [ 9.1, 9.9]   9.5% [ 9.0, 9.9]   62.0
+  crit.power_loss.partial               859   4.3% [ 4.0, 4.6]   4.3% [ 4.0, 4.6]    6.6
+  crit.loc_inflight                    1108   5.5% [ 5.2, 5.9]   2.8% [ 2.6, 2.9]   88.0
+  crit.vfr_into_imc                    1108   5.5% [ 5.2, 5.9]   2.8% [ 2.6, 2.9]   88.0
+
+TIER mechanism+undetermined gran=2
+  N = 20000  (fatal 3792)
+  bucket                                  n incidence [95% CI]   attribution [CI]  fatal%
+  (none at this tier)                  8294  41.5% [40.8,42.2]  41.5% [40.7,42.3]    9.7
+  mech.fuel                            3720  18.6% [18.1,19.1]  18.6% [18.1,19.1]   11.5
+  mech.engine                          3089  15.4% [15.0,16.0]  15.4% [14.9,16.0]    8.6
+  mech.aero                            2397  12.0% [11.5,12.4]  12.0% [11.6,12.5]   55.1
+  mech.spatial_disorientation           993   5.0% [ 4.7, 5.3]   5.0% [ 4.7, 5.2]   87.6
+  mech.induction_icing                  859   4.3% [ 4.0, 4.6]   4.3% [ 4.0, 4.6]    6.6
+  und.not_determined                    648   3.2% [ 3.0, 3.5]   3.2% [ 3.0, 3.5]    6.8
+
+TIER act gran=0
+  N = 20000  (fatal 3792)
+  bucket                                  n incidence [95% CI]   attribution [CI]  fatal%
+  (none at this tier)                  4907  24.5% [23.9,25.1]  24.5% [24.0,25.3]   15.6
+  act.pilot.fuel_mgmt                  3190  16.0% [15.4,16.5]  14.8% [14.3,15.2]   11.6
+  act.pilot.directional_control        3546  17.7% [17.2,18.3]  13.4% [12.9,13.8]    0.3
+  act.pilot.flare_landing              1984   9.9% [ 9.5,10.3]   9.8% [ 9.4,10.2]    0.0
+  act.pilot.airspeed                   1533   7.7% [ 7.3, 8.0]   6.2% [ 5.9, 6.6]   61.4
+  act.pilot.decision                   1516   7.6% [ 7.2, 8.0]   5.5% [ 5.2, 5.8]   58.4
+  act.pilot.wind_comp                  1931   9.7% [ 9.3,10.1]   5.3% [ 5.1, 5.6]    0.2
+  act.maint.improper                    853   4.3% [ 4.0, 4.6]   4.3% [ 4.0, 4.5]    7.6
+  act.pilot.gear                       1006   5.0% [ 4.7, 5.3]   4.2% [ 4.0, 4.5]    0.0
+  act.pilot.carb_heat                   599   3.0% [ 2.8, 3.2]   3.0% [ 2.8, 3.2]    6.5
+  act.pilot.ifr_procedure               485   2.4% [ 2.2, 2.6]   2.4% [ 2.2, 2.6]   80.8
+  act.pilot.low_flight                  734   3.7% [ 3.4, 3.9]   2.2% [ 2.1, 2.4]   65.5
+
+TIER latent gran=0
+  N = 20000  (fatal 3792)
+  bucket                                  n incidence [95% CI]   attribution [CI]  fatal%
+  (none at this tier)                 19169  95.8% [95.6,96.1]  95.8% [95.6,96.1]   17.5
+  latent.pilot.experience               684   3.4% [ 3.2, 3.7]   3.4% [ 3.2, 3.7]   49.7
+  latent.pilot.impairment               147   0.7% [ 0.6, 0.9]   0.7% [ 0.6, 0.9]   65.3
+
+TIER context gran=0
+  N = 20000  (fatal 3792)
+  bucket                                  n incidence [95% CI]   attribution [CI]  fatal%
+  (none at this tier)                 14801  74.0% [73.4,74.6]  74.0% [73.4,74.6]   14.9
+  env.wx.wind                          1941   9.7% [ 9.3,10.1]   9.7% [ 9.3,10.2]    0.3
+  env.wx.imc                           1430   7.1% [ 6.8, 7.5]   6.6% [ 6.3, 7.0]   85.4
+  env.wx.icing                          678   3.4% [ 3.1, 3.6]   3.4% [ 3.1, 3.6]    6.5
+  env.terrain                           519   2.6% [ 2.4, 2.8]   2.6% [ 2.4, 2.8]    9.8
+  env.wx.density_altitude               460   2.3% [ 2.1, 2.5]   2.3% [ 2.1, 2.5]   29.1
+  env.light.dark                        264   1.3% [ 1.2, 1.5]   0.8% [ 0.7, 0.9]   77.3
+  env.traffic                           116   0.6% [ 0.5, 0.7]   0.6% [ 0.5, 0.7]   70.7
+
+WHY of 'crit.power_loss' depth=Direct gran=0 ctx=Include
+  N = 8316  (fatal 796)
+  bucket                                  n incidence [95% CI]   attribution [CI]  fatal%
+  mech.engine.internal                 2409  29.0% [28.0,30.0]  29.0% [28.0,30.0]    8.6
+  mech.fuel.exhaustion                 1976  23.8% [22.9,24.7]  23.8% [22.8,24.8]   12.8
+  mech.fuel.starvation                 1744  21.0% [20.1,21.9]  21.0% [20.0,21.8]   10.0
+  mech.induction_icing                  859  10.3% [ 9.7,11.0]  10.3% [ 9.6,11.0]    6.6
+  mech.engine.undetermined              680   8.2% [ 7.6, 8.8]   8.2% [ 7.6, 8.8]    8.7
+  und.not_determined                    648   7.8% [ 7.2, 8.4]   7.8% [ 7.2, 8.4]    6.8
+
+WHY of 'crit.power_loss' depth=Root gran=0 ctx=Exclude
+  N = 8316  (fatal 796)
+  bucket                                  n incidence [95% CI]   attribution [CI]  fatal%
+  act.pilot.fuel_mgmt                  3028  36.4% [35.4,37.5]  34.2% [33.3,35.3]   11.5
+  mech.engine.internal                 1556  18.7% [17.9,19.6]  18.7% [17.9,19.5]    9.2
+  act.maint.improper                    853  10.3% [ 9.6,10.9]  10.3% [ 9.6,11.0]    7.6
+  mech.engine.undetermined              680   8.2% [ 7.6, 8.8]   8.2% [ 7.6, 8.8]    8.7
+  und.not_determined                    648   7.8% [ 7.2, 8.4]   7.8% [ 7.2, 8.4]    6.8
+  act.pilot.carb_heat                   599   7.2% [ 6.7, 7.8]   7.2% [ 6.7, 7.8]    6.5
+  mech.fuel.starvation                  307   3.7% [ 3.3, 4.1]   3.7% [ 3.3, 4.1]   10.4
+  mech.induction_icing                  260   3.1% [ 2.8, 3.5]   3.1% [ 2.8, 3.5]    6.9
+  act.pilot.decision                    600   7.2% [ 6.7, 7.8]   2.9% [ 2.6, 3.2]   12.3
+  act.pilot.checklist                   198   2.4% [ 2.1, 2.7]   2.4% [ 2.1, 2.7]   12.1
+  mech.fuel.exhaustion                  128   1.5% [ 1.3, 1.8]   1.5% [ 1.3, 1.8]   12.5
+
+WHY of 'mech.fuel' depth=Direct gran=0 ctx=Include
+  N = 3720  (fatal 428)
+  bucket                                  n incidence [95% CI]   attribution [CI]  fatal%
+  act.pilot.fuel_mgmt                  3190  85.8% [84.6,86.8]  80.9% [79.8,82.0]   11.6
+  (none recorded)                       435  11.7% [10.7,12.8]  11.7% [10.7,12.7]   11.0
+  act.pilot.decision                    600  16.1% [15.0,17.3]   6.4% [ 5.9, 7.0]   12.3
+  act.pilot.checklist                    36   1.0% [ 0.7, 1.3]   1.0% [ 0.7, 1.3]    5.6
+
+WHAT from 'act.pilot.decision' depth=Any gran=0
+  N = 1516  (fatal 886)
+  bucket                                  n incidence [95% CI]   attribution [CI]  fatal%
+  end.collision                        1516 100.0% [99.7,100.0]  30.0% [29.8,30.2]   58.4
+  crit.loc_inflight                     916  60.4% [57.9,62.9]  20.1% [19.3,21.0]   88.6
+  crit.vfr_into_imc                     916  60.4% [57.9,62.9]  20.1% [19.3,21.0]   88.6
+  crit.power_loss.total                 600  39.6% [37.1,42.1]   9.9% [ 9.3,10.5]   12.3
+  end.forced_landing                    600  39.6% [37.1,42.1]   9.9% [ 9.3,10.5]   12.3
+  mech.fuel.exhaustion                  600  39.6% [37.1,42.1]   9.9% [ 9.3,10.5]   12.3
+
+WHY of 'outcome' depth=Direct gran=2 ctx=Include
+  N = 3792  (fatal 3792)
+  bucket                                  n incidence [95% CI]   attribution [CI]  fatal%
+  end.collision                        3286  86.7% [85.5,87.7]  86.7% [85.5,87.7]  100.0
+  end.midair                            226   6.0% [ 5.3, 6.8]   6.0% [ 5.2, 6.8]  100.0
+  end.cfit                              214   5.6% [ 5.0, 6.4]   5.6% [ 4.8, 6.4]  100.0
+  end.nose_over                          57   1.5% [ 1.2, 1.9]   1.5% [ 1.1, 1.9]  100.0
+  end.runway_excursion                    5   0.1% [ 0.1, 0.3]   0.1% [ 0.0, 0.2]  100.0
+  crit.loc_ground                         4   0.1% [ 0.0, 0.3]   0.1% [ 0.0, 0.2]  100.0  *low n
+
+LETHALITY (critical tier)
+  crit.power_loss.total        n=  7457 fatal=  9.9% [ 9.3,10.6] lift=0.52
+  crit.loc_ground              n=  3926 fatal=  0.2% [ 0.1, 0.4] lift=0.01
+  crit.stall_spin              n=  1895 fatal= 62.0% [59.7,64.1] lift=3.27
+  crit.loc_inflight            n=  1108 fatal= 88.0% [86.0,89.8] lift=4.64
+  crit.vfr_into_imc            n=  1108 fatal= 88.0% [86.0,89.8] lift=4.64
+  crit.power_loss.partial      n=   859 fatal=  6.6% [ 5.2, 8.5] lift=0.35
+
+TOP CHAIN SIGNATURES (gran 2, context excluded)
+   16.4%  fatal  11.6%  end.collision <- end.forced_landing <- crit.power_loss <- mech.fuel <- act.pilot
+   11.2%  fatal   9.0%  end.collision <- end.forced_landing <- crit.power_loss <- mech.engine
+   10.0%  fatal   0.0%  end.hard_landing <- act.pilot
+    9.3%  fatal   0.2%  crit.loc_ground <- act.pilot
+    8.0%  fatal   0.3%  end.runway_excursion <- crit.loc_ground <- act.pilot
+    5.3%  fatal   0.0%  end.gear_up <- act.pilot
+    4.4%  fatal  59.2%  end.collision <- crit.stall_spin <- mech.aero <- act.pilot
+    4.3%  fatal   7.6%  end.collision <- end.forced_landing <- crit.power_loss <- mech.engine <- act.maint
+    4.0%  fatal  87.5%  end.collision <- crit.loc_inflight <- mech.spatial_disorientation
+    3.6%  fatal  65.7%  end.collision <- crit.stall_spin <- act.pilot
+    3.2%  fatal   6.8%  end.collision <- end.forced_landing <- crit.power_loss <- und.not_determined
+    3.0%  fatal   6.5%  end.nose_over <- end.forced_landing <- crit.power_loss <- mech.induction_icing <- act.pilot
+
+ERA COMPARE: WHY of crit.power_loss (2008+ vs pre-2008)
+  mech.engine.undetermined      16.1% vs   0.0%  q=0.000
+  und.not_determined             0.0% vs  15.8%  q=0.000
+  mech.engine.internal          28.3% vs  29.7%  q=0.324
+  mech.fuel.starvation          21.4% vs  20.6%  q=0.542
+  mech.induction_icing          10.4% vs  10.2%  q=0.890
+  mech.fuel.exhaustion          23.8% vs  23.7%  q=0.915
+
+CSV written to wwca_demo_out

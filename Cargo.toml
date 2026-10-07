@@ -1,0 +1,8 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/aircraft-taxonomy",
+    "crates/causal-chain",
+    "crates/ntsb-fetch",
+    "crates/ntsb-cli",
+]

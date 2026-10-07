@@ -1,0 +1,15 @@
+[package]
+name = "aircraft-taxonomy"
+version = "0.1.0"
+edition = "2021"
+description = "Classify NTSB make/model strings into the fixed-wing aircraft taxonomy (config/aircraft_types.toml)"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+anyhow = "1"
+regex = "1"
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"
+
+[dev-dependencies]
+csv = "1"

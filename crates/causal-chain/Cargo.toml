@@ -1,0 +1,17 @@
+[package]
+name = "causal-chain"
+version = "0.1.0"
+edition = "2021"
+description = "What-Why Chain Analysis (WWCA) over NTSB occurrence/finding data"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+anyhow = "1"
+regex = "1"
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"
+csv = "1"
+
+[[bin]]
+name = "wwca-demo"
+path = "src/bin/wwca_demo.rs"

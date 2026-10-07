@@ -1,0 +1,15 @@
+/target
+/data/raw
+/data/db
+/data/reports
+/data/parquet
+/wwca_demo_out
+__pycache__/
+node_modules/
+/web/dist
+/functions/lib
+.firebase/
+firebase-debug.log
+firestore-debug.log
+.env.local
+/tax_out

@@ -1,0 +1,743 @@
+# Causal node dictionary for What–Why Chain Analysis (WWCA). Starter version 0.1.
+#
+# Every NTSB occurrence / finding row is mapped to ONE canonical node by the first matcher
+# (file order) whose `src` equals the row's source and whose `re` matches the row's text.
+# Rows that match nothing are "unmapped" and appear in the QA report. They are never dropped silently.
+#
+# Node id = dot path. The first segment is the tier family; later segments are finer buckets.
+# Roll-up ("granularity g") = the first g segments of the id.
+#
+# tier       rank  meaning
+# outcome     0    injury outcome of this aircraft (made by the builder; no matchers)
+# end         1    how the flight ended (collision, forced landing, hard landing, nose-over …)
+# critical    2    the critical in-flight / on-ground event (power loss, LOC-I, VFR into IMC …)
+# mechanism   3    physical/technical/physiological state that produced it (fuel starvation, AOA exceeded …)
+# undetermined 3   NTSB explicitly could not determine the cause
+# act         4    a person's action or decision (pilot fuel planning, maintenance error, ATC …)
+# latent      5    underlying condition (experience, training, impairment, organization, oversight)
+# context     6    environment / conditions (weather, light, terrain, wildlife) – may explain any tier
+#
+# explains = node-id prefixes this node can be a WHY of. Used to attach findings that NTSB did not
+# link to a specific occurrence (all 2008+ findings). "" = anything.
+# Attachment order: by rank ascending, then by FILE ORDER within a tier – list the more proximate
+# node first (e.g. act.pilot.decision before act.pilot.wx_planning).
+#
+# Sources: occ08 = avall events_sequence "Phase-Event" description; find08 = avall Findings.finding_description;
+#          occ_pre08 = pre2008 Occurrences decoded text; find_pre08 = pre2008 seq_of_events decoded as
+#          "SUBJECT - MODIFIER - PERSON".
+#
+# !! The regexes were written from NTSB coding conventions, not from today's data. Run `wwca qa unmapped`
+# !! on the real tables and iterate, exactly like the aircraft taxonomy loop.
+
+schema_version = 1
+
+[weights]          # attribution weight by role (spec §5.3)
+sequence = 1.0     # occurrence-derived node
+cause = 1.0        # finding with Cause_Factor = C
+factor = 0.5       # finding with Cause_Factor = F
+finding = 0.25     # finding, neither cause nor factor
+
+# =====================================================================================  OUTCOME
+[[node]]
+id = "outcome.fatal"
+label = "Fatal injury"
+tier = "outcome"
+[[node]]
+id = "outcome.serious"
+label = "Serious injury"
+tier = "outcome"
+[[node]]
+id = "outcome.minor"
+label = "Minor injury"
+tier = "outcome"
+[[node]]
+id = "outcome.none"
+label = "No injury"
+tier = "outcome"
+
+# =====================================================================================  CONTEXT
+# Listed first so their anchored regexes match before broader mechanism/act regexes.
+[[node]]
+id = "env.wx.imc"
+label = "IMC / low ceiling / low visibility"
+tier = "context"
+explains = ["crit.vfr_into_imc", "mech.spatial_disorientation", "end.cfit", "act.pilot.decision"]
+match = [ { src = "find08", re = '(?i)^Environmental issues.*(ceiling|visibility|fog|cloud|obscur|IMC|instrument meteorological)' },
+          { src = "find_pre08", re = '(?i)^WEATHER CONDITION.*(CEILING|FOG|CLOUD|OBSCUR|VISIBILITY|IMC)' } ]
+[[node]]
+id = "env.wx.icing"
+label = "Icing / carb-icing conditions"
+tier = "context"
+explains = ["mech.induction_icing", "mech.icing"]
+match = [ { src = "find08", re = '(?i)^Environmental issues.*(icing|freezing)' },
+          { src = "find_pre08", re = '(?i)^WEATHER CONDITION.*(ICING|FREEZING)' } ]
+[[node]]
+id = "env.wx.density_altitude"
+label = "High density altitude"
+tier = "context"
+explains = ["mech.aero.performance", "act.pilot.performance_planning"]
+match = [ { src = "find08", re = '(?i)^Environmental issues.*density altitude' },
+          { src = "find_pre08", re = '(?i)(DENSITY ALTITUDE|HIGH TEMPERATURE)' } ]
+[[node]]
+id = "env.wx.convective"
+label = "Thunderstorm / turbulence"
+tier = "context"
+explains = ["crit.turbulence", "crit.windshear", "crit.upset", "crit.loc_inflight"]
+match = [ { src = "find08", re = '(?i)^Environmental issues.*(thunderstorm|convective|turbulence)' },
+          { src = "find_pre08", re = '(?i)^WEATHER CONDITION.*(THUNDERSTORM|TURBULENCE)' } ]
+[[node]]
+id = "env.wx.wind"
+label = "Wind / gusts / crosswind / tailwind"
+tier = "context"
+explains = ["act.pilot.wind_comp", "act.pilot.directional_control", "crit.loc_ground", "end.hard_landing", "end.runway_excursion", "crit.loc_inflight"]
+match = [ { src = "find08", re = '(?i)^Environmental issues.*(wind|gust|draft)' },
+          { src = "find_pre08", re = '(?i)^WEATHER CONDITION.*(WIND|GUST|DRAFT)' } ]
+[[node]]
+id = "env.light.dark"
+label = "Dark night / low light"
+tier = "context"
+explains = ["mech.visual", "mech.spatial_disorientation", "end.cfit", "end.collision"]
+match = [ { src = "find08", re = '(?i)^Environmental issues.*(dark|night|light condition)' },
+          { src = "find_pre08", re = '(?i)^LIGHT CONDITION' } ]
+[[node]]
+id = "env.traffic"
+label = "Other aircraft / wake"
+tier = "context"
+explains = ["end.midair", "crit.upset", "end.ground_collision"]
+match = [ { src = "find08", re = '(?i)^Environmental issues.*(other aircraft|wake|traffic)' },
+          { src = "find_pre08", re = '(?i)(OTHER AIRCRAFT|WAKE TURBULENCE)' } ]
+[[node]]
+id = "env.wildlife"
+label = "Bird / wildlife"
+tier = "context"
+explains = ["crit.birdstrike", "end.collision", "crit.loc_ground"]
+match = [ { src = "find08", re = '(?i)^Environmental issues.*(bird|wildlife|deer|elk|coyote|livestock)' },
+          { src = "find_pre08", re = '(?i)(BIRD|ANIMAL|WILDLIFE|DEER)' } ]
+[[node]]
+id = "env.obstacle"
+label = "Wires / towers / obstacles"
+tier = "context"
+explains = ["end.collision", "end"]
+match = [ { src = "find08", re = '(?i)^Environmental issues.*(wire|power line|tower|pole|obstruction|building|fence)' },
+          { src = "find_pre08", re = '(?i)^(OBJECT|WIRE|TOWER|POLE|OBSTRUCTION)' } ]
+[[node]]
+id = "env.runway"
+label = "Runway / surface condition"
+tier = "context"
+explains = ["crit.loc_ground", "end.runway_excursion", "end.nose_over", "mech.brakes"]
+match = [ { src = "find08", re = '(?i)^Environmental issues.*(runway|surface|snow|slush|wet|contamina|grass|soft)' },
+          { src = "find_pre08", re = '(?i)^(AIRPORT FACILITIES|RUNWAY CONDITION|TERRAIN CONDITION.*(SOFT|SNOW|WET|MUD))' } ]
+[[node]]
+id = "env.terrain"
+label = "Terrain / trees / unsuitable landing area"
+tier = "context"
+explains = ["end.forced_landing", "end.collision", "end.nose_over", "end"]
+match = [ { src = "find08", re = '(?i)^Environmental issues.*(terrain|tree|vegetation|rough|uneven|water|mountain)' },
+          { src = "find_pre08", re = '(?i)^TERRAIN CONDITION' } ]
+[[node]]
+id = "env.other"
+label = "Other environmental condition"
+tier = "context"
+explains = [""]
+match = [ { src = "find08", re = '(?i)^Environmental issues' },
+          { src = "find_pre08", re = '(?i)^WEATHER CONDITION' } ]
+
+# =====================================================================================  END (how the flight ended)
+[[node]]
+id = "end.cfit"
+label = "Controlled flight into terrain/object"
+tier = "end"
+explains = ["outcome"]
+match = [ { src = "occ08", re = '(?i)controlled flight into terr' } ]
+[[node]]
+id = "end.midair"
+label = "Midair collision"
+tier = "end"
+explains = ["outcome"]
+match = [ { src = "occ08", re = '(?i)midair' }, { src = "occ_pre08", re = '(?i)MIDAIR' } ]
+[[node]]
+id = "end.forced_landing"
+label = "Off-field / emergency / forced landing"
+tier = "end"
+explains = ["end.collision", "end.nose_over", "end.ditching", "end.hard_landing", "outcome"]
+match = [ { src = "occ08", re = '(?i)off-field or emergency landing|forced landing' }, { src = "occ_pre08", re = '(?i)^FORCED LANDING' } ]
+[[node]]
+id = "end.ditching"
+label = "Ditching"
+tier = "end"
+explains = ["outcome"]
+match = [ { src = "occ08", re = '(?i)ditching' }, { src = "occ_pre08", re = '(?i)DITCHING' } ]
+[[node]]
+id = "end.collision"
+label = "Collision with terrain/object (non-CFIT)"
+tier = "end"
+explains = ["outcome"]
+match = [ { src = "occ08", re = '(?i)collision with terr/obj \(non-CFIT\)|collision with (terrain|object)' },
+          { src = "occ_pre08", re = '(?i)IN ?FLIGHT COLLISION WITH (TERRAIN|WATER|OBJECT)|ON GROUND/WATER (COLLISION WITH OBJECT|ENCOUNTER WITH TERRAIN)' } ]
+[[node]]
+id = "end.ground_collision"
+label = "Ground collision (taxi / parked)"
+tier = "end"
+explains = ["outcome"]
+match = [ { src = "occ08", re = '(?i)ground collision|collision during (taxi|takeoff/land)' } ]
+[[node]]
+id = "end.hard_landing"
+label = "Hard landing"
+tier = "end"
+explains = ["outcome"]
+match = [ { src = "occ08", re = '(?i)hard landing' }, { src = "occ_pre08", re = '(?i)HARD LANDING' } ]
+[[node]]
+id = "end.runway_excursion"
+label = "Runway excursion / overrun / undershoot"
+tier = "end"
+explains = ["outcome"]
+match = [ { src = "occ08", re = '(?i)runway excursion|overrun|undershoot' }, { src = "occ_pre08", re = '(?i)OVERRUN|UNDERSHOOT' } ]
+[[node]]
+id = "end.gear_up"
+label = "Gear-up / gear not configured landing"
+tier = "end"
+explains = ["outcome"]
+match = [ { src = "occ08", re = '(?i)landing gear not configured|gear.?up|wheels.?up' }, { src = "occ_pre08", re = '(?i)(WHEELS|GEAR) UP' } ]
+[[node]]
+id = "end.gear_collapse"
+label = "Landing gear collapse"
+tier = "end"
+explains = ["outcome"]
+match = [ { src = "occ08", re = '(?i)landing gear collapse' }, { src = "occ_pre08", re = '(?i)GEAR COLLAPSE' } ]
+[[node]]
+id = "end.abnormal_runway_contact"
+label = "Abnormal runway contact (tail/prop/wing strike, bounce)"
+tier = "end"
+explains = ["outcome"]
+match = [ { src = "occ08", re = '(?i)abnormal runway contact|tail strike|prop strike' } ]
+[[node]]
+id = "end.nose_over"
+label = "Nose-over / nose-down"
+tier = "end"
+explains = ["outcome"]
+match = [ { src = "occ08", re = '(?i)nose over|nose down' }, { src = "occ_pre08", re = '(?i)NOSE (OVER|DOWN)' } ]
+[[node]]
+id = "end.dragged_wing"
+label = "Dragged wing / float / tail"
+tier = "end"
+explains = ["outcome"]
+match = [ { src = "occ08", re = '(?i)dragged wing' }, { src = "occ_pre08", re = '(?i)DRAGGED WING' } ]
+[[node]]
+id = "end.post_impact_fire"
+label = "Post-impact fire"
+tier = "end"
+explains = ["outcome"]
+match = [ { src = "occ08", re = '(?i)fire/smoke \(post-impact\)' } ]
+
+# =====================================================================================  CRITICAL EVENT
+[[node]]
+id = "crit.power_loss.total"
+label = "Loss of engine power (total)"
+tier = "critical"
+explains = ["end"]
+match = [ { src = "occ08", re = '(?i)loss of engine power \(total\)' },
+          { src = "occ_pre08", re = '(?i)LOSS OF ENGINE POWER\s*\(TOTAL\)|^LOSS OF ENGINE POWER\s*($|-)' } ]
+[[node]]
+id = "crit.power_loss.partial"
+label = "Loss of engine power (partial)"
+tier = "critical"
+explains = ["end"]
+match = [ { src = "occ08", re = '(?i)loss of engine power \(partial\)' }, { src = "occ_pre08", re = '(?i)LOSS OF ENGINE POWER\s*\(PARTIAL\)' } ]
+[[node]]
+id = "crit.vfr_into_imc"
+label = "VFR encounter with IMC"
+tier = "critical"
+explains = ["crit.loc_inflight", "end.cfit", "end"]
+match = [ { src = "occ08", re = '(?i)VFR encounter with IMC' }, { src = "occ_pre08", re = '(?i)VFR (FLIGHT )?INTO IMC' } ]
+[[node]]
+id = "crit.stall_spin"
+label = "Aerodynamic stall / spin"
+tier = "critical"
+explains = ["crit.loc_inflight", "end"]
+match = [ { src = "occ08", re = '(?i)aerodynamic stall|stall/spin' }, { src = "occ_pre08", re = '(?i)^STALL|SPIN' } ]
+[[node]]
+id = "crit.loc_inflight"
+label = "Loss of control in flight"
+tier = "critical"
+explains = ["end"]
+match = [ { src = "occ08", re = '(?i)loss of control in flight' }, { src = "occ_pre08", re = '(?i)LOSS OF CONTROL\s*-\s*IN FLIGHT' } ]
+[[node]]
+id = "crit.loc_ground"
+label = "Loss of control on ground"
+tier = "critical"
+explains = ["end"]
+match = [ { src = "occ08", re = '(?i)loss of control on ground' }, { src = "occ_pre08", re = '(?i)LOSS OF CONTROL\s*-\s*ON GROUND|GROUND LOOP|SWERVE' } ]
+[[node]]
+id = "crit.upset"
+label = "Inflight upset"
+tier = "critical"
+explains = ["crit.loc_inflight", "end"]
+match = [ { src = "occ08", re = '(?i)inflight upset' } ]
+[[node]]
+id = "crit.windshear"
+label = "Windshear / thunderstorm encounter"
+tier = "critical"
+explains = ["crit.loc_inflight", "end"]
+match = [ { src = "occ08", re = '(?i)windshear|thunderstorm' }, { src = "occ_pre08", re = '(?i)WINDSHEAR' } ]
+[[node]]
+id = "crit.turbulence"
+label = "Turbulence encounter"
+tier = "critical"
+explains = ["crit.loc_inflight", "end"]
+match = [ { src = "occ08", re = '(?i)turbulence encounter' }, { src = "occ_pre08", re = '(?i)TURBULENCE' } ]
+[[node]]
+id = "crit.structural"
+label = "Part separation / structural failure in flight"
+tier = "critical"
+explains = ["crit.loc_inflight", "end"]
+match = [ { src = "occ08", re = '(?i)part\(s\) separation|structural failure|in-?flight breakup' } ]
+[[node]]
+id = "crit.sys_failure"
+label = "System / component failure (non-powerplant)"
+tier = "critical"
+explains = ["end", "crit.loc_inflight"]
+match = [ { src = "occ08", re = '(?i)sys/comp malf/fail|system/component malfunction' },
+          { src = "occ_pre08", re = '(?i)AIRFRAME/COMPONENT/SYSTEM FAILURE' } ]
+[[node]]
+id = "crit.fire_inflight"
+label = "Fire / smoke (non-impact)"
+tier = "critical"
+explains = ["end", "crit.loc_inflight"]
+match = [ { src = "occ08", re = '(?i)fire/smoke \(non-impact\)' }, { src = "occ_pre08", re = '(?i)^FIRE' } ]
+[[node]]
+id = "crit.birdstrike"
+label = "Bird / wildlife strike or encounter"
+tier = "critical"
+explains = ["end", "crit.power_loss"]
+match = [ { src = "occ08", re = '(?i)bird|wildlife' }, { src = "occ_pre08", re = '(?i)BIRD|ANIMAL' } ]
+[[node]]
+id = "crit.low_alt"
+label = "Low altitude operation / event"
+tier = "critical"
+explains = ["end"]
+match = [ { src = "occ08", re = '(?i)low altitude operation' } ]
+[[node]]
+id = "crit.other"
+label = "Miscellaneous / other occurrence"
+tier = "critical"
+explains = ["end"]
+match = [ { src = "occ08", re = '(?i)-(miscellaneous/other|other)$' }, { src = "occ_pre08", re = '(?i)MISCELLANEOUS' } ]
+
+# =====================================================================================  MECHANISM
+[[node]]
+id = "mech.fuel.starvation"
+label = "Fuel starvation (fuel on board, not reaching engine)"
+tier = "mechanism"
+explains = ["crit.power_loss"]
+match = [ { src = "occ08", re = '(?i)fuel starvation' }, { src = "find08", re = '(?i)^Aircraft-.*fuel.*starvation|^Aircraft-.*starvation' },
+          { src = "find_pre08", re = '(?i)^FLUID,\s*FUEL\s*-\s*STARVATION|FUEL STARVATION' } ]
+[[node]]
+id = "mech.fuel.exhaustion"
+label = "Fuel exhaustion (no usable fuel)"
+tier = "mechanism"
+explains = ["crit.power_loss"]
+match = [ { src = "occ08", re = '(?i)fuel exhaustion' }, { src = "find08", re = '(?i)^Aircraft-.*fuel.*(exhaustion|fluid level)' },
+          { src = "find_pre08", re = '(?i)^FLUID,\s*FUEL\s*-\s*EXHAUSTION|FUEL EXHAUSTION' } ]
+[[node]]
+id = "mech.fuel.contamination"
+label = "Fuel contamination / wrong fuel"
+tier = "mechanism"
+explains = ["crit.power_loss"]
+match = [ { src = "occ08", re = '(?i)fuel contamination' }, { src = "find08", re = '(?i)^Aircraft-.*fuel.*(contamina|water|incorrect|wrong)' },
+          { src = "find_pre08", re = '(?i)^FLUID,\s*FUEL\s*-\s*(CONTAMINA|WATER|IMPROPER GRADE)' } ]
+[[node]]
+id = "mech.fuel.other"
+label = "Other fuel-related condition"
+tier = "mechanism"
+explains = ["crit.power_loss"]
+match = [ { src = "occ08", re = '(?i)fuel related' } ]
+[[node]]
+id = "mech.induction_icing"
+label = "Carburetor / induction icing"
+tier = "mechanism"
+explains = ["crit.power_loss"]
+match = [ { src = "find08", re = '(?i)^Aircraft-.*(carb\w* ic(e|ing)|induction.*ic(e|ing))' },
+          { src = "find_pre08", re = '(?i)^CARBURETOR ICE|INDUCTION.*ICE' } ]
+[[node]]
+id = "mech.engine.undetermined"
+label = "Engine power loss, reason not determined"
+tier = "mechanism"
+explains = ["crit.power_loss"]
+match = [ { src = "find08", re = '(?i)^Aircraft-.*(power ?plant|engine).*(unknown|not determined)' } ]
+[[node]]
+id = "mech.engine.oil"
+label = "Oil starvation / lubrication failure"
+tier = "mechanism"
+explains = ["crit.power_loss", "crit.fire_inflight"]
+match = [ { src = "find08", re = '(?i)^Aircraft-.*(\boil\b|lubrica)' }, { src = "find_pre08", re = '(?i)^(FLUID,\s*OIL|LUBRICATING SYSTEM|OIL)' } ]
+[[node]]
+id = "mech.engine.ignition"
+label = "Ignition system (magneto, plugs, harness)"
+tier = "mechanism"
+explains = ["crit.power_loss"]
+match = [ { src = "find08", re = '(?i)^Aircraft-.*(ignition|magneto|spark plug)' }, { src = "find_pre08", re = '(?i)^(IGNITION|MAGNETO|SPARK PLUG)' } ]
+[[node]]
+id = "mech.engine.fuel_system"
+label = "Engine fuel system component (pump, servo, carb, lines)"
+tier = "mechanism"
+explains = ["crit.power_loss", "mech.fuel"]
+match = [ { src = "find08", re = '(?i)^Aircraft-.*(fuel (pump|line|servo|injector|control|distribution|system)|carburetor)' },
+          { src = "find_pre08", re = '(?i)^(FUEL SYSTEM|FUEL PUMP|FUEL LINE|FUEL INJECT|CARBURETOR,|CARBURETOR ASSEMBLY)' } ]
+[[node]]
+id = "mech.engine.turbine"
+label = "Turbine engine failure (compressor, turbine, FCU)"
+tier = "mechanism"
+explains = ["crit.power_loss", "crit.fire_inflight"]
+match = [ { src = "find08", re = '(?i)^Aircraft-.*(turbine|compressor|gas generator|turboprop|turbofan)' },
+          { src = "find_pre08", re = '(?i)^(TURBINE|COMPRESSOR)' } ]
+[[node]]
+id = "mech.engine.internal"
+label = "Reciprocating engine internal failure (crank, rod, cylinder, valve)"
+tier = "mechanism"
+explains = ["crit.power_loss", "crit.fire_inflight"]
+match = [ { src = "find08", re = '(?i)^Aircraft-.*(power section|crankshaft|connecting rod|cylinder|piston|valve|camshaft|bearing|crankcase|turbocharger)' },
+          { src = "find_pre08", re = '(?i)^(ENGINE ASSEMBLY|ENGINE,|CRANKSHAFT|CONNECTING ROD|CYLINDER|PISTON|VALVE|TURBOCHARGER)' } ]
+[[node]]
+id = "mech.prop"
+label = "Propeller / prop governor failure"
+tier = "mechanism"
+explains = ["crit.power_loss", "crit.sys_failure", "crit.structural"]
+match = [ { src = "find08", re = '(?i)^Aircraft-.*(propeller|prop governor)' }, { src = "find_pre08", re = '(?i)^PROPELLER' } ]
+[[node]]
+id = "mech.engine.other"
+label = "Other powerplant condition"
+tier = "mechanism"
+explains = ["crit.power_loss", "crit.fire_inflight"]
+match = [ { src = "find08", re = '(?i)^Aircraft-.*(power ?plant|engine)' }, { src = "find_pre08", re = '(?i)^ENGINE' } ]
+[[node]]
+id = "mech.aero.aoa_exceeded"
+label = "Critical angle of attack exceeded"
+tier = "mechanism"
+explains = ["crit.stall_spin", "crit.loc_inflight"]
+match = [ { src = "find08", re = '(?i)angle of attack' }, { src = "find_pre08", re = '(?i)^STALL' } ]
+[[node]]
+id = "mech.aero.performance"
+label = "Climb / takeoff performance not attained"
+tier = "mechanism"
+explains = ["end.collision", "crit.stall_spin", "crit.loc_inflight", "end.runway_excursion"]
+match = [ { src = "find08", re = '(?i)^Aircraft-.*(climb (rate|capability|performance)|takeoff (performance|distance)|performance.*not (attained|maintained))' },
+          { src = "find_pre08", re = '(?i)^(CLIMB|AIRCRAFT PERFORMANCE)' } ]
+[[node]]
+id = "mech.wb.cg_weight"
+label = "Weight / CG out of limits"
+tier = "mechanism"
+explains = ["mech.aero", "crit.loc_inflight", "crit.stall_spin"]
+match = [ { src = "find08", re = '(?i)^Aircraft-.*(weight|balance|center of gravity)' } ]
+[[node]]
+id = "mech.icing"
+label = "Airframe / structural icing"
+tier = "mechanism"
+explains = ["crit.loc_inflight", "crit.stall_spin", "mech.aero"]
+match = [ { src = "find08", re = '(?i)^Aircraft-.*(structural|airframe|wing|tail).*ic(e|ing)' }, { src = "find_pre08", re = '(?i)^(AIRFRAME|STRUCTURAL) IC' } ]
+[[node]]
+id = "mech.spatial_disorientation"
+label = "Spatial disorientation"
+tier = "mechanism"
+explains = ["crit.loc_inflight", "end.cfit", "crit.upset"]
+match = [ { src = "find08", re = '(?i)spatial disorientation' }, { src = "find_pre08", re = '(?i)SPATIAL DISORIENTATION' } ]
+[[node]]
+id = "mech.visual.illusion"
+label = "Visual illusion / flat light / whiteout"
+tier = "mechanism"
+explains = ["end.cfit", "end.collision", "end.hard_landing", "crit.loc_inflight"]
+match = [ { src = "find08", re = '(?i)illusion|flat light|whiteout|glassy water' }, { src = "find_pre08", re = '(?i)ILLUSION|FLAT LIGHT|WHITEOUT|GLASSY WATER' } ]
+[[node]]
+id = "mech.control_system"
+label = "Flight control system failure / jam"
+tier = "mechanism"
+explains = ["crit.loc_inflight", "crit.sys_failure", "crit.loc_ground"]
+match = [ { src = "find08", re = '(?i)^Aircraft-.*(flight control|aileron|elevator|rudder|trim|stabilator)' },
+          { src = "find_pre08", re = '(?i)^(FLIGHT CONTROL|FLT CONTROL|AILERON|ELEVATOR|RUDDER|TRIM)' } ]
+[[node]]
+id = "mech.gear_system"
+label = "Landing gear system failure"
+tier = "mechanism"
+explains = ["end.gear_collapse", "end.gear_up", "end.abnormal_runway_contact", "crit.sys_failure", "crit.loc_ground"]
+match = [ { src = "find08", re = '(?i)^Aircraft-.*(landing gear|gear (actuator|extension|retraction))' }, { src = "find_pre08", re = '(?i)^(LANDING GEAR|MAIN GEAR|NOSE GEAR)[, ].*-\s*(FAIL|MALF|COLLAPS|FATIGUE|FRACT|INOP|BROKE|SEPARAT|CORRO|DISCONN|BINDING)' } ]
+[[node]]
+id = "mech.brakes"
+label = "Brake / tire / steering failure"
+tier = "mechanism"
+explains = ["crit.loc_ground", "end.runway_excursion"]
+match = [ { src = "find08", re = '(?i)^Aircraft-.*(brake|tire|nosewheel steering|steering)' }, { src = "find_pre08", re = '(?i)^(BRAKE|TIRE|NOSE WHEEL STEERING)' } ]
+[[node]]
+id = "mech.structure"
+label = "Structural fatigue / corrosion / overload failure"
+tier = "mechanism"
+explains = ["crit.structural", "crit.sys_failure", "end.gear_collapse"]
+match = [ { src = "find08", re = '(?i)^Aircraft-.*(fatigue|corrosion|spar|fitting|structure|attach)' }, { src = "find_pre08", re = '(?i)^(AIRFRAME|WING|SPAR|FUSELAGE|STABILIZER|ATTACH|STRUCTURE)|-\s*(FATIGUE|CORROSION)\b' } ]
+[[node]]
+id = "mech.instrument"
+label = "Flight instrument / vacuum / pitot-static failure"
+tier = "mechanism"
+explains = ["mech.spatial_disorientation", "crit.loc_inflight", "crit.sys_failure"]
+match = [ { src = "find08", re = '(?i)^Aircraft-.*(attitude indicator|vacuum|gyro|pitot|static|instrument)' },
+          { src = "find_pre08", re = '(?i)^(ATTITUDE|VACUUM|GYRO|PITOT|FLIGHT INSTRUMENT)' } ]
+[[node]]
+id = "mech.electrical"
+label = "Electrical system failure"
+tier = "mechanism"
+explains = ["crit.sys_failure", "mech.instrument", "crit.fire_inflight"]
+match = [ { src = "find08", re = '(?i)^Aircraft-.*(electrical|alternator|generator|battery)' }, { src = "find_pre08", re = '(?i)^(ELECTRICAL|ALTERNATOR|GENERATOR|BATTERY)' } ]
+[[node]]
+id = "mech.aircraft_other"
+label = "Other aircraft system condition"
+tier = "mechanism"
+explains = ["crit", "end"]
+match = [ { src = "find08", re = '(?i)^Aircraft-(Aircraft structures|Aircraft systems|Fluids|Aircraft oper)' } ]
+
+# =====================================================================================  UNDETERMINED
+[[node]]
+id = "und.not_determined"
+label = "Not determined"
+tier = "undetermined"
+explains = [""]
+match = [ { src = "find08", re = '(?i)^Not determined' }, { src = "occ08", re = '(?i)unknown or undetermined' },
+          { src = "find_pre08", re = '(?i)UNDETERMINED|REASON FOR OCCURRENCE' }, { src = "occ_pre08", re = '(?i)UNDETERMINED' } ]
+
+# =====================================================================================  ACT (pilot – most proximate first)
+[[node]]
+id = "act.pilot.fuel_mgmt"
+label = "Pilot fuel management / planning / tank selection"
+tier = "act"
+explains = ["mech.fuel", "crit.power_loss"]
+match = [ { src = "find08", re = '(?i)^Personnel issues.*(fuel|fluid management|fluid level|tank selector)' },
+          { src = "find_pre08", re = '(?i)^(FUEL TANK SELECTOR|FUEL SUPPLY|FUEL MANAGEMENT|FUEL CONSUMPTION|REFUELING|FLUID,\s*FUEL\s*-\s*(MISMANAG|INADEQUATE))' } ]
+[[node]]
+id = "act.pilot.carb_heat"
+label = "Pilot carb heat use"
+tier = "act"
+explains = ["mech.induction_icing", "crit.power_loss"]
+match = [ { src = "find08", re = '(?i)^Personnel issues.*carb\w* heat' }, { src = "find_pre08", re = '(?i)^CARBURETOR HEAT' } ]
+[[node]]
+id = "act.pilot.mixture"
+label = "Pilot mixture / power management"
+tier = "act"
+explains = ["crit.power_loss", "mech.engine"]
+match = [ { src = "find08", re = '(?i)^Personnel issues.*(mixture|power (setting|management)|throttle)' }, { src = "find_pre08", re = '(?i)^(MIXTURE|THROTTLE|POWER)' } ]
+[[node]]
+id = "act.pilot.airspeed"
+label = "Pilot did not maintain airspeed"
+tier = "act"
+explains = ["mech.aero.aoa_exceeded", "crit.stall_spin", "crit.loc_inflight", "end.hard_landing"]
+match = [ { src = "find08", re = '(?i)airspeed' }, { src = "find_pre08", re = '(?i)^AIRSPEED' } ]
+[[node]]
+id = "act.pilot.directional_control"
+label = "Pilot directional control"
+tier = "act"
+explains = ["crit.loc_ground", "end.runway_excursion", "end.nose_over", "end.gear_collapse", "end.dragged_wing"]
+match = [ { src = "find08", re = '(?i)directional control' }, { src = "find_pre08", re = '(?i)^DIRECTIONAL CONTROL' } ]
+[[node]]
+id = "act.pilot.wind_comp"
+label = "Pilot wind / crosswind compensation"
+tier = "act"
+explains = ["crit.loc_ground", "end.hard_landing", "end.runway_excursion", "crit.loc_inflight", "end.dragged_wing"]
+match = [ { src = "find08", re = '(?i)^Personnel issues.*(crosswind|wind (compensation|correction))' }, { src = "find_pre08", re = '(?i)^(COMPENSATION FOR WIND|CROSSWIND)' } ]
+[[node]]
+id = "act.pilot.flare_landing"
+label = "Pilot flare / landing technique"
+tier = "act"
+explains = ["end.hard_landing", "end.nose_over", "end.gear_collapse", "crit.loc_ground", "end.runway_excursion", "end.abnormal_runway_contact"]
+match = [ { src = "find08", re = '(?i)^Personnel issues.*(flare|landing technique|touchdown|bounced)' }, { src = "find_pre08", re = '(?i)^(FLARE|TOUCHDOWN|PROPER TOUCHDOWN POINT|RECOVERY FROM BOUNCED LANDING|LANDING TECHNIQUE)' } ]
+[[node]]
+id = "act.pilot.gear"
+label = "Pilot gear extension / gear handling"
+tier = "act"
+explains = ["end.gear_up", "end.abnormal_runway_contact", "end.gear_collapse"]
+match = [ { src = "find08", re = '(?i)^Personnel issues.*(landing gear|gear (extension|position|handle|selector))' }, { src = "find_pre08", re = '(?i)^(LANDING GEAR|GEAR) (EXTENSION|HANDLE|SELECTOR|POSITION)' } ]
+[[node]]
+id = "act.pilot.ifr_procedure"
+label = "Pilot IFR / instrument approach procedure"
+tier = "act"
+explains = ["end.cfit", "end.collision", "crit.loc_inflight"]
+match = [ { src = "find08", re = '(?i)(instrument|IFR) (approach|procedure)|minimum descent|decision altitude|descended below' },
+          { src = "find_pre08", re = '(?i)^(IFR PROCEDURE|INSTRUMENT APPROACH|MINIMUM DESCENT ALTITUDE|DECISION HEIGHT)' } ]
+[[node]]
+id = "act.pilot.approach"
+label = "Pilot approach (unstabilized / improper planned approach)"
+tier = "act"
+explains = ["end.hard_landing", "end.runway_excursion", "end.collision", "end.cfit", "crit.stall_spin"]
+match = [ { src = "find08", re = '(?i)^Personnel issues.*(approach|glidepath|descent rate)' }, { src = "find_pre08", re = '(?i)^(PLANNED APPROACH|STABILIZED APPROACH|DESCENT)' } ]
+[[node]]
+id = "act.pilot.go_around"
+label = "Pilot go-around / rejected landing decision"
+tier = "act"
+explains = ["end.runway_excursion", "end.collision", "crit.stall_spin", "end.hard_landing"]
+match = [ { src = "find08", re = '(?i)go-?around|aborted landing|rejected' }, { src = "find_pre08", re = '(?i)^(GO-?AROUND|ABORTED)' } ]
+[[node]]
+id = "act.pilot.takeoff_tech"
+label = "Pilot takeoff technique"
+tier = "act"
+explains = ["crit.loc_ground", "crit.stall_spin", "end.runway_excursion", "end.collision"]
+match = [ { src = "find08", re = '(?i)^Personnel issues.*(takeoff|rotation|lift-?off)' }, { src = "find_pre08", re = '(?i)^(TAKEOFF|ROTATION|LIFT-?OFF)' } ]
+[[node]]
+id = "act.pilot.low_flight"
+label = "Pilot intentional low flight / maneuvering"
+tier = "act"
+explains = ["end.collision", "end.cfit", "crit.stall_spin", "crit.loc_inflight"]
+match = [ { src = "find08", re = '(?i)low (altitude )?(flight|maneuver|pass)|buzz' }, { src = "find_pre08", re = '(?i)^LOW (ALTITUDE )?(FLIGHT|PASS)|BUZZING|MANEUVER' } ]
+[[node]]
+id = "act.pilot.altitude_clearance"
+label = "Pilot altitude / terrain or obstacle clearance"
+tier = "act"
+explains = ["end.collision", "end.cfit"]
+match = [ { src = "find08", re = '(?i)^Personnel issues.*(altitude|clearance)' }, { src = "find_pre08", re = '(?i)^(ALTITUDE|CLEARANCE|OBSTACLE CLEARANCE)' } ]
+[[node]]
+id = "act.pilot.lookout"
+label = "Pilot visual lookout / see-and-avoid"
+tier = "act"
+explains = ["end.midair", "end.collision", "end.ground_collision"]
+match = [ { src = "find08", re = '(?i)lookout|see and avoid|visual search|monitoring environment' }, { src = "find_pre08", re = '(?i)^VISUAL LOOKOUT|SEE AND AVOID' } ]
+[[node]]
+id = "act.pilot.emergency_proc"
+label = "Pilot emergency procedure / forced-landing technique"
+tier = "act"
+explains = ["end.forced_landing", "end.collision", "crit.stall_spin", "end.ditching"]
+match = [ { src = "find08", re = '(?i)^Personnel issues.*(emergency procedure|forced landing|landing (site|area) selection)' }, { src = "find_pre08", re = '(?i)^(EMERGENCY PROCEDURE|FORCED LANDING|PROPER ALIGNMENT|SELECTION OF)' } ]
+[[node]]
+id = "act.pilot.aircraft_control"
+label = "Pilot aircraft control (general)"
+tier = "act"
+explains = ["crit.loc_inflight", "crit.loc_ground", "crit.stall_spin", "end.hard_landing", "end"]
+match = [ { src = "find08", re = '(?i)aircraft control' }, { src = "find_pre08", re = '(?i)^(AIRCRAFT CONTROL|CONTROL)\b' } ]
+[[node]]
+id = "act.pilot.decision"
+label = "Pilot decision-making / continued VFR into adverse weather"
+tier = "act"
+explains = ["crit.vfr_into_imc", "end.cfit", "crit.loc_inflight", "crit.windshear", "crit.turbulence", "mech.icing", "mech.fuel", "act.pilot.low_flight", "end"]
+match = [ { src = "find08", re = '(?i)decision making|judgment|continued (VFR|flight)|flight into (IMC|adverse)' },
+          { src = "find_pre08", re = '(?i)^(VFR FLIGHT INTO IMC|IN-?FLIGHT PLANNING/DECISION|FLIGHT INTO (KNOWN )?ADVERSE WEATHER|CONTINUED|JUDGMENT)' } ]
+[[node]]
+id = "act.pilot.wx_planning"
+label = "Pilot weather evaluation / briefing"
+tier = "act"
+explains = ["act.pilot.decision", "crit.vfr_into_imc", "mech.icing", "crit.turbulence", "crit.windshear", "mech.spatial_disorientation"]
+match = [ { src = "find08", re = '(?i)^Personnel issues.*weather' }, { src = "find_pre08", re = '(?i)^(WEATHER EVALUATION|WEATHER BRIEFING|INADEQUATE WEATHER)' } ]
+[[node]]
+id = "act.pilot.performance_planning"
+label = "Pilot performance / density altitude planning"
+tier = "act"
+explains = ["mech.aero.performance", "end.runway_excursion", "end.collision"]
+match = [ { src = "find08", re = '(?i)^Personnel issues.*(performance (calc|plan|data|chart)|density altitude|runway length|takeoff distance)' }, { src = "find_pre08", re = '(?i)^(AIRCRAFT PERFORMANCE|PERFORMANCE)' } ]
+[[node]]
+id = "act.pilot.wb_planning"
+label = "Pilot weight & balance / loading"
+tier = "act"
+explains = ["mech.wb", "mech.aero.performance", "crit.loc_inflight"]
+match = [ { src = "find08", re = '(?i)^Personnel issues.*(weight|balance|loading|center of gravity)' }, { src = "find_pre08", re = '(?i)^(AIRCRAFT WEIGHT|WEIGHT AND BALANCE|AIRCRAFT LOADING)' } ]
+[[node]]
+id = "act.pilot.checklist"
+label = "Pilot checklist use"
+tier = "act"
+explains = ["act.pilot", "mech.fuel", "end.gear_up", "crit.power_loss"]
+match = [ { src = "find08", re = '(?i)checklist' }, { src = "find_pre08", re = '(?i)CHECKLIST' } ]
+[[node]]
+id = "act.pilot.preflight"
+label = "Pilot preflight inspection / preparation"
+tier = "act"
+explains = ["mech.fuel", "mech.engine", "mech.icing", "mech.wb", "mech.control_system", "crit"]
+match = [ { src = "find08", re = '(?i)pre-?flight|planning/preparation' }, { src = "find_pre08", re = '(?i)PREFLIGHT' } ]
+[[node]]
+id = "act.instructor"
+label = "Flight instructor supervision / remedial action"
+tier = "act"
+explains = ["act.pilot", "crit", "end"]
+match = [ { src = "find08", re = '(?i)instructor|supervision|remedial' }, { src = "find_pre08", re = '(?i)(SUPERVISION|REMEDIAL ACTION|FLIGHT INSTRUCTOR|CFI)' } ]
+[[node]]
+id = "act.maint.improper"
+label = "Maintenance / inspection error"
+tier = "act"
+explains = ["mech", "crit.power_loss", "crit.sys_failure"]
+match = [ { src = "find08", re = '(?i)maintenance|mechanic|installation|inspection|repair station' },
+          { src = "find_pre08", re = '(?i)(MAINTENANCE|INSPECTION|INSTALLATION|MECHANIC|OVERHAUL|REPAIR)' } ]
+[[node]]
+id = "act.atc"
+label = "Air traffic control"
+tier = "act"
+explains = ["end.midair", "end.cfit", "crit.vfr_into_imc", "end.collision", "end.ground_collision"]
+match = [ { src = "find08", re = '(?i)\bATC\b|air traffic|controller' }, { src = "find_pre08", re = '(?i)(ATC PERSONNEL|AIR TRAFFIC|CONTROLLER)' } ]
+[[node]]
+id = "act.ground_ops"
+label = "Ground / fueling / line personnel"
+tier = "act"
+explains = ["mech.fuel.contamination", "end.ground_collision", "mech"]
+match = [ { src = "find08", re = '(?i)ground (crew|personnel)|line service|fuel(ing|er) personnel|ramp' }, { src = "find_pre08", re = '(?i)(GROUND PERSONNEL|LINE PERSONNEL|FUELING PERSONNEL)' } ]
+[[node]]
+id = "act.design_mfg"
+label = "Design / manufacturing / certification deficiency"
+tier = "act"
+explains = ["mech"]
+match = [ { src = "find08", re = '(?i)(design|manufactur|certification)' }, { src = "find_pre08", re = '(?i)(DESIGN|MANUFACTUR)' } ]
+
+# =====================================================================================  LATENT
+[[node]]
+id = "latent.pilot.impairment"
+label = "Pilot impairment (alcohol / drugs / medication)"
+tier = "latent"
+explains = ["act.pilot", "mech.spatial_disorientation", "crit.loc_inflight"]
+match = [ { src = "find08", re = '(?i)alcohol|drug|impair|medication|toxicolog' }, { src = "find_pre08", re = '(?i)(ALCOHOL|DRUG|IMPAIRED|MEDICATION)' } ]
+[[node]]
+id = "latent.pilot.incapacitation"
+label = "Pilot medical incapacitation"
+tier = "latent"
+explains = ["crit.loc_inflight", "end", "act.pilot"]
+match = [ { src = "find08", re = '(?i)incapacitat|cardiac|heart|stroke|seizure|medical (condition|event)' }, { src = "find_pre08", re = '(?i)(INCAPACITAT|CARDIAC|HEART|PHYSICAL IMPAIRMENT)' } ]
+[[node]]
+id = "latent.pilot.fatigue"
+label = "Pilot fatigue"
+tier = "latent"
+explains = ["act.pilot"]
+match = [ { src = "find08", re = '(?i)^Personnel issues.*(fatigue|sleep|alertness)' }, { src = "find_pre08", re = '(?i)^(FATIGUE|SLEEP)' } ]
+[[node]]
+id = "latent.pilot.experience"
+label = "Pilot lack of experience / recency"
+tier = "latent"
+explains = ["act.pilot", "mech.spatial_disorientation"]
+match = [ { src = "find08", re = '(?i)experience|recency|recent' }, { src = "find_pre08", re = '(?i)(EXPERIENCE|LACK OF (RECENT|TOTAL)|INEXPERIENCE)' } ]
+[[node]]
+id = "latent.pilot.training"
+label = "Pilot training / proficiency"
+tier = "latent"
+explains = ["act.pilot", "mech.spatial_disorientation"]
+match = [ { src = "find08", re = '(?i)training|proficiency|knowledge' }, { src = "find_pre08", re = '(?i)(TRAINING|PROFICIENCY|KNOWLEDGE)' } ]
+[[node]]
+id = "latent.pilot.attitude"
+label = "Complacency / self-induced pressure / attitude"
+tier = "latent"
+explains = ["act.pilot.decision", "act.pilot"]
+match = [ { src = "find08", re = '(?i)complacen|pressure|overconfiden|attitude|motivation' }, { src = "find_pre08", re = '(?i)(COMPLACEN|PRESSURE|OVERCONFIDEN|DISREGARD)' } ]
+[[node]]
+id = "latent.pilot.qualification"
+label = "Pilot not certificated / rated / current"
+tier = "latent"
+explains = ["act.pilot"]
+match = [ { src = "find08", re = '(?i)(not|un)(certificated|rated|current)|expired|without (a )?valid|qualification' }, { src = "find_pre08", re = '(?i)(NOT CERTIFICATED|NOT RATED|NOT CURRENT|EXPIRED)' } ]
+[[node]]
+id = "latent.org.operator"
+label = "Operator procedures / management / safety program"
+tier = "latent"
+explains = ["act", "latent.pilot"]
+match = [ { src = "find08", re = '(?i)^Organizational issues' }, { src = "find_pre08", re = '(?i)(COMPANY|OPERATOR|MANAGEMENT|POLICY)' } ]
+[[node]]
+id = "latent.reg.oversight"
+label = "Regulatory oversight (FAA)"
+tier = "latent"
+explains = ["latent.org", "act.maint"]
+match = [ { src = "find08", re = '(?i)FAA|oversight|surveillance|regulat' }, { src = "find_pre08", re = '(?i)(FAA|SURVEILLANCE|OVERSIGHT)' } ]
+[[node]]
+id = "act.pilot.other"
+label = "Other pilot action"
+tier = "act"
+explains = ["crit", "end", "mech"]
+match = [ { src = "find08", re = '(?i)^Personnel issues.*pilot' }, { src = "find_pre08", re = '(?i)PILOT IN COMMAND|\bPILOT\b' } ]
+[[node]]
+id = "act.other"
+label = "Other personnel action"
+tier = "act"
+explains = ["crit", "end", "mech"]
+match = [ { src = "find08", re = '(?i)^Personnel issues' } ]

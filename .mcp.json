@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "fra-portal": {
+      "type": "http",
+      "url": "https://fra-portal.web.app/mcp",
+      "headers": {
+        "Authorization": "Bearer ${FRA_MCP_TOKEN}"
+      }
+    }
+  }
+}

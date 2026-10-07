@@ -1,0 +1,423 @@
+class_id,class_name,family_id,family_name,variant_id,variant_name,resolved_class_id,engines,propulsion,gear,gear_config,wing
+sep_fixed,"Single-engine piston, fixed tricycle gear",beech_77,Beech 77 Skipper,,,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",beech_musketeer,Beech Musketeer / Sport / Sundowner / Sierra (19/23/24),sierra,24R / A24R / B24R Sierra,sep_retract,1,piston,retract,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",beech_musketeer,Beech Musketeer / Sport / Sundowner / Sierra (19/23/24),sundowner,C23 Sundowner / 23 / A23 Musketeer,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",beech_musketeer,Beech Musketeer / Sport / Sundowner / Sierra (19/23/24),sport,19 / B19 Sport,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_150_152,Cessna 150/152,aerobat,A150/A152 Aerobat,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_150_152,Cessna 150/152,c150,150,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_150_152,Cessna 150/152,c152,152,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_172,Cessna 172 Skyhawk,c172rg,172RG Cutlass RG,sep_retract,1,piston,retract,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_172,Cessna 172 Skyhawk,r172,R172 / FR172 Hawk XP,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_172,Cessna 172 Skyhawk,p172,P172 Powermatic,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_172,Cessna 172 Skyhawk,c172_early,172 / 172A (straight tail),sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_172,Cessna 172 Skyhawk,c172_bm,172B-172M,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_172,Cessna 172 Skyhawk,c172n,172N,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_172,Cessna 172 Skyhawk,c172pq,172P / 172Q,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_172,Cessna 172 Skyhawk,c172r,172R,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_172,Cessna 172 Skyhawk,c172s,172S / 172SP,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_172,Cessna 172 Skyhawk,t41,T-41 Mescalero,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_175,Cessna 175 Skylark,,,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_177,Cessna 177 Cardinal,c177rg,177RG Cardinal RG,sep_retract,1,piston,retract,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_177,Cessna 177 Cardinal,c177,177 / 177A / 177B,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_182,Cessna 182 Skylane,c182rg,R182 / TR182 Skylane RG,sep_retract,1,piston,retract,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_182,Cessna 182 Skylane,t182,T182 Turbo Skylane,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_182,Cessna 182 Skylane,c182,182 / 182A-182T,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_206,Cessna 205/206/207 Stationair,c205,205,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_206,Cessna 205/206/207 Stationair,c206,206 / U206 / P206 / T206,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_206,Cessna 205/206/207 Stationair,c207,207 Skywagon / Stationair 8,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",cirrus_sr,Cirrus SR20 / SR22 / SR22T,sr22t,SR22T,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",cirrus_sr,Cirrus SR20 / SR22 / SR22T,sr22,SR22,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",cirrus_sr,Cirrus SR20 / SR22 / SR22T,sr20,SR20,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",cessna_corvalis,Columbia/Cessna 300/350/400 (Corvalis),,,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",diamond_da20,Diamond DA20 / DV20 Katana,,,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",diamond_da40,Diamond DA40 Diamond Star,,,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",ercoupe,Ercoupe / Aircoupe / Alon / Mooney M10,,,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",gippsland_ga8,Gippsland GA8 Airvan,,,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",grumman_aa1,Grumman American AA-1 Yankee / Trainer / T-Cat / Lynx,,,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",grumman_aa5,Grumman American AA-5 Traveler / Cheetah / Tiger,aa5b,AA-5B / AG-5B Tiger,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",grumman_aa5,Grumman American AA-5 Traveler / Cheetah / Tiger,aa5a,AA-5A Cheetah,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",grumman_aa5,Grumman American AA-5 Traveler / Cheetah / Tiger,aa5,AA-5 Traveler,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",piper_pa20_22,Piper PA-20 Pacer / PA-22 Tri-Pacer & Colt,pa20,PA-20 Pacer,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",piper_pa20_22,Piper PA-20 Pacer / PA-22 Tri-Pacer & Colt,pa22_108,PA-22-108 Colt,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",piper_pa20_22,Piper PA-20 Pacer / PA-22 Tri-Pacer & Colt,pa22,PA-22 Tri-Pacer,sep_fixed,1,piston,fixed,tricycle,high
+sep_fixed,"Single-engine piston, fixed tricycle gear",piper_pa28,"Piper PA-28 Cherokee family (Cherokee, Warrior, Archer, Dakota, Arrow)",arrow,PA-28R / PA-28RT Arrow,sep_retract,1,piston,retract,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",piper_pa28,"Piper PA-28 Cherokee family (Cherokee, Warrior, Archer, Dakota, Arrow)",cherokee_140,PA-28-140 Cherokee 140 / Cruiser,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",piper_pa28,"Piper PA-28 Cherokee family (Cherokee, Warrior, Archer, Dakota, Arrow)",cherokee_150_180,PA-28-150/160/180 Cherokee,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",piper_pa28,"Piper PA-28 Cherokee family (Cherokee, Warrior, Archer, Dakota, Arrow)",warrior,PA-28-151/161 Warrior,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",piper_pa28,"Piper PA-28 Cherokee family (Cherokee, Warrior, Archer, Dakota, Arrow)",archer,PA-28-181 Archer,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",piper_pa28,"Piper PA-28 Cherokee family (Cherokee, Warrior, Archer, Dakota, Arrow)",dakota_235,PA-28-235/236 / 201T Dakota & Pathfinder,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",piper_pa32,Piper PA-32 Cherokee Six / Saratoga / Lance,pa32r,PA-32R Lance / Saratoga SP / Saratoga II,sep_retract,1,piston,retract,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",piper_pa32,Piper PA-32 Cherokee Six / Saratoga / Lance,pa32_fixed,PA-32-260/300/301 Cherokee Six / Saratoga / 6X,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",piper_pa38,Piper PA-38 Tomahawk,,,sep_fixed,1,piston,fixed,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",socata_tb,Socata TB Tampico / Tobago / Trinidad,tb20_21,TB20 / TB21 Trinidad,sep_retract,1,piston,retract,tricycle,low
+sep_fixed,"Single-engine piston, fixed tricycle gear",socata_tb,Socata TB Tampico / Tobago / Trinidad,tb9_10_200,TB9 / TB10 / TB200,sep_fixed,1,piston,fixed,tricycle,low
+sep_retract,"Single-engine piston, retractable gear",beech_bonanza,Beech Bonanza / Debonair (33/35/36),be33,33 / F33 Debonair & Bonanza,sep_retract,1,piston,retract,tricycle,low
+sep_retract,"Single-engine piston, retractable gear",beech_bonanza,Beech Bonanza / Debonair (33/35/36),be35,35 V-tail Bonanza,sep_retract,1,piston,retract,tricycle,low
+sep_retract,"Single-engine piston, retractable gear",beech_bonanza,Beech Bonanza / Debonair (33/35/36),be36,36 / A36 / G36 Bonanza,sep_retract,1,piston,retract,tricycle,low
+sep_retract,"Single-engine piston, retractable gear",bellanca_viking,Bellanca 14-19 / 17-30 Viking (& 14-13 Cruisair),cruisair,14-12 / 14-13 Cruisair,sep_tailwheel,1,piston,fixed,tailwheel,low
+sep_retract,"Single-engine piston, retractable gear",bellanca_viking,Bellanca 14-19 / 17-30 Viking (& 14-13 Cruisair),viking,17-30 / 17-31 Viking,sep_retract,1,piston,retract,tricycle,low
+sep_retract,"Single-engine piston, retractable gear",bellanca_viking,Bellanca 14-19 / 17-30 Viking (& 14-13 Cruisair),cruisemaster,14-19 Cruisemaster,sep_retract,1,piston,retract,tricycle,low
+sep_retract,"Single-engine piston, retractable gear",cessna_210,Cessna 210 Centurion,p210,P210 Pressurized Centurion,sep_retract,1,piston,retract,tricycle,high
+sep_retract,"Single-engine piston, retractable gear",cessna_210,Cessna 210 Centurion,t210,T210 Turbo Centurion,sep_retract,1,piston,retract,tricycle,high
+sep_retract,"Single-engine piston, retractable gear",cessna_210,Cessna 210 Centurion,c210,210,sep_retract,1,piston,retract,tricycle,high
+sep_retract,"Single-engine piston, retractable gear",mooney_m20,Mooney M20 series,m20a_e,M20/M20A-M20E (early),sep_retract,1,piston,retract,tricycle,low
+sep_retract,"Single-engine piston, retractable gear",mooney_m20,Mooney M20 series,m20f_g,M20F Executive / M20G Statesman,sep_retract,1,piston,retract,tricycle,low
+sep_retract,"Single-engine piston, retractable gear",mooney_m20,Mooney M20 series,m20j,M20J 201 / MSE / Allegro,sep_retract,1,piston,retract,tricycle,low
+sep_retract,"Single-engine piston, retractable gear",mooney_m20,Mooney M20 series,m20k,M20K 231/252/Encore,sep_retract,1,piston,retract,tricycle,low
+sep_retract,"Single-engine piston, retractable gear",mooney_m20,Mooney M20 series,m20m,M20M Bravo / TLS,sep_retract,1,piston,retract,tricycle,low
+sep_retract,"Single-engine piston, retractable gear",mooney_m20,Mooney M20 series,m20r,M20R Ovation,sep_retract,1,piston,retract,tricycle,low
+sep_retract,"Single-engine piston, retractable gear",mooney_m20,Mooney M20 series,m20s,M20S Eagle,sep_retract,1,piston,retract,tricycle,low
+sep_retract,"Single-engine piston, retractable gear",mooney_m20,Mooney M20 series,m20tn,M20TN Acclaim,sep_retract,1,piston,retract,tricycle,low
+sep_retract,"Single-engine piston, retractable gear",mooney_m20,Mooney M20 series,m20u_v,M20U Ovation Ultra / M20V Acclaim Ultra,sep_retract,1,piston,retract,tricycle,low
+sep_retract,"Single-engine piston, retractable gear",navion,Navion,,,sep_retract,1,piston,retract,tricycle,low
+sep_retract,"Single-engine piston, retractable gear",piper_pa24,Piper PA-24 Comanche,,,sep_retract,1,piston,retract,tricycle,low
+sep_retract,"Single-engine piston, retractable gear",piper_pa46,Piper PA-46 Malibu / Mirage / Matrix / Meridian / M-series,pa46_turbine,PA-46-500TP Meridian / M500 / M600 / M700,set,1,turboprop,,,low
+sep_retract,"Single-engine piston, retractable gear",piper_pa46,Piper PA-46 Malibu / Mirage / Matrix / Meridian / M-series,pa46_piston,PA-46-310P/350P Malibu / Mirage / Matrix / M350,sep_retract,1,piston,retract,tricycle,low
+sep_retract,"Single-engine piston, retractable gear",commander_112_114,Rockwell / Commander 112 / 114,,,sep_retract,1,piston,retract,tricycle,low
+sep_tailwheel,"Single-engine piston, conventional gear",aeronca_champ,Aeronca / Champion 7AC Champ series,7ac,7AC Champ,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",aeronca_champ,Aeronca / Champion 7AC Champ series,7ec,7EC/7FC Traveler / Tri-Traveler,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",aeronca_champ,Aeronca / Champion 7AC Champ series,7bcm_dc,7BCM / 7CCM / 7DC / L-16,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",aeronca_chief,Aeronca 11 Chief / 15 Sedan,,,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",aviat_husky,Aviat Husky (A-1),,,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",cessna_120_140,Cessna 120/140,c120,120,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",cessna_120_140,Cessna 120/140,c140,140 / 140A,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",cessna_170,Cessna 170,,,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",cessna_180,Cessna 180 Skywagon,,,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",cessna_185,Cessna 185 Skywagon,,,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",cessna_190_195,Cessna 190/195,,,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",champion_citabria,Citabria (7ECA/7GCAA/7GCBC/7KCAB),,,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",cubcrafters,CubCrafters Carbon Cub / Top Cub / XCub / NX Cub,cc11,CC11 Carbon Cub (S-LSA / EX),sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",cubcrafters,CubCrafters Carbon Cub / Top Cub / XCub / NX Cub,cc18,CC18 Top Cub,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",cubcrafters,CubCrafters Carbon Cub / Top Cub / XCub / NX Cub,cc19,CC19 XCub / NX Cub,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",globe_swift,Globe / Temco Swift,,,sep_tailwheel,1,piston,retract,tailwheel,low
+sep_tailwheel,"Single-engine piston, conventional gear",helio_courier,Helio Courier / Super Courier,,,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",luscombe_8,Luscombe 8 Silvaire,,,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",maule,Maule M-4 through M-9,maule_tricycle,MXT-7 / MT-7 (tricycle),sep_tailwheel,1,piston,fixed,tricycle,high
+sep_tailwheel,"Single-engine piston, conventional gear",maule,Maule M-4 through M-9,maule_m4_m6,M-4 / M-5 / M-6,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",maule,Maule M-4 through M-9,maule_m7_m9,M-7 / MX-7 / M-8 / M-9,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",piper_pa11,Piper PA-11 Cub Special,,,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",piper_pa12,Piper PA-12 Super Cruiser,,,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",piper_pa14_16,Piper PA-14 Family Cruiser / PA-16 Clipper,,,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",piper_pa15_17,Piper PA-15/PA-17 Vagabond,,,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",piper_pa18,Piper PA-18 Super Cub,,,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",piper_j_cub,Piper/Taylor J-2/J-3/J-4/J-5 Cub,j3,J-3 Cub,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",piper_j_cub,Piper/Taylor J-2/J-3/J-4/J-5 Cub,j5,J-5 Cub Cruiser,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",piper_j_cub,Piper/Taylor J-2/J-3/J-4/J-5 Cub,j2_j4,J-2 / J-4,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",champion_scout,Scout (8GCBC),,,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",stinson,Stinson 108 Voyager / L-5,s108,108 Voyager / Station Wagon,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",stinson,Stinson 108 Voyager / L-5,l5,L-5 Sentinel / V-77,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",taylorcraft,"Taylorcraft (BC-12, F-19, F-21, L-2)",,,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_tailwheel,"Single-engine piston, conventional gear",dhc2_beaver,de Havilland Canada DHC-2 Beaver,dhc2_turbo,DHC-2 Mk III Turbo Beaver,set,1,turboprop,,,high
+sep_tailwheel,"Single-engine piston, conventional gear",dhc2_beaver,de Havilland Canada DHC-2 Beaver,dhc2,DHC-2 Mk I Beaver,sep_tailwheel,1,piston,fixed,tailwheel,high
+sep_aerobatic,Aerobatic,christen_eagle,Christen Eagle,,,sep_aerobatic,1,piston,fixed,tailwheel,biplane
+sep_aerobatic,Aerobatic,champion_decathlon,Decathlon / Super Decathlon (8KCAB),,,sep_aerobatic,1,piston,fixed,tailwheel,high
+sep_aerobatic,Aerobatic,extra,Extra 200/230/260/300/330,ea300_330,EA-300 / 330,sep_aerobatic,1,piston,fixed,tailwheel,low
+sep_aerobatic,Aerobatic,extra,Extra 200/230/260/300/330,ea200_260,EA-200 / 230 / 260,sep_aerobatic,1,piston,fixed,tailwheel,low
+sep_aerobatic,Aerobatic,pitts,Pitts Special (S-1 / S-2),s1,S-1 (single seat),sep_aerobatic,1,piston,fixed,tailwheel,biplane
+sep_aerobatic,Aerobatic,pitts,Pitts Special (S-1 / S-2),s2,S-2 (two seat),sep_aerobatic,1,piston,fixed,tailwheel,biplane
+sep_aerobatic,Aerobatic,sukhoi,Sukhoi Su-26/29/31,,,sep_aerobatic,1,piston,fixed,tailwheel,low
+sep_aerobatic,Aerobatic,zivko_edge,Zivko Edge 540,,,sep_aerobatic,1,piston,fixed,tailwheel,low
+lsa,Light sport (S-LSA / E-LSA),aeropro_eurofox,AeroPro EuroFOX,,,lsa,1,piston,fixed,tricycle,high
+lsa,Light sport (S-LSA / E-LSA),american_legend_cub,American Legend Cub,,,lsa,1,piston,fixed,tailwheel,high
+lsa,Light sport (S-LSA / E-LSA),cessna_162,Cessna 162 Skycatcher,,,lsa,1,piston,fixed,tricycle,high
+lsa,Light sport (S-LSA / E-LSA),evektor_sportstar,Evektor SportStar / Harmony,,,lsa,1,piston,fixed,tricycle,low
+lsa,Light sport (S-LSA / E-LSA),flight_design_ct,Flight Design CT series,,,lsa,1,piston,fixed,tricycle,high
+lsa,Light sport (S-LSA / E-LSA),icon_a5,Icon A5,,,lsa,1,piston,retract,tricycle,high
+lsa,Light sport (S-LSA / E-LSA),jabiru,Jabiru J170/J230/J250,,,lsa,1,piston,fixed,tricycle,high
+lsa,Light sport (S-LSA / E-LSA),piper_ps28,Piper Sport / Czech SportCruiser (PS-28),,,lsa,1,piston,fixed,tricycle,low
+lsa,Light sport (S-LSA / E-LSA),pipistrel,"Pipistrel (Alpha, Virus, Sinus, Velis)",,,lsa,1,piston,fixed,tricycle,high
+lsa,Light sport (S-LSA / E-LSA),remos,Remos GX,,,lsa,1,piston,fixed,tricycle,high
+lsa,Light sport (S-LSA / E-LSA),sling,Sling 2 / Sling 4 / TSi,,,lsa,1,piston,fixed,tricycle,low
+lsa,Light sport (S-LSA / E-LSA),tecnam,Tecnam (P92 / P2002 / P2008 / P2010 / P2006T),p2006t,P2006T twin,mep,2,piston,retract,tricycle,high
+lsa,Light sport (S-LSA / E-LSA),tecnam,Tecnam (P92 / P2002 / P2008 / P2010 / P2006T),p2010,P2010,sep_fixed,1,piston,fixed,tricycle,high
+lsa,Light sport (S-LSA / E-LSA),tecnam,Tecnam (P92 / P2002 / P2008 / P2010 / P2006T),p2002,P2002 Sierra (low wing),lsa,1,piston,fixed,tricycle,low
+lsa,Light sport (S-LSA / E-LSA),tecnam,Tecnam (P92 / P2002 / P2008 / P2010 / P2006T),p2008,P2008,lsa,1,piston,fixed,tricycle,high
+lsa,Light sport (S-LSA / E-LSA),tecnam,Tecnam (P92 / P2002 / P2008 / P2010 / P2006T),p92,P92 Echo / Eaglet,lsa,1,piston,fixed,tricycle,high
+experimental,Experimental amateur-built (kit),avid_flyer,Avid Flyer / Magnum,,,experimental,1,piston,,tailwheel,high
+experimental,Experimental amateur-built (kit),bearhawk,Bearhawk,,,experimental,1,piston,,tailwheel,high
+experimental,Experimental amateur-built (kit),glasair,Glasair / GlaStar / Sportsman,glastar_sportsman,GlaStar / Sportsman 2+2,experimental,1,piston,fixed,,high
+experimental,Experimental amateur-built (kit),glasair,Glasair / GlaStar / Sportsman,glasair_iii,Glasair III,experimental,1,piston,retract,,low
+experimental,Experimental amateur-built (kit),glasair,Glasair / GlaStar / Sportsman,glasair_i_ii,Glasair I / II / Super II,experimental,1,piston,,,low
+experimental,Experimental amateur-built (kit),just_highlander,Just Aircraft Highlander / SuperSTOL,,,experimental,1,piston,,tailwheel,high
+experimental,Experimental amateur-built (kit),kitfox,Kitfox,,,experimental,1,piston,,tailwheel,high
+experimental,Experimental amateur-built (kit),kolb,Kolb Firestar / Twinstar / Mark III,,,experimental,1,piston,,,high
+experimental,Experimental amateur-built (kit),lancair,Lancair (235/320/360/IV/ES/Legacy/Evolution),lancair_iv,IV / IV-P / Propjet,experimental,1,piston,retract,,low
+experimental,Experimental amateur-built (kit),lancair,Lancair (235/320/360/IV/ES/Legacy/Evolution),lancair_es,ES / ES-P (fixed gear),experimental,1,piston,fixed,,low
+experimental,Experimental amateur-built (kit),lancair,Lancair (235/320/360/IV/ES/Legacy/Evolution),lancair_legacy,Legacy,experimental,1,piston,retract,,low
+experimental,Experimental amateur-built (kit),lancair,Lancair (235/320/360/IV/ES/Legacy/Evolution),lancair_evolution,Evolution,experimental,1,piston,retract,,low
+experimental,Experimental amateur-built (kit),lancair,Lancair (235/320/360/IV/ES/Legacy/Evolution),lancair_2_3,235 / 320 / 360,experimental,1,piston,retract,,low
+experimental,Experimental amateur-built (kit),murphy,Murphy Rebel / Moose / Elite,,,experimental,1,piston,,,high
+experimental,Experimental amateur-built (kit),pietenpol,Pietenpol Air Camper,,,experimental,1,piston,,tailwheel,parasol
+experimental,Experimental amateur-built (kit),rans,"Rans S-series (Coyote, Courier, Airaile, S-20)",,,experimental,1,piston,,,high
+experimental,Experimental amateur-built (kit),canard_pusher,"Rutan-type canards (Long-EZ, VariEze, Cozy, Velocity, Berkut)",velocity,Velocity,experimental,1,piston,,,canard_pusher
+experimental,Experimental amateur-built (kit),canard_pusher,"Rutan-type canards (Long-EZ, VariEze, Cozy, Velocity, Berkut)",cozy,Cozy,experimental,1,piston,,,canard_pusher
+experimental,Experimental amateur-built (kit),canard_pusher,"Rutan-type canards (Long-EZ, VariEze, Cozy, Velocity, Berkut)",longez,Long-EZ,experimental,1,piston,,,canard_pusher
+experimental,Experimental amateur-built (kit),canard_pusher,"Rutan-type canards (Long-EZ, VariEze, Cozy, Velocity, Berkut)",varieze,VariEze,experimental,1,piston,,,canard_pusher
+experimental,Experimental amateur-built (kit),canard_pusher,"Rutan-type canards (Long-EZ, VariEze, Cozy, Velocity, Berkut)",berkut,Berkut,experimental,1,piston,,,canard_pusher
+experimental,Experimental amateur-built (kit),canard_pusher,"Rutan-type canards (Long-EZ, VariEze, Cozy, Velocity, Berkut)",defiant,Defiant (twin),experimental,2,piston,,,canard_pusher
+experimental,Experimental amateur-built (kit),sonex,Sonex / Onex / Waiex / Xenos,,,experimental,1,piston,,,low
+experimental,Experimental amateur-built (kit),vans_rv,Van's RV series,rv10,RV-10,experimental,1,piston,,tricycle,low
+experimental,Experimental amateur-built (kit),vans_rv,Van's RV series,rv12,RV-12 / 12iS,experimental,1,piston,,tricycle,low
+experimental,Experimental amateur-built (kit),vans_rv,Van's RV series,rv14a,RV-14A,experimental,1,piston,,tricycle,low
+experimental,Experimental amateur-built (kit),vans_rv,Van's RV series,rv14,RV-14,experimental,1,piston,,tailwheel,low
+experimental,Experimental amateur-built (kit),vans_rv,Van's RV series,rv15,RV-15,experimental,1,piston,,tailwheel,low
+experimental,Experimental amateur-built (kit),vans_rv,Van's RV series,rv3,RV-3,experimental,1,piston,,tailwheel,low
+experimental,Experimental amateur-built (kit),vans_rv,Van's RV series,rv4,RV-4,experimental,1,piston,,tailwheel,low
+experimental,Experimental amateur-built (kit),vans_rv,Van's RV series,rv6a,RV-6A,experimental,1,piston,,tricycle,low
+experimental,Experimental amateur-built (kit),vans_rv,Van's RV series,rv6,RV-6,experimental,1,piston,,tailwheel,low
+experimental,Experimental amateur-built (kit),vans_rv,Van's RV series,rv7a,RV-7A,experimental,1,piston,,tricycle,low
+experimental,Experimental amateur-built (kit),vans_rv,Van's RV series,rv7,RV-7,experimental,1,piston,,tailwheel,low
+experimental,Experimental amateur-built (kit),vans_rv,Van's RV series,rv8a,RV-8A,experimental,1,piston,,tricycle,low
+experimental,Experimental amateur-built (kit),vans_rv,Van's RV series,rv8,RV-8,experimental,1,piston,,tailwheel,low
+experimental,Experimental amateur-built (kit),vans_rv,Van's RV series,rv9a,RV-9A,experimental,1,piston,,tricycle,low
+experimental,Experimental amateur-built (kit),vans_rv,Van's RV series,rv9,RV-9,experimental,1,piston,,tailwheel,low
+experimental,Experimental amateur-built (kit),zenith,"Zenith / Zenair CH-series (Zodiac, STOL)",zenith_stol,CH-701 / CH-750 / CH-801 STOL,experimental,1,piston,,tricycle,high
+experimental,Experimental amateur-built (kit),zenith,"Zenith / Zenair CH-series (Zodiac, STOL)",zenith_zodiac,CH-601 / CH-640 / CH-650 Zodiac,experimental,1,piston,,tricycle,low
+experimental,Experimental amateur-built (kit),zenith,"Zenith / Zenair CH-series (Zodiac, STOL)",zenith_200_300,CH-200 / CH-250 / CH-300,experimental,1,piston,,tricycle,low
+vintage,Vintage & warbird,aero_l39,Aero L-29 Delfin / L-39 Albatros,,,vintage,1,turbofan,retract,tricycle,low
+vintage,Vintage & warbird,beech_t34,Beech T-34 Mentor,,,vintage,1,piston,retract,tricycle,low
+vintage,Vintage & warbird,stearman,Boeing-Stearman Model 75 / PT-17 / N2S Kaydet,,,vintage,1,piston,fixed,tailwheel,biplane
+vintage,Vintage & warbird,fairchild_pt19,Fairchild PT-19 / PT-23 / PT-26 (M-62),,,vintage,1,piston,fixed,tailwheel,low
+vintage,Vintage & warbird,great_lakes,Great Lakes 2T-1A,,,vintage,1,piston,fixed,tailwheel,biplane
+vintage,Vintage & warbird,north_american_p51,North American P-51 Mustang,,,vintage,1,piston,retract,tailwheel,low
+vintage,Vintage & warbird,north_american_t28,North American T-28 Trojan,,,vintage,1,piston,retract,tricycle,low
+vintage,Vintage & warbird,north_american_t6,North American T-6 / SNJ / Harvard,,,vintage,1,piston,retract,tailwheel,low
+vintage,Vintage & warbird,ryan_pt22,Ryan ST / PT-22 Recruit,,,vintage,1,piston,fixed,tailwheel,low
+vintage,Vintage & warbird,waco,"Waco biplanes (UPF-7, YMF, YKS, etc.)",,,vintage,1,piston,fixed,tailwheel,biplane
+vintage,Vintage & warbird,yak_nanchang,Yak-52 / Yak-18 / Yak-50/54/55 / Nanchang CJ-6,yak52,Yak-52 / Yak-52TW,vintage,1,piston,retract,,low
+vintage,Vintage & warbird,yak_nanchang,Yak-52 / Yak-18 / Yak-50/54/55 / Nanchang CJ-6,cj6,Nanchang CJ-6,vintage,1,piston,retract,,low
+vintage,Vintage & warbird,yak_nanchang,Yak-52 / Yak-18 / Yak-50/54/55 / Nanchang CJ-6,yak_aerobatic,Yak-50 / 54 / 55,sep_aerobatic,1,piston,retract,tailwheel,low
+vintage,Vintage & warbird,yak_nanchang,Yak-52 / Yak-18 / Yak-50/54/55 / Nanchang CJ-6,yak18,Yak-18,vintage,1,piston,retract,,low
+agricultural,Agricultural,air_tractor,Air Tractor AT-300 through AT-800 series,at300_400p,AT-301 / AT-401 (radial piston),agricultural,1,piston,fixed,tailwheel,low
+agricultural,Agricultural,air_tractor,Air Tractor AT-300 through AT-800 series,at802,AT-802 / 802A / Fire Boss,agricultural,1,turboprop,fixed,tailwheel,low
+agricultural,Agricultural,air_tractor,Air Tractor AT-300 through AT-800 series,at602,AT-602,agricultural,1,turboprop,fixed,tailwheel,low
+agricultural,Agricultural,air_tractor,Air Tractor AT-300 through AT-800 series,at50x,AT-502 / 503 / 504,agricultural,1,turboprop,fixed,tailwheel,low
+agricultural,Agricultural,air_tractor,Air Tractor AT-300 through AT-800 series,at40x,AT-402,agricultural,1,turboprop,fixed,tailwheel,low
+agricultural,Agricultural,cessna_188,Cessna 188 AgWagon/AgTruck/AgHusky,,,agricultural,1,piston,fixed,tailwheel,low
+agricultural,Agricultural,grumman_agcat,Grumman / Schweizer G-164 Ag Cat,,,agricultural,1,piston,fixed,tailwheel,biplane
+agricultural,Agricultural,pzl_dromader,PZL M-18 Dromader,,,agricultural,1,piston,fixed,tailwheel,low
+agricultural,Agricultural,piper_pa25,Piper PA-25 Pawnee,,,agricultural,1,piston,fixed,tailwheel,low
+agricultural,Agricultural,piper_pa36,Piper PA-36 Pawnee Brave,,,agricultural,1,piston,fixed,tailwheel,low
+agricultural,Agricultural,thrush,Thrush / Ayres / Rockwell S2R,thrush_turbine,S2R-T / S2R-G / S2R-H / 510 / 710 (turbine),agricultural,1,turboprop,fixed,tailwheel,low
+agricultural,Agricultural,thrush,Thrush / Ayres / Rockwell S2R,thrush_piston,S2R / S2R-R1340 / R1820 (radial),agricultural,1,piston,fixed,tailwheel,low
+agricultural,Agricultural,weatherly,Weatherly 201/620,,,agricultural,1,piston,fixed,tailwheel,low
+amphibian,Amphibian / flying boat,grumman_amphibians,Grumman Goose / Widgeon / Mallard / Albatross,g21,G-21 Goose,amphibian,2,piston,retract,,
+amphibian,Amphibian / flying boat,grumman_amphibians,Grumman Goose / Widgeon / Mallard / Albatross,g44,G-44 Widgeon,amphibian,2,piston,retract,,
+amphibian,Amphibian / flying boat,grumman_amphibians,Grumman Goose / Widgeon / Mallard / Albatross,g73,G-73 Mallard,amphibian,2,piston,retract,,
+amphibian,Amphibian / flying boat,grumman_amphibians,Grumman Goose / Widgeon / Mallard / Albatross,g111,G-111 / HU-16 Albatross,amphibian,2,piston,retract,,
+amphibian,Amphibian / flying boat,lake,Lake LA-4 Buccaneer / Renegade / Seawolf,la250,LA-250 Renegade / Seawolf,amphibian,1,piston,retract,,
+amphibian,Amphibian / flying boat,lake,Lake LA-4 Buccaneer / Renegade / Seawolf,la4,LA-4 / LA-4-200 Buccaneer,amphibian,1,piston,retract,,
+amphibian,Amphibian / flying boat,searey,Progressive Aerodyne SeaRey,,,amphibian,1,piston,,,
+amphibian,Amphibian / flying boat,republic_seabee,Republic RC-3 Seabee,,,amphibian,1,piston,,,
+amphibian,Amphibian / flying boat,seawind,Seawind 3000/300C,,,amphibian,1,piston,retract,,
+mep,Multi-engine piston,aero_commander_piston,Aero Commander 500/520/560/680 (piston),,,mep,2,piston,retract,tricycle,high
+mep,Multi-engine piston,beech_18,Beech 18 Twin Beech,,,mep,2,piston,retract,tailwheel,low
+mep,Multi-engine piston,beech_50,Beech 50 Twin Bonanza,,,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,beech_60,Beech 60 Duke,,,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,beech_76,Beech 76 Duchess,,,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,beech_95,Beech 95 Travel Air,,,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,beech_baron,Beech Baron (55/56/58),be58,58 / 58P / 58TC / G58,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,beech_baron,Beech Baron (55/56/58),be56,56TC Turbo Baron,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,beech_baron,Beech Baron (55/56/58),be55,55 / 95-55 Baron,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,beech_queen_air,Beech Queen Air (65/70/80/88),,,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,britten_norman_islander,Britten-Norman BN-2 Islander / Trislander,,,mep,2,piston,fixed,tricycle,high
+mep,Multi-engine piston,cessna_303,Cessna 303 Crusader,,,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,cessna_310_320,Cessna 310/320,c310,310,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,cessna_310_320,Cessna 310/320,c320,320 Skyknight,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,cessna_335_340,Cessna 335/340,,,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,cessna_336_337,Cessna 336/337 Skymaster,c336,336 (fixed gear),mep,2,piston,fixed,tricycle,high
+mep,Multi-engine piston,cessna_336_337,Cessna 336/337 Skymaster,p337,P337 Pressurized,mep,2,piston,retract,tricycle,high
+mep,Multi-engine piston,cessna_336_337,Cessna 336/337 Skymaster,c337,337,mep,2,piston,retract,tricycle,high
+mep,Multi-engine piston,cessna_401_402_411,Cessna 401/402/411,c401,401,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,cessna_401_402_411,Cessna 401/402/411,c402,402 / Businessliner / Utiliner,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,cessna_401_402_411,Cessna 401/402/411,c411,411,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,cessna_404,Cessna 404 Titan,,,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,cessna_414_421,Cessna 414/421,c414,414 Chancellor,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,cessna_414_421,Cessna 414/421,c421,421 Golden Eagle,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,diamond_da42,Diamond DA42 Twin Star,,,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,diamond_da62,Diamond DA62,,,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,grumman_ga7,Grumman American GA-7 Cougar,,,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,partenavia_p68,Partenavia / Vulcanair P68,,,mep,2,piston,fixed,tricycle,high
+mep,Multi-engine piston,piper_aerostar,"Piper / Ted Smith Aerostar (PA-60, 600/601/602)",,,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,piper_pa23,Piper PA-23 Apache / Aztec,aztec,PA-23-250 Aztec,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,piper_pa23,Piper PA-23 Apache / Aztec,apache,PA-23 Apache (150/160/235),mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,piper_pa30_39,Piper PA-30/PA-39 Twin Comanche,,,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,piper_pa31,Piper PA-31 Navajo / Chieftain / Cheyenne I-II,cheyenne,PA-31T Cheyenne I/II/IIXL,met,2,turboprop,retract,tricycle,low
+mep,Multi-engine piston,piper_pa31,Piper PA-31 Navajo / Chieftain / Cheyenne I-II,chieftain,PA-31-350 Chieftain,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,piper_pa31,Piper PA-31 Navajo / Chieftain / Cheyenne I-II,mojave,PA-31P-350 Mojave,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,piper_pa31,Piper PA-31 Navajo / Chieftain / Cheyenne I-II,navajo,PA-31 / 31-310 / 31-325 / 31P Navajo,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,piper_pa34,Piper PA-34 Seneca,,,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,piper_pa44,Piper PA-44 Seminole,,,mep,2,piston,retract,tricycle,low
+set,Single-engine turboprop,cessna_208,Cessna 208 Caravan,c208b,208B Grand Caravan / EX,set,1,turboprop,fixed,tricycle,high
+set,Single-engine turboprop,cessna_208,Cessna 208 Caravan,c208,208 / 208A Caravan,set,1,turboprop,fixed,tricycle,high
+set,Single-engine turboprop,epic,Epic LT / E1000,,,set,1,turboprop,retract,,low
+set,Single-engine turboprop,pac_750xl,PAC 750XL,,,set,1,turboprop,fixed,,low
+set,Single-engine turboprop,pilatus_pc12,Pilatus PC-12,pc12_ngx,PC-12/47E (NG / NGX),set,1,turboprop,retract,,low
+set,Single-engine turboprop,pilatus_pc12,Pilatus PC-12,pc12_legacy,PC-12 / PC-12/45 / PC-12/47,set,1,turboprop,retract,,low
+set,Single-engine turboprop,pilatus_pc6,Pilatus PC-6 Porter,,,set,1,turboprop,fixed,tailwheel,high
+set,Single-engine turboprop,quest_kodiak,Quest / Daher Kodiak 100/900,,,set,1,turboprop,fixed,tricycle,high
+set,Single-engine turboprop,daher_tbm,Socata / Daher TBM 700-960,tbm700,TBM 700,set,1,turboprop,retract,,low
+set,Single-engine turboprop,daher_tbm,Socata / Daher TBM 700-960,tbm850,TBM 850,set,1,turboprop,retract,,low
+set,Single-engine turboprop,daher_tbm,Socata / Daher TBM 700-960,tbm9xx,TBM 900-960,set,1,turboprop,retract,,low
+set,Single-engine turboprop,dhc3_otter,de Havilland Canada DHC-3 Otter,,,set,1,turboprop,,tailwheel,high
+met,Multi-engine turboprop (business/utility),beech_2000,Beech 2000 Starship,,,met,2,turboprop,retract,tricycle,mid
+met,Multi-engine turboprop (business/utility),beech_king_air_200_300,Beech King Air 200/250/300/350,ka300_350,300 / B300 / 350 / 360,met,2,turboprop,retract,tricycle,low
+met,Multi-engine turboprop (business/utility),beech_king_air_200_300,Beech King Air 200/250/300/350,ka200_250,200 / B200 / 250 / 260 / C-12,met,2,turboprop,retract,tricycle,low
+met,Multi-engine turboprop (business/utility),beech_king_air_90_100,Beech King Air 90/100,ka100,A100 / B100,met,2,turboprop,retract,tricycle,low
+met,Multi-engine turboprop (business/utility),beech_king_air_90_100,Beech King Air 90/100,ka90,C90 / E90 / F90 / 65-90,met,2,turboprop,retract,tricycle,low
+met,Multi-engine turboprop (business/utility),cessna_406,Cessna 406 Caravan II,,,met,2,turboprop,retract,tricycle,low
+met,Multi-engine turboprop (business/utility),cessna_425_441,Cessna 425 Conquest I / 441 Conquest II,c425,425 Corsair / Conquest I,met,2,turboprop,retract,tricycle,low
+met,Multi-engine turboprop (business/utility),cessna_425_441,Cessna 425 Conquest I / 441 Conquest II,c441,441 Conquest II,met,2,turboprop,retract,tricycle,low
+met,Multi-engine turboprop (business/utility),mitsubishi_mu2,Mitsubishi MU-2,mu2_long,"Long body (MU-2B-36/60, Marquise)",met,2,turboprop,retract,tricycle,high
+met,Multi-engine turboprop (business/utility),mitsubishi_mu2,Mitsubishi MU-2,mu2_short,"Short body (MU-2B-25/35/40, Solitaire)",met,2,turboprop,retract,tricycle,high
+met,Multi-engine turboprop (business/utility),piaggio_p180,Piaggio P.180 Avanti,,,met,2,turboprop,retract,tricycle,mid
+met,Multi-engine turboprop (business/utility),piper_pa42,Piper PA-42 Cheyenne III / 400,,,met,2,turboprop,retract,tricycle,low
+met,Multi-engine turboprop (business/utility),swearingen_merlin,Swearingen / Fairchild Merlin,,,met,2,turboprop,retract,tricycle,low
+met,Multi-engine turboprop (business/utility),turbo_commander,"Turbo Commander / Jetprop (680T/V/W, 681, 690, 695)",,,met,2,turboprop,retract,tricycle,high
+regional_turboprop,Commuter & regional turboprop,atr,ATR 42 / 72,atr72,ATR 72,regional_turboprop,2,turboprop,,,high
+regional_turboprop,Commuter & regional turboprop,atr,ATR 42 / 72,atr42,ATR 42,regional_turboprop,2,turboprop,,,high
+regional_turboprop,Commuter & regional turboprop,jetstream,BAe / Handley Page Jetstream 31/32/41,j41,Jetstream 41,regional_turboprop,2,turboprop,,,low
+regional_turboprop,Commuter & regional turboprop,jetstream,BAe / Handley Page Jetstream 31/32/41,j31_32,Jetstream 31 / 32,regional_turboprop,2,turboprop,,,low
+regional_turboprop,Commuter & regional turboprop,beech_1900,Beech 1900 Airliner,,,regional_turboprop,2,turboprop,,,low
+regional_turboprop,Commuter & regional turboprop,beech_99,Beech 99 Airliner,,,regional_turboprop,2,turboprop,,,low
+regional_turboprop,Commuter & regional turboprop,casa_212_235,CASA C-212 / CN-235 / C-295,,,regional_turboprop,2,turboprop,,,high
+regional_turboprop,Commuter & regional turboprop,cessna_408,Cessna 408 SkyCourier,,,regional_turboprop,2,turboprop,fixed,,high
+regional_turboprop,Commuter & regional turboprop,dornier_228_328,Dornier 228 / 328 / 328JET,do328jet,328-300 (328JET),regional_jet,2,turbofan,retract,tricycle,high
+regional_turboprop,Commuter & regional turboprop,dornier_228_328,Dornier 228 / 328 / 328JET,do328,328-100,regional_turboprop,2,turboprop,,,high
+regional_turboprop,Commuter & regional turboprop,dornier_228_328,Dornier 228 / 328 / 328JET,do228,228,regional_turboprop,2,turboprop,,,high
+regional_turboprop,Commuter & regional turboprop,embraer_110,Embraer EMB-110 Bandeirante,,,regional_turboprop,2,turboprop,,,low
+regional_turboprop,Commuter & regional turboprop,embraer_120,Embraer EMB-120 Brasilia,,,regional_turboprop,2,turboprop,,,low
+regional_turboprop,Commuter & regional turboprop,fokker_f27_50,Fokker F27 / Fairchild FH-227 / Fokker 50,,,regional_turboprop,2,turboprop,,,high
+regional_turboprop,Commuter & regional turboprop,gulfstream_i,Grumman Gulfstream I (G-159),,,regional_turboprop,2,turboprop,,,low
+regional_turboprop,Commuter & regional turboprop,let_410,Let L-410 Turbolet,,,regional_turboprop,2,turboprop,,,high
+regional_turboprop,Commuter & regional turboprop,saab_340_2000,Saab 340 / 2000,saab340,340A / 340B,regional_turboprop,2,turboprop,,,low
+regional_turboprop,Commuter & regional turboprop,saab_340_2000,Saab 340 / 2000,saab2000,2000,regional_turboprop,2,turboprop,,,low
+regional_turboprop,Commuter & regional turboprop,shorts_330_360,Shorts 330 / 360 / Skyvan / C-23 Sherpa,sd360,360,regional_turboprop,2,turboprop,,,high
+regional_turboprop,Commuter & regional turboprop,shorts_330_360,Shorts 330 / 360 / Skyvan / C-23 Sherpa,sd330,330 / Sherpa,regional_turboprop,2,turboprop,,,high
+regional_turboprop,Commuter & regional turboprop,shorts_330_360,Shorts 330 / 360 / Skyvan / C-23 Sherpa,skyvan,SC.7 Skyvan,regional_turboprop,2,turboprop,fixed,,high
+regional_turboprop,Commuter & regional turboprop,swearingen_metro,Swearingen / Fairchild Metro (SA226-TC / SA227),metro_ii,SA226-TC Metro II,regional_turboprop,2,turboprop,,,low
+regional_turboprop,Commuter & regional turboprop,swearingen_metro,Swearingen / Fairchild Metro (SA226-TC / SA227),metro_iii_23,SA227 Metro III / 23,regional_turboprop,2,turboprop,,,low
+regional_turboprop,Commuter & regional turboprop,dhc8,de Havilland Canada / Bombardier DHC-8 Dash 8 / Q400,dhc8_400,DHC-8-400 / Q400,regional_turboprop,2,turboprop,,,high
+regional_turboprop,Commuter & regional turboprop,dhc8,de Havilland Canada / Bombardier DHC-8 Dash 8 / Q400,dhc8_300,DHC-8-300,regional_turboprop,2,turboprop,,,high
+regional_turboprop,Commuter & regional turboprop,dhc8,de Havilland Canada / Bombardier DHC-8 Dash 8 / Q400,dhc8_100_200,DHC-8-100 / 200,regional_turboprop,2,turboprop,,,high
+regional_turboprop,Commuter & regional turboprop,dhc6_twin_otter,de Havilland Canada DHC-6 Twin Otter,,,regional_turboprop,2,turboprop,fixed,,high
+regional_turboprop,Commuter & regional turboprop,dhc7,de Havilland Canada DHC-7 Dash 7,,,regional_turboprop,4,turboprop,,,high
+bizjet_light,Business jet - very light / light,beech_premier,Beech Premier I/IA (390),,,bizjet_light,2,turbofan,retract,tricycle,low
+bizjet_light,Business jet - very light / light,beechjet_400,"Beechjet / Hawker 400 / Diamond (MU-300, 400, 400A, 400XP)",,,bizjet_light,2,turbofan,retract,tricycle,low
+bizjet_light,Business jet - very light / light,citation_500_series,Cessna Citation I/II/V/Ultra/Encore/Bravo (500/501/550/551/560),c500_501,500/501 Citation I,bizjet_light,2,turbofan,retract,tricycle,low
+bizjet_light,Business jet - very light / light,citation_500_series,Cessna Citation I/II/V/Ultra/Encore/Bravo (500/501/550/551/560),c550_551,550/551 Citation II / S/II / Bravo,bizjet_light,2,turbofan,retract,tricycle,low
+bizjet_light,Business jet - very light / light,citation_500_series,Cessna Citation I/II/V/Ultra/Encore/Bravo (500/501/550/551/560),c560,560 Citation V / Ultra / Encore,bizjet_light,2,turbofan,retract,tricycle,low
+bizjet_light,Business jet - very light / light,citation_mustang,Cessna Citation Mustang (510),,,bizjet_light,2,turbofan,retract,tricycle,low
+bizjet_light,Business jet - very light / light,citation_cj,Cessna CitationJet / M2 / CJ1-CJ4 (525),cj4,525C CJ4,bizjet_light,2,turbofan,retract,tricycle,low
+bizjet_light,Business jet - very light / light,citation_cj,Cessna CitationJet / M2 / CJ1-CJ4 (525),cj3,525B CJ3,bizjet_light,2,turbofan,retract,tricycle,low
+bizjet_light,Business jet - very light / light,citation_cj,Cessna CitationJet / M2 / CJ1-CJ4 (525),cj2,525A CJ2,bizjet_light,2,turbofan,retract,tricycle,low
+bizjet_light,Business jet - very light / light,citation_cj,Cessna CitationJet / M2 / CJ1-CJ4 (525),cj1_m2,525 CitationJet / CJ1 / M2,bizjet_light,2,turbofan,retract,tricycle,low
+bizjet_light,Business jet - very light / light,cirrus_sf50,Cirrus SF50 Vision Jet,,,bizjet_light,1,turbofan,retract,tricycle,low
+bizjet_light,Business jet - very light / light,eclipse,Eclipse 500 / 550,,,bizjet_light,2,turbofan,retract,tricycle,low
+bizjet_light,Business jet - very light / light,embraer_phenom,Embraer Phenom 100 / 300 (EMB-500/505),phenom300,Phenom 300 (EMB-505),bizjet_light,2,turbofan,retract,tricycle,low
+bizjet_light,Business jet - very light / light,embraer_phenom,Embraer Phenom 100 / 300 (EMB-500/505),phenom100,Phenom 100 (EMB-500),bizjet_light,2,turbofan,retract,tricycle,low
+bizjet_light,Business jet - very light / light,hondajet,Honda HA-420 HondaJet,,,bizjet_light,2,turbofan,retract,tricycle,low
+bizjet_light,Business jet - very light / light,learjet,Learjet (23-75),lj20s,23 / 24 / 25 / 28 / 29,bizjet_light,2,turbofan,retract,tricycle,low
+bizjet_light,Business jet - very light / light,learjet,Learjet (23-75),lj30s,31 / 35 / 36 / C-21,bizjet_light,2,turbofan,retract,tricycle,low
+bizjet_light,Business jet - very light / light,learjet,Learjet (23-75),lj55_60,55 / 60,bizjet_midsize,2,turbofan,retract,tricycle,low
+bizjet_light,Business jet - very light / light,learjet,Learjet (23-75),lj40_45_70_75,40 / 45 / 70 / 75,bizjet_light,2,turbofan,retract,tricycle,low
+bizjet_light,Business jet - very light / light,pilatus_pc24,Pilatus PC-24,,,bizjet_light,2,turbofan,retract,tricycle,low
+bizjet_midsize,Business jet - midsize / super-midsize,citation_excel,Cessna Citation Excel/XLS (560XL),,,bizjet_midsize,2,turbofan,retract,tricycle,low
+bizjet_midsize,Business jet - midsize / super-midsize,citation_650,Cessna Citation III/VI/VII (650),,,bizjet_midsize,2,turbofan,retract,tricycle,low
+bizjet_midsize,Business jet - midsize / super-midsize,citation_700,Cessna Citation Longitude (700),,,bizjet_midsize,2,turbofan,retract,tricycle,low
+bizjet_midsize,Business jet - midsize / super-midsize,citation_680,Cessna Citation Sovereign/Latitude (680/680A),c680a,680A Latitude,bizjet_midsize,2,turbofan,retract,tricycle,low
+bizjet_midsize,Business jet - midsize / super-midsize,citation_680,Cessna Citation Sovereign/Latitude (680/680A),c680,680 Sovereign,bizjet_midsize,2,turbofan,retract,tricycle,low
+bizjet_midsize,Business jet - midsize / super-midsize,citation_750,Cessna Citation X (750),,,bizjet_midsize,2,turbofan,retract,tricycle,low
+bizjet_midsize,Business jet - midsize / super-midsize,embraer_legacy_praetor,Embraer Legacy 450/500 / Praetor 500/600,,,bizjet_midsize,2,turbofan,retract,tricycle,low
+bizjet_midsize,Business jet - midsize / super-midsize,hawker_4000,Hawker 4000 Horizon,,,bizjet_midsize,2,turbofan,retract,tricycle,low
+bizjet_midsize,Business jet - midsize / super-midsize,hawker_125,Hawker Siddeley / BAe / Hawker 125 (700/800/850/900),,,bizjet_midsize,2,turbofan,retract,tricycle,low
+bizjet_midsize,Business jet - midsize / super-midsize,iai_westwind,IAI 1121/1123/1124 Jet Commander / Westwind,,,bizjet_midsize,2,turbofan,retract,tricycle,low
+bizjet_midsize,Business jet - midsize / super-midsize,sabreliner,North American / Rockwell Sabreliner,,,bizjet_midsize,2,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,bombardier_challenger,Canadair / Bombardier Challenger & Global,global,BD-700 Global Express / 5000-8000,bizjet_large,2,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,bombardier_challenger,Canadair / Bombardier Challenger & Global,c300_350,BD-100 Challenger 300 / 350 / 3500,bizjet_midsize,2,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,bombardier_challenger,Canadair / Bombardier Challenger & Global,c604_650,CL-600-2B16 Challenger 604 / 605 / 650,bizjet_large,2,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,bombardier_challenger,Canadair / Bombardier Challenger & Global,c601,CL-600-2A12 Challenger 601,bizjet_large,2,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,bombardier_challenger,Canadair / Bombardier Challenger & Global,c600,CL-600-1A11 Challenger 600,bizjet_large,2,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,dassault_falcon,Dassault Falcon,f2000,Falcon 2000 series,bizjet_large,2,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,dassault_falcon,Dassault Falcon,f900,Falcon 900 series,bizjet_large,3,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,dassault_falcon,Dassault Falcon,f7x_8x,Falcon 7X / 8X,bizjet_large,3,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,dassault_falcon,Dassault Falcon,f6x,Falcon 6X,bizjet_large,2,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,dassault_falcon,Dassault Falcon,f200,Falcon 200,bizjet_midsize,2,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,dassault_falcon,Dassault Falcon,f10_100,Falcon 10 / 100,bizjet_midsize,2,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,dassault_falcon,Dassault Falcon,f50,Falcon 50 series,bizjet_large,3,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,dassault_falcon,Dassault Falcon,f20,Fan Jet Falcon / Falcon 20 / HU-25,bizjet_midsize,2,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,embraer_legacy_600,Embraer Legacy 600/650 (EMB-135BJ),,,bizjet_large,2,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,gulfstream,"Gulfstream jets (GII-G800, G100-G280)",g1159_gii_giii,G-1159 / GII / GIIB / GIII (C-20),bizjet_large,2,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,gulfstream,"Gulfstream jets (GII-G800, G100-G280)",giv_g450,GIV / GIV-SP / G300-G450,bizjet_large,2,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,gulfstream,"Gulfstream jets (GII-G800, G100-G280)",gv_g550,GV / GV-SP / G550 (C-37),bizjet_large,2,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,gulfstream,"Gulfstream jets (GII-G800, G100-G280)",gvi_g650,GVI / G650 / G650ER,bizjet_large,2,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,gulfstream,"Gulfstream jets (GII-G800, G100-G280)",gvii,GVII G500 / G600 / G700 / G800,bizjet_large,2,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,gulfstream,"Gulfstream jets (GII-G800, G100-G280)",g280_g200,G200 Galaxy / G280 (IAI 1126),bizjet_midsize,2,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,gulfstream,"Gulfstream jets (GII-G800, G100-G280)",g100_g150,Astra / G100 / G150 (IAI 1125),bizjet_midsize,2,turbofan,retract,tricycle,low
+bizjet_large,Business jet - large / long range,lockheed_jetstar,Lockheed JetStar (1329),,,bizjet_large,4,turbofan,retract,tricycle,low
+regional_jet,Regional jet,bae146_avro,BAe 146 / Avro RJ,,,regional_jet,4,turbofan,retract,tricycle,high
+regional_jet,Regional jet,bombardier_crj,Bombardier CRJ100/200/440/700/900/1000,crj1000,CRJ1000 (CL-600-2E25),regional_jet,2,turbofan,retract,tricycle,low
+regional_jet,Regional jet,bombardier_crj,Bombardier CRJ100/200/440/700/900/1000,crj900,CRJ900 (CL-600-2D24/2D15),regional_jet,2,turbofan,retract,tricycle,low
+regional_jet,Regional jet,bombardier_crj,Bombardier CRJ100/200/440/700/900/1000,crj700,CRJ700/550 (CL-600-2C10/2C11),regional_jet,2,turbofan,retract,tricycle,low
+regional_jet,Regional jet,bombardier_crj,Bombardier CRJ100/200/440/700/900/1000,crj100_200,CRJ100/200/440 (CL-600-2B19),regional_jet,2,turbofan,retract,tricycle,low
+regional_jet,Regional jet,embraer_ejet,"Embraer E-Jets (E170/175/190/195, E2)",ejet_e2,E175-E2 / E190-E2 / E195-E2,regional_jet,2,turbofan,retract,tricycle,low
+regional_jet,Regional jet,embraer_ejet,"Embraer E-Jets (E170/175/190/195, E2)",e175,E175 (ERJ 170-200),regional_jet,2,turbofan,retract,tricycle,low
+regional_jet,Regional jet,embraer_ejet,"Embraer E-Jets (E170/175/190/195, E2)",e170,E170 (ERJ 170-100),regional_jet,2,turbofan,retract,tricycle,low
+regional_jet,Regional jet,embraer_ejet,"Embraer E-Jets (E170/175/190/195, E2)",e195,E195 (ERJ 190-200),regional_jet,2,turbofan,retract,tricycle,low
+regional_jet,Regional jet,embraer_ejet,"Embraer E-Jets (E170/175/190/195, E2)",e190,E190 (ERJ 190-100),regional_jet,2,turbofan,retract,tricycle,low
+regional_jet,Regional jet,embraer_erj145,Embraer ERJ-135 / 140 / 145,erj135,ERJ-135,regional_jet,2,turbofan,retract,tricycle,low
+regional_jet,Regional jet,embraer_erj145,Embraer ERJ-135 / 140 / 145,erj140,ERJ-140,regional_jet,2,turbofan,retract,tricycle,low
+regional_jet,Regional jet,embraer_erj145,Embraer ERJ-135 / 140 / 145,erj145,ERJ-145,regional_jet,2,turbofan,retract,tricycle,low
+regional_jet,Regional jet,fokker_f28_70_100,Fokker F28 / 70 / 100,f100,Fokker 100,regional_jet,2,turbofan,retract,tricycle,low
+regional_jet,Regional jet,fokker_f28_70_100,Fokker F28 / 70 / 100,f70,Fokker 70,regional_jet,2,turbofan,retract,tricycle,low
+regional_jet,Regional jet,fokker_f28_70_100,Fokker F28 / 70 / 100,f28,F28 Fellowship,regional_jet,2,turbofan,retract,tricycle,low
+narrowbody,Narrowbody airliner,airbus_a220,"Airbus A220 (Bombardier CS100/CS300, BD-500)",,,narrowbody,,turbofan,retract,tricycle,low
+narrowbody,Narrowbody airliner,airbus_a320_family,Airbus A318 / A319 / A320 / A321,a318,A318,narrowbody,,turbofan,retract,tricycle,low
+narrowbody,Narrowbody airliner,airbus_a320_family,Airbus A318 / A319 / A320 / A321,a319,A319,narrowbody,,turbofan,retract,tricycle,low
+narrowbody,Narrowbody airliner,airbus_a320_family,Airbus A318 / A319 / A320 / A321,a320,A320,narrowbody,,turbofan,retract,tricycle,low
+narrowbody,Narrowbody airliner,airbus_a320_family,Airbus A318 / A319 / A320 / A321,a321,A321,narrowbody,,turbofan,retract,tricycle,low
+narrowbody,Narrowbody airliner,boeing_707_720,Boeing 707 / 720,,,narrowbody,4,turbofan,retract,tricycle,low
+narrowbody,Narrowbody airliner,boeing_717,Boeing 717 (MD-95),,,narrowbody,2,turbofan,retract,tricycle,low
+narrowbody,Narrowbody airliner,boeing_727,Boeing 727,b727_200,727-200,narrowbody,3,turbofan,retract,tricycle,low
+narrowbody,Narrowbody airliner,boeing_727,Boeing 727,b727_100,727-100,narrowbody,3,turbofan,retract,tricycle,low
+narrowbody,Narrowbody airliner,boeing_737,Boeing 737,b737_max,737 MAX 7/8/9/10,narrowbody,2,turbofan,retract,tricycle,low
+narrowbody,Narrowbody airliner,boeing_737,Boeing 737,b737_ng,737 NG (-600/700/800/900/BBJ),narrowbody,2,turbofan,retract,tricycle,low
+narrowbody,Narrowbody airliner,boeing_737,Boeing 737,b737_classic,737 Classic (-300/400/500),narrowbody,2,turbofan,retract,tricycle,low
+narrowbody,Narrowbody airliner,boeing_737,Boeing 737,b737_original,"737 Original (-100/200, T-43)",narrowbody,2,turbofan,retract,tricycle,low
+narrowbody,Narrowbody airliner,boeing_757,Boeing 757,b757_300,757-300,narrowbody,2,turbofan,retract,tricycle,low
+narrowbody,Narrowbody airliner,boeing_757,Boeing 757,b757_200,757-200,narrowbody,2,turbofan,retract,tricycle,low
+narrowbody,Narrowbody airliner,douglas_dc8,Douglas DC-8,,,narrowbody,4,turbofan,retract,tricycle,low
+narrowbody,Narrowbody airliner,douglas_dc9_md80_90,Douglas DC-9 / MD-80 / MD-90,md90,MD-90,narrowbody,2,turbofan,retract,tricycle,low
+narrowbody,Narrowbody airliner,douglas_dc9_md80_90,Douglas DC-9 / MD-80 / MD-90,md80,"MD-80 series (DC-9-81/82/83/87, MD-88)",narrowbody,2,turbofan,retract,tricycle,low
+narrowbody,Narrowbody airliner,douglas_dc9_md80_90,Douglas DC-9 / MD-80 / MD-90,dc9,DC-9-10 to -50,narrowbody,2,turbofan,retract,tricycle,low
+widebody,Widebody airliner,airbus_a300_310,Airbus A300 / A310,a300,A300,widebody,2,turbofan,retract,tricycle,low
+widebody,Widebody airliner,airbus_a300_310,Airbus A300 / A310,a310,A310,widebody,2,turbofan,retract,tricycle,low
+widebody,Widebody airliner,airbus_a330,Airbus A330,,,widebody,2,turbofan,retract,tricycle,low
+widebody,Widebody airliner,airbus_a340,Airbus A340,,,widebody,4,turbofan,retract,tricycle,low
+widebody,Widebody airliner,airbus_a350,Airbus A350,,,widebody,2,turbofan,retract,tricycle,low
+widebody,Widebody airliner,airbus_a380,Airbus A380,,,widebody,4,turbofan,retract,tricycle,low
+widebody,Widebody airliner,boeing_747,Boeing 747,b747_8,747-8,widebody,4,turbofan,retract,tricycle,low
+widebody,Widebody airliner,boeing_747,Boeing 747,b747_400,747-400,widebody,4,turbofan,retract,tricycle,low
+widebody,Widebody airliner,boeing_747,Boeing 747,b747_classic,747-100/200/300/SP,widebody,4,turbofan,retract,tricycle,low
+widebody,Widebody airliner,boeing_767,Boeing 767,b767_400,767-400,widebody,2,turbofan,retract,tricycle,low
+widebody,Widebody airliner,boeing_767,Boeing 767,b767_300,767-300,widebody,2,turbofan,retract,tricycle,low
+widebody,Widebody airliner,boeing_767,Boeing 767,b767_200,767-200 / KC-46,widebody,2,turbofan,retract,tricycle,low
+widebody,Widebody airliner,boeing_777,Boeing 777,b777x,777-8 / 777-9,widebody,2,turbofan,retract,tricycle,low
+widebody,Widebody airliner,boeing_777,Boeing 777,b777_300,777-300 / 300ER,widebody,2,turbofan,retract,tricycle,low
+widebody,Widebody airliner,boeing_777,Boeing 777,b777_200,777-200 / 200ER / 200LR / F,widebody,2,turbofan,retract,tricycle,low
+widebody,Widebody airliner,boeing_787,Boeing 787,b787_8,787-8,widebody,2,turbofan,retract,tricycle,low
+widebody,Widebody airliner,boeing_787,Boeing 787,b787_9,787-9,widebody,2,turbofan,retract,tricycle,low
+widebody,Widebody airliner,boeing_787,Boeing 787,b787_10,787-10,widebody,2,turbofan,retract,tricycle,low
+widebody,Widebody airliner,lockheed_l1011,Lockheed L-1011 TriStar,,,widebody,3,turbofan,retract,tricycle,low
+widebody,Widebody airliner,douglas_dc10_md11,McDonnell Douglas DC-10 / MD-10 / MD-11,md11,MD-11,widebody,3,turbofan,retract,tricycle,low
+widebody,Widebody airliner,douglas_dc10_md11,McDonnell Douglas DC-10 / MD-10 / MD-11,dc10,DC-10 / MD-10 / KC-10,widebody,3,turbofan,retract,tricycle,low
+legacy_transport,Legacy piston/turboprop transport,convair_piston,Convair 240 / 340 / 440,,,legacy_transport,2,piston,retract,,low
+legacy_transport,Legacy piston/turboprop transport,convair_580,Convair 580 / 600 / 640 / 5800 (turboprop),,,legacy_transport,2,turboprop,retract,,low
+legacy_transport,Legacy piston/turboprop transport,curtiss_c46,Curtiss C-46 Commando,,,legacy_transport,2,piston,retract,tailwheel,
+legacy_transport,Legacy piston/turboprop transport,douglas_dc3,Douglas DC-3 / C-47 / Basler BT-67,bt67,Basler BT-67 / turbine DC-3,legacy_transport,2,turboprop,retract,tailwheel,low
+legacy_transport,Legacy piston/turboprop transport,douglas_dc3,Douglas DC-3 / C-47 / Basler BT-67,dc3,DC-3 / C-47 / R4D,legacy_transport,2,piston,retract,tailwheel,low
+legacy_transport,Legacy piston/turboprop transport,douglas_dc4_6_7,Douglas DC-4 / DC-6 / DC-7,dc4,DC-4 / C-54,legacy_transport,4,piston,retract,tricycle,low
+legacy_transport,Legacy piston/turboprop transport,douglas_dc4_6_7,Douglas DC-4 / DC-6 / DC-7,dc6,DC-6 / C-118,legacy_transport,4,piston,retract,tricycle,low
+legacy_transport,Legacy piston/turboprop transport,douglas_dc4_6_7,Douglas DC-4 / DC-6 / DC-7,dc7,DC-7,legacy_transport,4,piston,retract,tricycle,low
+legacy_transport,Legacy piston/turboprop transport,lockheed_l382,Lockheed L-100/L-382 Hercules / C-130,,,legacy_transport,4,turboprop,retract,,high
+legacy_transport,Legacy piston/turboprop transport,lockheed_l188,Lockheed L-188 Electra,,,legacy_transport,4,turboprop,retract,,

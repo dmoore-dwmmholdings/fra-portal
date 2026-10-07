@@ -1,0 +1,3624 @@
+# Fixed-wing aircraft taxonomy for NTSB accident analysis
+# Generated 2026-10-06 - 229 families, 276 variants, 20 classes.
+#
+# Hierarchy: class -> family (airframe lineage) -> variant (specific model).
+# A variant may override the family's class and attrs (e.g. 172RG -> sep_retract).
+#
+# MATCHING CONTRACT (see NTSB_INGEST_SPEC.md section 5):
+#   make_norm  = uppercase; every char not [A-Z0-9] -> space; collapse spaces; trim
+#   model_norm = uppercase; delete every char not [A-Z0-9]       ('PA-28-161' -> 'PA28161')
+#   series_norm likewise; combo = model_norm + series_norm when series is non-empty
+#   1. Family candidates: (any make regex in family.makes matches make_norm AND model_re matches model_norm)
+#      OR (aircraft is amateur-built AND homebuilt_model_re matches model_norm).
+#      If none, retry with combo.  Highest priority wins; ties at top priority = AMBIGUOUS (report, don't guess).
+#   2. Variant: first variant (file order) whose model_re matches combo, else model_norm. No match = family-only.
+#   3. Class/attrs resolve: class defaults <- family attrs <- variant overrides.
+#   4. No family -> [[fallback]] rules in order, using NTSB homebuilt / engines.eng_type / num_eng.
+# All regexes are Rust `regex` crate compatible (no lookaround/backrefs); use Regex::is_match (unanchored unless ^/$).
+
+schema_version = 1
+scope = "NTSB aircraft.acft_category = AIR (airplanes), events 1982-present"
+
+[makes]
+cessna = ['^CESSNA\b', '^REIMS\b', '^TEXTRON\b']
+beech = ['^BEECH', '^RAYTHEON\b', '^HAWKER BEECHCRAFT\b', '^TEXTRON\b']
+piper = ['^PIPER\b', '^NEW PIPER\b']
+mooney = ['^MOONEY\b']
+cirrus = ['^CIRRUS\b']
+diamond = ['^DIAMOND\b']
+grumman_american = ['^GRUMMAN\b', '^AMERICAN AVIATION\b', '^GULFSTREAM AMERICAN\b', '^AMERICAN GEN', '^TIGER AIRCRAFT\b']
+socata = ['^SOCATA\b', '^EADS SOCATA\b', '^AEROSPATIALE\b', '^DAHER\b']
+commander_single = ['^ROCKWELL\b', '^COMMANDER\b', '^AERO COMMANDER\b']
+navion = ['^NAVION\b', '^RYAN\b', '^NORTH AMERICAN\b', '^TUSCO\b']
+erco = ['^ERCO\b', '^ENGINEERING (AND|&)? ?RESEARCH\b', '^ALON\b', '^FORNEY\b', '^FORNAIRE\b', '^AIRCOUPE\b', '^MOONEY\b']
+luscombe = ['^LUSCOMBE\b', '^SILVAIRE\b', '^TEMCO\b']
+aeronca = ['^AERONCA\b', '^CHAMPION\b', '^AMERICAN CHAMPION\b', '^BELLANCA\b']
+champion = ['^CHAMPION\b', '^AMERICAN CHAMPION\b', '^BELLANCA\b', '^AERONCA\b']
+bellanca = ['^BELLANCA\b']
+taylorcraft = ['^TAYLORCRAFT\b', '^TAYLOR\b']
+stinson = ['^STINSON\b']
+maule = ['^MAULE\b']
+aviat = ['^AVIAT\b', '^CHRISTEN\b', '^PITTS\b', '^HUSKY\b']
+christen = ['^CHRISTEN\b', '^AVIAT\b']
+cubcrafters = ['^CUB ?CRAFTERS\b']
+american_legend = ['^AMERICAN LEGEND\b']
+extra = ['^EXTRA\b', '^WALTER EXTRA\b']
+zivko = ['^ZIVKO\b']
+sukhoi = ['^SUKHOI\b']
+globe_temco = ['^GLOBE\b', '^TEMCO\b', '^SWIFT\b']
+helio = ['^HELIO\b']
+gippsland = ['^GIPPSLAND\b', '^MAHINDRA\b']
+lake = ['^LAKE\b', '^REVO\b', '^CONSOLIDATED AERONAUTICS\b', '^COLONIAL\b']
+icon = ['^ICON\b']
+flight_design = ['^FLIGHT DESIGN\b']
+tecnam = ['^TECNAM\b', '^COSTRUZIONI AERONAUTICHE TECNAM\b']
+czech_sport = ['^CZECH\b', '^PIPER\b']
+sling = ['^SLING\b', '^THE AIRPLANE FACTORY\b', '^AIRPLANE FACTORY\b']
+pipistrel = ['^PIPISTREL\b']
+evektor = ['^EVEKTOR\b']
+remos = ['^REMOS\b']
+jabiru = ['^JABIRU\b']
+aeropro = ['^AEROPRO\b']
+vans = ['^VAN ?S\b']
+lancair = ['^LANCAIR\b', '^NEICO\b']
+columbia = ['^COLUMBIA\b', '^LANCAIR\b', '^CESSNA\b']
+glasair = ['^GLASAIR\b', '^GLASSAIR\b', '^STODDARD\b']
+kitfox = ['^KITFOX\b', '^DENNEY\b', '^SKYSTAR\b']
+zenith = ['^ZENITH\b', '^ZENAIR\b', '^AMD\b']
+sonex = ['^SONEX\b']
+rans = ['^RANS\b']
+canard = ['^RUTAN\b', '^VELOCITY\b', '^COZY\b']
+murphy = ['^MURPHY\b']
+just = ['^JUST AIRCRAFT\b']
+kolb = ['^KOLB\b']
+avid = ['^AVID\b']
+progressive = ['^PROGRESSIVE AERODYNE\b', '^SEAREY\b']
+seawind = ['^SEAWIND\b']
+republic = ['^REPUBLIC\b']
+grumman_amph = ['^GRUMMAN\b', '^MCKINNON\b', '^FRAKES\b']
+dehavilland = ['^DE ?HAVILLAND\b', '^DHC\b', '^VIKING\b', '^BOMBARDIER\b']
+pilatus = ['^PILATUS\b']
+britten_norman = ['^BRITTEN', '^PILATUS BRITTEN']
+partenavia = ['^PARTENAVIA\b', '^VULCANAIR\b']
+kodiak = ['^QUEST\b', '^KODIAK\b', '^DAHER\b']
+epic = ['^EPIC\b']
+pac = ['^PACIFIC AEROSPACE\b']
+air_tractor = ['^AIR TRACTOR\b']
+thrush = ['^THRUSH\b', '^AYRES\b', '^ROCKWELL\b', '^SNOW\b', '^AERO COMMANDER\b', '^QUALITY AEROSPACE\b']
+agcat = ['^GRUMMAN\b', '^SCHWEIZER\b', '^AG CAT\b', '^ALLIED AG CAT\b']
+weatherly = ['^WEATHERLY\b']
+pzl = ['^PZL\b', '^WSK\b']
+twin_commander = ['^AERO COMMANDER\b', '^ROCKWELL\b', '^GULFSTREAM\b', '^TWIN COMMANDER\b', '^COMMANDER\b']
+aerostar = ['^PIPER\b', '^AEROSTAR\b', '^TED SMITH\b', '^MACHEN\b']
+mitsubishi = ['^MITSUBISHI\b']
+piaggio = ['^PIAGGIO\b']
+swearingen = ['^SWEARINGEN\b', '^FAIRCHILD\b', '^M7 AEROSPACE\b']
+jetstream = ['^BRITISH AEROSPACE\b', '^BAE\b', '^JETSTREAM\b', '^HANDLEY PAGE\b', '^SCOTTISH AVIATION\b']
+saab = ['^SAAB\b']
+embraer = ['^EMBRAER\b']
+atr = ['^ATR\b', '^AVIONS DE TRANSPORT\b', '^AEROSPATIALE\b']
+dornier = ['^DORNIER\b', '^FAIRCHILD DORNIER\b', '^RUAG\b']
+shorts = ['^SHORT\b', '^SHORTS\b']
+casa = ['^CASA\b', '^CONSTRUCCIONES AERONAUTICAS\b', '^AIRBUS\b', '^IPTN\b']
+let = ['^LET\b']
+fokker = ['^FOKKER\b', '^FAIRCHILD\b']
+eclipse = ['^ECLIPSE\b', '^ONE AVIATION\b']
+honda = ['^HONDA\b']
+learjet = ['^LEAR', '^GATES LEAR', '^BOMBARDIER\b']
+hawker = ['^HAWKER\b', '^RAYTHEON\b', '^BRITISH AEROSPACE\b', '^BAE\b', '^HAWKER SIDDELEY\b', '^DE ?HAVILLAND\b', '^BEECH']
+beechjet = ['^BEECH', '^RAYTHEON\b', '^HAWKER\b', '^MITSUBISHI\b', '^TEXTRON\b']
+dassault = ['^DASSAULT\b', '^AVIONS MARCEL DASSAULT\b', '^FALCON\b']
+gulfstream = ['^GULFSTREAM\b', '^GRUMMAN\b', '^ISRAEL AIRCRAFT\b', '^ISRAEL AEROSPACE\b', '^IAI\b']
+iai = ['^ISRAEL AIRCRAFT\b', '^ISRAEL AEROSPACE\b', '^IAI\b']
+bombardier = ['^BOMBARDIER\b', '^CANADAIR\b']
+sabreliner = ['^SABRELINER\b', '^NORTH AMERICAN\b', '^ROCKWELL\b']
+lockheed = ['^LOCKHEED\b']
+boeing = ['^BOEING\b']
+douglas = ['^DOUGLAS\b', '^MCDONNELL\b', '^BOEING\b', '^BASLER\b']
+airbus = ['^AIRBUS\b', '^BOMBARDIER\b']
+bae146 = ['^BRITISH AEROSPACE\b', '^BAE\b', '^AVRO\b']
+convair = ['^CONVAIR\b', '^GENERAL DYNAMICS\b', '^KELOWNA\b']
+curtiss = ['^CURTISS\b']
+stearman = ['^BOEING\b', '^STEARMAN\b']
+north_american = ['^NORTH AMERICAN\b', '^NORTH AMER\b', '^NOORDUYN\b', '^CANADIAN CAR\b', '^CCF\b', '^CAVALIER\b', '^COMMONWEALTH\b']
+yak = ['^YAK', '^IAK\b', '^AEROSTAR S ?A\b', '^NANCHANG\b']
+aero_vodochody = ['^AERO VODOCHODY\b', '^AERO\b']
+waco = ['^WACO\b', '^CLASSIC AIRCRAFT\b']
+ryan = ['^RYAN\b']
+fairchild_vintage = ['^FAIRCHILD\b']
+great_lakes = ['^GREAT LAKES\b']
+
+[[class]]
+id = "sep_fixed"
+name = "Single-engine piston, fixed tricycle gear"
+description = "Trainers, tourers and fixed-gear high performance singles (C172, PA-28, SR22, DA40)."
+defaults = { engines = 1, propulsion = "piston", gear = "fixed", gear_config = "tricycle" }
+
+[[class]]
+id = "sep_retract"
+name = "Single-engine piston, retractable gear"
+description = "Complex / high-performance retract singles (Bonanza, Mooney, Arrow, C210, PA-46 piston)."
+defaults = { engines = 1, propulsion = "piston", gear = "retract", gear_config = "tricycle" }
+
+[[class]]
+id = "sep_tailwheel"
+name = "Single-engine piston, conventional gear"
+description = "Tailwheel light, utility and bush aircraft (J-3, Super Cub, Citabria, C180/185, Husky, Maule)."
+defaults = { engines = 1, propulsion = "piston", gear = "fixed", gear_config = "tailwheel" }
+
+[[class]]
+id = "sep_aerobatic"
+name = "Aerobatic"
+description = "Purpose-built aerobatic aircraft (Pitts, Extra, Decathlon, Edge 540, Christen Eagle)."
+defaults = { engines = 1, propulsion = "piston", gear = "fixed", gear_config = "tailwheel" }
+
+[[class]]
+id = "lsa"
+name = "Light sport (S-LSA / E-LSA)"
+description = "Factory light-sport designs (CTLS, Tecnam P92/P2008, Cessna 162, Icon A5, SportCruiser)."
+defaults = { engines = 1, propulsion = "piston", gear = "fixed", gear_config = "tricycle", cert = "lsa" }
+
+[[class]]
+id = "experimental"
+name = "Experimental amateur-built (kit)"
+description = "Kit/plans-built types usually registered under the builder's name (RV, Lancair, Glasair, Kitfox)."
+defaults = { engines = 1, propulsion = "piston", cert = "experimental" }
+
+[[class]]
+id = "vintage"
+name = "Vintage & warbird"
+description = "Ex-military trainers/fighters and classic biplanes (Stearman, T-6, P-51, Yak-52, L-39, Waco)."
+defaults = { cert = "limited_or_exhibition" }
+
+[[class]]
+id = "agricultural"
+name = "Agricultural"
+description = "Purpose-built ag aircraft (Air Tractor, Thrush, Ag Cat, Pawnee, AgWagon)."
+defaults = { engines = 1, gear = "fixed", gear_config = "tailwheel", cert = "restricted_or_normal" }
+
+[[class]]
+id = "amphibian"
+name = "Amphibian / flying boat"
+description = "Hull amphibians (Lake, Grumman Goose/Widgeon/Mallard, Seabee, SeaRey). Floatplanes stay in their base class."
+defaults = { amphibian = true }
+
+[[class]]
+id = "mep"
+name = "Multi-engine piston"
+description = "Piston twins (Baron, Seneca, Seminole, C310/340/414/421, Aztec, Navajo, DA42)."
+defaults = { engines = 2, propulsion = "piston", gear = "retract", gear_config = "tricycle" }
+
+[[class]]
+id = "set"
+name = "Single-engine turboprop"
+description = "Caravan, PC-12, TBM, PA-46 turbine, Kodiak, PC-6."
+defaults = { engines = 1, propulsion = "turboprop" }
+
+[[class]]
+id = "met"
+name = "Multi-engine turboprop (business/utility)"
+description = "King Air, Conquest, MU-2, Cheyenne, Turbo Commander, Merlin, P180."
+defaults = { engines = 2, propulsion = "turboprop", gear = "retract", gear_config = "tricycle" }
+
+[[class]]
+id = "regional_turboprop"
+name = "Commuter & regional turboprop"
+description = "19+ seat commuter/airline turboprops (B1900, Metro, Jetstream, EMB-120, Saab 340, ATR, Dash 8, Twin Otter)."
+defaults = { engines = 2, propulsion = "turboprop" }
+
+[[class]]
+id = "bizjet_light"
+name = "Business jet - very light / light"
+description = "Citation Mustang/CJ/I/II/V, Phenom, Eclipse, HondaJet, Learjet 20/30/40, Beechjet/Premier, SF50."
+defaults = { engines = 2, propulsion = "turbofan", gear = "retract", gear_config = "tricycle" }
+
+[[class]]
+id = "bizjet_midsize"
+name = "Business jet - midsize / super-midsize"
+description = "Citation Excel/III/Sovereign/Latitude/X/Longitude, Hawker 125, Learjet 55/60, G100-G280, Challenger 300."
+defaults = { engines = 2, propulsion = "turbofan", gear = "retract", gear_config = "tricycle" }
+
+[[class]]
+id = "bizjet_large"
+name = "Business jet - large / long range"
+description = "Gulfstream GII-G700, Challenger 600-650, Global, Falcon 50/900/2000/7X/8X, Legacy 600."
+defaults = { engines = 2, propulsion = "turbofan", gear = "retract", gear_config = "tricycle" }
+
+[[class]]
+id = "regional_jet"
+name = "Regional jet"
+description = "CRJ, ERJ-135/145, E-Jets, BAe 146/Avro RJ, Fokker 70/100, 328JET."
+defaults = { engines = 2, propulsion = "turbofan", gear = "retract", gear_config = "tricycle", cert = "part25" }
+
+[[class]]
+id = "narrowbody"
+name = "Narrowbody airliner"
+description = "737, 757, 727, 707, 717, DC-8, DC-9/MD-80/90, A220, A320 family."
+defaults = { propulsion = "turbofan", gear = "retract", gear_config = "tricycle", cert = "part25" }
+
+[[class]]
+id = "widebody"
+name = "Widebody airliner"
+description = "747, 767, 777, 787, DC-10/MD-11, L-1011, A300/310/330/340/350/380."
+defaults = { propulsion = "turbofan", gear = "retract", gear_config = "tricycle", cert = "part25" }
+
+[[class]]
+id = "legacy_transport"
+name = "Legacy piston/turboprop transport"
+description = "DC-3, DC-4/6/7, Convair 240-640, C-46, L-188 Electra, L-382/C-130."
+defaults = { gear = "retract", cert = "part25_or_car4b" }
+
+[[fallback]]
+id = "unclassified_experimental"
+name = "Unclassified amateur-built"
+when = { homebuilt = true }
+
+[[fallback]]
+id = "unclassified_jet"
+name = "Unclassified jet"
+when = { eng_type = ["TF", "TJ"] }
+
+[[fallback]]
+id = "unclassified_turboprop"
+name = "Unclassified turboprop"
+when = { eng_type = ["TP"] }
+
+[[fallback]]
+id = "unclassified_mep"
+name = "Unclassified multi-engine piston"
+when = { eng_type = ["REC"], num_eng_min = 2 }
+
+[[fallback]]
+id = "unclassified_sep"
+name = "Unclassified single-engine piston"
+when = { eng_type = ["REC"], num_eng_max = 1 }
+
+[[fallback]]
+id = "unknown"
+name = "Unknown"
+when = {  }
+
+[[family]]
+id = "cessna_120_140"
+name = "Cessna 120/140"
+class = "sep_tailwheel"
+makes = ["cessna"]
+model_re = '^C?1[24]0A?$'
+attrs = { wing = "high" }
+
+  [[family.variant]]
+  id = "c120"
+  name = "120"
+  model_re = '^C?120'
+
+  [[family.variant]]
+  id = "c140"
+  name = "140 / 140A"
+  model_re = '^C?140'
+
+[[family]]
+id = "cessna_150_152"
+name = "Cessna 150/152"
+class = "sep_fixed"
+makes = ["cessna"]
+model_re = '^(C|F|A|FA)?15[02]([A-Z][A-Z0-9]*)?$|^AEROBAT'
+attrs = { wing = "high" }
+
+  [[family.variant]]
+  id = "aerobat"
+  name = "A150/A152 Aerobat"
+  model_re = '^F?A15[02]|AEROBAT'
+
+  [[family.variant]]
+  id = "c150"
+  name = "150"
+  model_re = '^(C|F)?150'
+
+  [[family.variant]]
+  id = "c152"
+  name = "152"
+  model_re = '^(C|F)?152'
+
+[[family]]
+id = "cessna_162"
+name = "Cessna 162 Skycatcher"
+class = "lsa"
+makes = ["cessna"]
+model_re = '^C?162$|^SKYCATCHER'
+attrs = { wing = "high" }
+
+[[family]]
+id = "cessna_170"
+name = "Cessna 170"
+class = "sep_tailwheel"
+makes = ["cessna"]
+model_re = '^C?170[AB]?$'
+attrs = { wing = "high" }
+
+[[family]]
+id = "cessna_172"
+name = "Cessna 172 Skyhawk"
+class = "sep_fixed"
+makes = ["cessna"]
+model_re = '^(C|F|P|R|FR)?172([A-Z][A-Z0-9]*)?$|^SKYHAWK|^T41[A-D]?$|^CUTLASS|^HAWKXP'
+attrs = { wing = "high" }
+
+  [[family.variant]]
+  id = "c172rg"
+  name = "172RG Cutlass RG"
+  model_re = '^C?172RG|^CUTLASSRG'
+  class = "sep_retract"
+  attrs = { gear = "retract" }
+
+  [[family.variant]]
+  id = "r172"
+  name = "R172 / FR172 Hawk XP"
+  model_re = '^F?R172|^HAWKXP|^172XP'
+
+  [[family.variant]]
+  id = "p172"
+  name = "P172 Powermatic"
+  model_re = '^P172'
+
+  [[family.variant]]
+  id = "c172_early"
+  name = "172 / 172A (straight tail)"
+  model_re = '^C?172A?$'
+
+  [[family.variant]]
+  id = "c172_bm"
+  name = "172B-172M"
+  model_re = '^(C|F)?172[B-M]$'
+
+  [[family.variant]]
+  id = "c172n"
+  name = "172N"
+  model_re = '^(C|F)?172N'
+
+  [[family.variant]]
+  id = "c172pq"
+  name = "172P / 172Q"
+  model_re = '^(C|F)?172[PQ]'
+
+  [[family.variant]]
+  id = "c172r"
+  name = "172R"
+  model_re = '^C?172R$|^C?172R[0-9]'
+
+  [[family.variant]]
+  id = "c172s"
+  name = "172S / 172SP"
+  model_re = '^C?172S($|P|[0-9])'
+
+  [[family.variant]]
+  id = "t41"
+  name = "T-41 Mescalero"
+  model_re = '^T41'
+
+[[family]]
+id = "cessna_175"
+name = "Cessna 175 Skylark"
+class = "sep_fixed"
+makes = ["cessna"]
+model_re = '^C?175[A-C]?$|^SKYLARK'
+attrs = { wing = "high" }
+
+[[family]]
+id = "cessna_177"
+name = "Cessna 177 Cardinal"
+class = "sep_fixed"
+makes = ["cessna"]
+model_re = '^C?177([A-Z][A-Z0-9]*)?$|^CARDINAL'
+attrs = { wing = "high" }
+
+  [[family.variant]]
+  id = "c177rg"
+  name = "177RG Cardinal RG"
+  model_re = '^C?177RG|^CARDINALRG'
+  class = "sep_retract"
+  attrs = { gear = "retract" }
+
+  [[family.variant]]
+  id = "c177"
+  name = "177 / 177A / 177B"
+  model_re = '^C?177'
+
+[[family]]
+id = "cessna_180"
+name = "Cessna 180 Skywagon"
+class = "sep_tailwheel"
+makes = ["cessna"]
+model_re = '^C?180[A-K]?$'
+attrs = { wing = "high" }
+
+[[family]]
+id = "cessna_182"
+name = "Cessna 182 Skylane"
+class = "sep_fixed"
+makes = ["cessna"]
+model_re = '^(C|F|R|T|TR|FR)?182([A-Z][A-Z0-9]*)?$|^SKYLANE'
+attrs = { wing = "high" }
+
+  [[family.variant]]
+  id = "c182rg"
+  name = "R182 / TR182 Skylane RG"
+  model_re = '^(F?R|TR)182|^SKYLANERG|^182RG'
+  class = "sep_retract"
+  attrs = { gear = "retract" }
+
+  [[family.variant]]
+  id = "t182"
+  name = "T182 Turbo Skylane"
+  model_re = '^T182'
+
+  [[family.variant]]
+  id = "c182"
+  name = "182 / 182A-182T"
+  model_re = '^(C|F)?182'
+
+[[family]]
+id = "cessna_185"
+name = "Cessna 185 Skywagon"
+class = "sep_tailwheel"
+makes = ["cessna"]
+model_re = '^A?185[A-F]?[A-Z0-9]*$|^SKYWAGON'
+attrs = { wing = "high" }
+
+[[family]]
+id = "cessna_188"
+name = "Cessna 188 AgWagon/AgTruck/AgHusky"
+class = "agricultural"
+makes = ["cessna"]
+model_re = '^A?188[A-Z0-9]*$|^AG(WAGON|TRUCK|HUSKY|PICKUP)'
+attrs = { propulsion = "piston", wing = "low" }
+
+[[family]]
+id = "cessna_190_195"
+name = "Cessna 190/195"
+class = "sep_tailwheel"
+makes = ["cessna"]
+model_re = '^C?19[05][AB]?$|^LC126'
+attrs = { wing = "high" }
+
+[[family]]
+id = "cessna_206"
+name = "Cessna 205/206/207 Stationair"
+class = "sep_fixed"
+makes = ["cessna"]
+model_re = '^(C|U|P|TU|TP|T)?20[567]([A-Z][A-Z0-9]*)?$|^STATIONAIR|^SKYWAGON20[67]'
+attrs = { wing = "high" }
+
+  [[family.variant]]
+  id = "c205"
+  name = "205"
+  model_re = '^C?205'
+
+  [[family.variant]]
+  id = "c206"
+  name = "206 / U206 / P206 / T206"
+  model_re = '^(C|U|P|TU|TP|T)?206|^STATIONAIR'
+
+  [[family.variant]]
+  id = "c207"
+  name = "207 Skywagon / Stationair 8"
+  model_re = '^T?207'
+
+[[family]]
+id = "cessna_210"
+name = "Cessna 210 Centurion"
+class = "sep_retract"
+makes = ["cessna"]
+model_re = '^(C|T|P|TP)?210([A-Z][A-Z0-9]*)?$|^CENTURION'
+attrs = { wing = "high" }
+
+  [[family.variant]]
+  id = "p210"
+  name = "P210 Pressurized Centurion"
+  model_re = '^T?P210'
+  attrs = { pressurized = true }
+
+  [[family.variant]]
+  id = "t210"
+  name = "T210 Turbo Centurion"
+  model_re = '^T210'
+
+  [[family.variant]]
+  id = "c210"
+  name = "210"
+  model_re = '^C?210'
+
+[[family]]
+id = "cessna_corvalis"
+name = "Columbia/Cessna 300/350/400 (Corvalis)"
+class = "sep_fixed"
+makes = ["columbia"]
+model_re = '^LC4[012]|^COLUMBIA|^CORVALIS|^T?240$|^350$|^400$'
+priority = 150
+attrs = { wing = "low" }
+notes = "'350'/'400' only match make CESSNA/COLUMBIA/LANCAIR; a TEXTRON-made 350 falls to King Air."
+
+[[family]]
+id = "cessna_303"
+name = "Cessna 303 Crusader"
+class = "mep"
+makes = ["cessna"]
+model_re = '^T?303$|^CRUSADER'
+attrs = { wing = "low" }
+
+[[family]]
+id = "cessna_310_320"
+name = "Cessna 310/320"
+class = "mep"
+makes = ["cessna"]
+model_re = '^(T|E)?3[12]0[A-Z0-9]*$|^U3[AB]?$|^SKYKNIGHT'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "c310"
+  name = "310"
+  model_re = '^T?310|^U3'
+
+  [[family.variant]]
+  id = "c320"
+  name = "320 Skyknight"
+  model_re = '^(E)?320|^SKYKNIGHT'
+
+[[family]]
+id = "cessna_336_337"
+name = "Cessna 336/337 Skymaster"
+class = "mep"
+makes = ["cessna"]
+model_re = '^(T|P|F|FT|M|T)?33[67][A-Z0-9]*$|^SKYMASTER|^O2[AB]?$'
+attrs = { wing = "high", engine_layout = "centerline" }
+
+  [[family.variant]]
+  id = "c336"
+  name = "336 (fixed gear)"
+  model_re = '^336'
+  attrs = { gear = "fixed" }
+
+  [[family.variant]]
+  id = "p337"
+  name = "P337 Pressurized"
+  model_re = '^T?P337'
+  attrs = { pressurized = true }
+
+  [[family.variant]]
+  id = "c337"
+  name = "337"
+  model_re = '337|^O2'
+
+[[family]]
+id = "cessna_335_340"
+name = "Cessna 335/340"
+class = "mep"
+makes = ["cessna"]
+model_re = '^3(35|40)[A-Z0-9]*$'
+attrs = { wing = "low", pressurized = true }
+
+[[family]]
+id = "cessna_401_402_411"
+name = "Cessna 401/402/411"
+class = "mep"
+makes = ["cessna"]
+model_re = '^4(01|02|11)[A-Z0-9]*$'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "c401"
+  name = "401"
+  model_re = '^401'
+
+  [[family.variant]]
+  id = "c402"
+  name = "402 / Businessliner / Utiliner"
+  model_re = '^402'
+
+  [[family.variant]]
+  id = "c411"
+  name = "411"
+  model_re = '^411'
+
+[[family]]
+id = "cessna_404"
+name = "Cessna 404 Titan"
+class = "mep"
+makes = ["cessna"]
+model_re = '^404[A-Z0-9]*$|^TITAN'
+attrs = { wing = "low" }
+
+[[family]]
+id = "cessna_414_421"
+name = "Cessna 414/421"
+class = "mep"
+makes = ["cessna"]
+model_re = '^4(14|21)[A-Z0-9]*$|^CHANCELLOR|^GOLDENEAGLE'
+attrs = { wing = "low", pressurized = true }
+
+  [[family.variant]]
+  id = "c414"
+  name = "414 Chancellor"
+  model_re = '^414|^CHANCELLOR'
+
+  [[family.variant]]
+  id = "c421"
+  name = "421 Golden Eagle"
+  model_re = '^421|^GOLDENEAGLE'
+
+[[family]]
+id = "cessna_406"
+name = "Cessna 406 Caravan II"
+class = "met"
+makes = ["cessna"]
+model_re = '^406$|^F406'
+attrs = { wing = "low" }
+
+[[family]]
+id = "cessna_425_441"
+name = "Cessna 425 Conquest I / 441 Conquest II"
+class = "met"
+makes = ["cessna"]
+model_re = '^4(25|41)[A-Z0-9]*$|^CONQUEST|^CORSAIR'
+attrs = { wing = "low", pressurized = true }
+
+  [[family.variant]]
+  id = "c425"
+  name = "425 Corsair / Conquest I"
+  model_re = '^425|^CORSAIR|^CONQUESTI$'
+
+  [[family.variant]]
+  id = "c441"
+  name = "441 Conquest II"
+  model_re = '^441|^CONQUEST'
+
+[[family]]
+id = "cessna_208"
+name = "Cessna 208 Caravan"
+class = "set"
+makes = ["cessna"]
+model_re = '^C?208[AB]?[A-Z0-9]*$|^CARAVAN|^GRANDCARAVAN'
+attrs = { wing = "high", gear = "fixed", gear_config = "tricycle" }
+
+  [[family.variant]]
+  id = "c208b"
+  name = "208B Grand Caravan / EX"
+  model_re = '^C?208B|^GRANDCARAVAN'
+
+  [[family.variant]]
+  id = "c208"
+  name = "208 / 208A Caravan"
+  model_re = '^C?208'
+
+[[family]]
+id = "cessna_408"
+name = "Cessna 408 SkyCourier"
+class = "regional_turboprop"
+makes = ["cessna"]
+model_re = '^408$|^SKYCOURIER'
+attrs = { wing = "high", gear = "fixed" }
+
+[[family]]
+id = "citation_mustang"
+name = "Cessna Citation Mustang (510)"
+class = "bizjet_light"
+makes = ["cessna"]
+model_re = '^C?510$|^MUSTANG'
+attrs = { wing = "low" }
+
+[[family]]
+id = "citation_cj"
+name = "Cessna CitationJet / M2 / CJ1-CJ4 (525)"
+class = "bizjet_light"
+makes = ["cessna"]
+model_re = '^C?525[ABC]?[A-Z0-9]*$|^CJ[1-4]|^CITATIONJET|^CITATIONM2'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "cj4"
+  name = "525C CJ4"
+  model_re = '^C?525C|^CJ4'
+
+  [[family.variant]]
+  id = "cj3"
+  name = "525B CJ3"
+  model_re = '^C?525B|^CJ3'
+
+  [[family.variant]]
+  id = "cj2"
+  name = "525A CJ2"
+  model_re = '^C?525A|^CJ2'
+
+  [[family.variant]]
+  id = "cj1_m2"
+  name = "525 CitationJet / CJ1 / M2"
+  model_re = '^C?525|^CJ1|^CITATION'
+
+[[family]]
+id = "citation_500_series"
+name = "Cessna Citation I/II/V/Ultra/Encore/Bravo (500/501/550/551/560)"
+class = "bizjet_light"
+makes = ["cessna"]
+model_re = '^C?5(00|01|50|51|60)[A-Z0-9]*$|^T47'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "c500_501"
+  name = "500/501 Citation I"
+  model_re = '^C?50[01]'
+
+  [[family.variant]]
+  id = "c550_551"
+  name = "550/551 Citation II / S/II / Bravo"
+  model_re = '^C?55[01]|^T47'
+
+  [[family.variant]]
+  id = "c560"
+  name = "560 Citation V / Ultra / Encore"
+  model_re = '^C?560'
+
+[[family]]
+id = "citation_excel"
+name = "Cessna Citation Excel/XLS (560XL)"
+class = "bizjet_midsize"
+makes = ["cessna"]
+model_re = '^C?560XL'
+priority = 150
+attrs = { wing = "low" }
+
+[[family]]
+id = "citation_650"
+name = "Cessna Citation III/VI/VII (650)"
+class = "bizjet_midsize"
+makes = ["cessna"]
+model_re = '^C?650$'
+attrs = { wing = "low" }
+
+[[family]]
+id = "citation_680"
+name = "Cessna Citation Sovereign/Latitude (680/680A)"
+class = "bizjet_midsize"
+makes = ["cessna"]
+model_re = '^C?680A?[A-Z0-9]*$|^SOVEREIGN|^LATITUDE'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "c680a"
+  name = "680A Latitude"
+  model_re = '^C?680A|^LATITUDE'
+
+  [[family.variant]]
+  id = "c680"
+  name = "680 Sovereign"
+  model_re = '^C?680|^SOVEREIGN'
+
+[[family]]
+id = "citation_700"
+name = "Cessna Citation Longitude (700)"
+class = "bizjet_midsize"
+makes = ["cessna"]
+model_re = '^C?700$|^LONGITUDE'
+attrs = { wing = "low" }
+
+[[family]]
+id = "citation_750"
+name = "Cessna Citation X (750)"
+class = "bizjet_midsize"
+makes = ["cessna"]
+model_re = '^C?750$|^CITATIONX'
+attrs = { wing = "low" }
+
+[[family]]
+id = "piper_j_cub"
+name = "Piper/Taylor J-2/J-3/J-4/J-5 Cub"
+class = "sep_tailwheel"
+makes = ["piper", "taylorcraft"]
+model_re = '^J[2345][A-Z0-9]*$|^CUB$|^L4[A-J]?$|^NE1$'
+attrs = { wing = "high" }
+
+  [[family.variant]]
+  id = "j3"
+  name = "J-3 Cub"
+  model_re = '^J3|^CUB$|^L4|^NE1'
+
+  [[family.variant]]
+  id = "j5"
+  name = "J-5 Cub Cruiser"
+  model_re = '^J5'
+
+  [[family.variant]]
+  id = "j2_j4"
+  name = "J-2 / J-4"
+  model_re = '^J[24]'
+
+[[family]]
+id = "piper_pa11"
+name = "Piper PA-11 Cub Special"
+class = "sep_tailwheel"
+makes = ["piper"]
+model_re = '^PA11'
+attrs = { wing = "high" }
+
+[[family]]
+id = "piper_pa12"
+name = "Piper PA-12 Super Cruiser"
+class = "sep_tailwheel"
+makes = ["piper"]
+model_re = '^PA12'
+attrs = { wing = "high" }
+
+[[family]]
+id = "piper_pa14_16"
+name = "Piper PA-14 Family Cruiser / PA-16 Clipper"
+class = "sep_tailwheel"
+makes = ["piper"]
+model_re = '^PA1[46]'
+attrs = { wing = "high" }
+
+[[family]]
+id = "piper_pa15_17"
+name = "Piper PA-15/PA-17 Vagabond"
+class = "sep_tailwheel"
+makes = ["piper"]
+model_re = '^PA1[57]'
+attrs = { wing = "high" }
+
+[[family]]
+id = "piper_pa18"
+name = "Piper PA-18 Super Cub"
+class = "sep_tailwheel"
+makes = ["piper"]
+model_re = '^PA18[A-Z0-9]*$|^SUPERCUB|^L21|^L18'
+attrs = { wing = "high" }
+
+[[family]]
+id = "piper_pa20_22"
+name = "Piper PA-20 Pacer / PA-22 Tri-Pacer & Colt"
+class = "sep_fixed"
+makes = ["piper"]
+model_re = '^PA2[02][A-Z0-9]*$|^TRIPACER|^PACER|^COLT$'
+attrs = { wing = "high" }
+
+  [[family.variant]]
+  id = "pa20"
+  name = "PA-20 Pacer"
+  model_re = '^PA20|^PACER'
+  class = "sep_tailwheel"
+  attrs = { gear_config = "tailwheel" }
+
+  [[family.variant]]
+  id = "pa22_108"
+  name = "PA-22-108 Colt"
+  model_re = '^PA22108|^COLT'
+
+  [[family.variant]]
+  id = "pa22"
+  name = "PA-22 Tri-Pacer"
+  model_re = '^PA22|^TRIPACER'
+
+[[family]]
+id = "piper_pa23"
+name = "Piper PA-23 Apache / Aztec"
+class = "mep"
+makes = ["piper"]
+model_re = '^PA23[A-Z0-9]*$|^AZTEC|^APACHE'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "aztec"
+  name = "PA-23-250 Aztec"
+  model_re = '^PA23250|^AZTEC'
+
+  [[family.variant]]
+  id = "apache"
+  name = "PA-23 Apache (150/160/235)"
+  model_re = '^PA23|^APACHE'
+
+[[family]]
+id = "piper_pa24"
+name = "Piper PA-24 Comanche"
+class = "sep_retract"
+makes = ["piper"]
+model_re = '^PA24[A-Z0-9]*$|^COMANCHE$|^COMANCHE[0-9]'
+attrs = { wing = "low" }
+
+[[family]]
+id = "piper_pa25"
+name = "Piper PA-25 Pawnee"
+class = "agricultural"
+makes = ["piper"]
+model_re = '^PA25|^PAWNEE$'
+attrs = { propulsion = "piston", wing = "low" }
+
+[[family]]
+id = "piper_pa28"
+name = "Piper PA-28 Cherokee family (Cherokee, Warrior, Archer, Dakota, Arrow)"
+class = "sep_fixed"
+makes = ["piper"]
+model_re = '^PA28[A-Z0-9]*$|^CHEROKEE$|^CHEROKEE(140|150|160|180|235)|^WARRIOR|^ARCHER|^DAKOTA|^ARROW|^CRUISER$'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "arrow"
+  name = "PA-28R / PA-28RT Arrow"
+  model_re = '^PA28R|^ARROW'
+  class = "sep_retract"
+  attrs = { gear = "retract" }
+
+  [[family.variant]]
+  id = "cherokee_140"
+  name = "PA-28-140 Cherokee 140 / Cruiser"
+  model_re = '^PA28140|^CHEROKEE140|^CRUISER'
+
+  [[family.variant]]
+  id = "cherokee_150_180"
+  name = "PA-28-150/160/180 Cherokee"
+  model_re = '^PA28(150|160|180)|^CHEROKEE(150|160|180)'
+
+  [[family.variant]]
+  id = "warrior"
+  name = "PA-28-151/161 Warrior"
+  model_re = '^PA28(151|161)|^WARRIOR'
+
+  [[family.variant]]
+  id = "archer"
+  name = "PA-28-181 Archer"
+  model_re = '^PA28181|^ARCHER'
+
+  [[family.variant]]
+  id = "dakota_235"
+  name = "PA-28-235/236 / 201T Dakota & Pathfinder"
+  model_re = '^PA28(235|236|201T)|^DAKOTA|^CHEROKEE235'
+
+[[family]]
+id = "piper_pa30_39"
+name = "Piper PA-30/PA-39 Twin Comanche"
+class = "mep"
+makes = ["piper"]
+model_re = '^PA(30|39)[A-Z0-9]*$|^TWINCOMANCHE'
+attrs = { wing = "low" }
+
+[[family]]
+id = "piper_pa31"
+name = "Piper PA-31 Navajo / Chieftain / Cheyenne I-II"
+class = "mep"
+makes = ["piper"]
+model_re = '^PA31[A-Z0-9]*$|^NAVAJO|^CHIEFTAIN|^CHEYENNE(I|II|IIXL)?$|^MOJAVE'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "cheyenne"
+  name = "PA-31T Cheyenne I/II/IIXL"
+  model_re = '^PA31T|^CHEYENNE'
+  class = "met"
+  attrs = { propulsion = "turboprop", pressurized = true }
+
+  [[family.variant]]
+  id = "chieftain"
+  name = "PA-31-350 Chieftain"
+  model_re = '^PA31350|^CHIEFTAIN'
+
+  [[family.variant]]
+  id = "mojave"
+  name = "PA-31P-350 Mojave"
+  model_re = '^PA31P350|^MOJAVE'
+  attrs = { pressurized = true }
+
+  [[family.variant]]
+  id = "navajo"
+  name = "PA-31 / 31-310 / 31-325 / 31P Navajo"
+  model_re = '^PA31|^NAVAJO'
+
+[[family]]
+id = "piper_pa32"
+name = "Piper PA-32 Cherokee Six / Saratoga / Lance"
+class = "sep_fixed"
+makes = ["piper"]
+model_re = '^PA32[A-Z0-9]*$|^CHEROKEESIX|^SARATOGA|^LANCE'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "pa32r"
+  name = "PA-32R Lance / Saratoga SP / Saratoga II"
+  model_re = '^PA32R|^LANCE|^SARATOGASP|^SARATOGAII'
+  class = "sep_retract"
+  attrs = { gear = "retract" }
+
+  [[family.variant]]
+  id = "pa32_fixed"
+  name = "PA-32-260/300/301 Cherokee Six / Saratoga / 6X"
+  model_re = '^PA32(260|300|301)|^CHEROKEESIX'
+
+[[family]]
+id = "piper_pa34"
+name = "Piper PA-34 Seneca"
+class = "mep"
+makes = ["piper"]
+model_re = '^PA34[A-Z0-9]*$|^SENECA|^EMB810'
+attrs = { wing = "low" }
+
+[[family]]
+id = "piper_pa36"
+name = "Piper PA-36 Pawnee Brave"
+class = "agricultural"
+makes = ["piper"]
+model_re = '^PA36|^BRAVE|^PAWNEEBRAVE'
+attrs = { propulsion = "piston", wing = "low" }
+
+[[family]]
+id = "piper_pa38"
+name = "Piper PA-38 Tomahawk"
+class = "sep_fixed"
+makes = ["piper"]
+model_re = '^PA38|^TOMAHAWK'
+attrs = { wing = "low" }
+
+[[family]]
+id = "piper_pa42"
+name = "Piper PA-42 Cheyenne III / 400"
+class = "met"
+makes = ["piper"]
+model_re = '^PA42|^CHEYENNE(III|IIIA|400)'
+priority = 150
+attrs = { wing = "low", pressurized = true }
+
+[[family]]
+id = "piper_pa44"
+name = "Piper PA-44 Seminole"
+class = "mep"
+makes = ["piper"]
+model_re = '^PA44|^SEMINOLE'
+attrs = { wing = "low" }
+
+[[family]]
+id = "piper_pa46"
+name = "Piper PA-46 Malibu / Mirage / Matrix / Meridian / M-series"
+class = "sep_retract"
+makes = ["piper"]
+model_re = '^PA46[A-Z0-9]*$|^MALIBU|^MIRAGE|^MATRIX|^MERIDIAN|^M(350|500|600|700)[A-Z0-9]*$'
+attrs = { wing = "low", pressurized = true }
+notes = "JetPROP / Silver Eagle turbine conversions keep the piston model string; resolve with engines.eng_type."
+
+  [[family.variant]]
+  id = "pa46_turbine"
+  name = "PA-46-500TP Meridian / M500 / M600 / M700"
+  model_re = '^PA46(500|600|701)|^MERIDIAN|^M(500|600|700)'
+  class = "set"
+  attrs = { propulsion = "turboprop" }
+
+  [[family.variant]]
+  id = "pa46_piston"
+  name = "PA-46-310P/350P Malibu / Mirage / Matrix / M350"
+  model_re = '^PA46(310|350)|^MALIBU|^MIRAGE|^MATRIX|^M350'
+
+[[family]]
+id = "piper_aerostar"
+name = "Piper / Ted Smith Aerostar (PA-60, 600/601/602)"
+class = "mep"
+makes = ["aerostar"]
+model_re = '^PA60[A-Z0-9]*$|^60[012][A-Z0-9]*$|^AEROSTAR'
+attrs = { wing = "low" }
+
+[[family]]
+id = "piper_ps28"
+name = "Piper Sport / Czech SportCruiser (PS-28)"
+class = "lsa"
+makes = ["czech_sport"]
+model_re = '^PS28|^SPORTCRUISER|^PIPERSPORT'
+attrs = { wing = "low" }
+
+[[family]]
+id = "beech_bonanza"
+name = "Beech Bonanza / Debonair (33/35/36)"
+class = "sep_retract"
+makes = ["beech"]
+model_re = '^(BE)?(35)?[A-H]?33[A-Z]?$|^(BE)?[A-Z]?35[A-Z]?[0-9]*$|^(BE)?[A-G]?36[A-Z]*$|^BONANZA|^DEBONAIR'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "be33"
+  name = "33 / F33 Debonair & Bonanza"
+  model_re = '^(BE)?(35)?[A-H]?33|^DEBONAIR'
+
+  [[family.variant]]
+  id = "be35"
+  name = "35 V-tail Bonanza"
+  model_re = '^(BE)?[A-Z]?35'
+
+  [[family.variant]]
+  id = "be36"
+  name = "36 / A36 / G36 Bonanza"
+  model_re = '^(BE)?[A-G]?36'
+
+[[family]]
+id = "beech_musketeer"
+name = "Beech Musketeer / Sport / Sundowner / Sierra (19/23/24)"
+class = "sep_fixed"
+makes = ["beech"]
+model_re = '^(BE)?[A-C]?(19|23|24)[A-Z0-9]*$|^MUSKETEER|^SUNDOWNER|^SIERRA'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "sierra"
+  name = "24R / A24R / B24R Sierra"
+  model_re = '^(BE)?[A-C]?24R|^SIERRA'
+  class = "sep_retract"
+  attrs = { gear = "retract" }
+
+  [[family.variant]]
+  id = "sundowner"
+  name = "C23 Sundowner / 23 / A23 Musketeer"
+  model_re = '^(BE)?[A-C]?23|^SUNDOWNER|^MUSKETEER'
+
+  [[family.variant]]
+  id = "sport"
+  name = "19 / B19 Sport"
+  model_re = '^(BE)?[A-C]?19'
+
+[[family]]
+id = "beech_77"
+name = "Beech 77 Skipper"
+class = "sep_fixed"
+makes = ["beech"]
+model_re = '^(BE)?77$|^SKIPPER'
+attrs = { wing = "low" }
+
+[[family]]
+id = "beech_76"
+name = "Beech 76 Duchess"
+class = "mep"
+makes = ["beech"]
+model_re = '^(BE)?76$|^DUCHESS'
+attrs = { wing = "low" }
+
+[[family]]
+id = "beech_95"
+name = "Beech 95 Travel Air"
+class = "mep"
+makes = ["beech"]
+model_re = '^(BE)?[A-E]?95[A-Z0-9]*$|^TRAVELAIR'
+attrs = { wing = "low" }
+
+[[family]]
+id = "beech_baron"
+name = "Beech Baron (55/56/58)"
+class = "mep"
+makes = ["beech"]
+model_re = '^(BE)?(95)?[A-E]?55[A-Z0-9]*$|^(BE)?56TC|^(BE)?58[A-Z0-9]*$|^BARON'
+priority = 150
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "be58"
+  name = "58 / 58P / 58TC / G58"
+  model_re = '^(BE)?G?58'
+
+  [[family.variant]]
+  id = "be56"
+  name = "56TC Turbo Baron"
+  model_re = '^(BE)?56'
+
+  [[family.variant]]
+  id = "be55"
+  name = "55 / 95-55 Baron"
+  model_re = '55'
+
+[[family]]
+id = "beech_60"
+name = "Beech 60 Duke"
+class = "mep"
+makes = ["beech"]
+model_re = '^(BE)?[AB]?60$|^DUKE'
+attrs = { wing = "low", pressurized = true }
+
+[[family]]
+id = "beech_50"
+name = "Beech 50 Twin Bonanza"
+class = "mep"
+makes = ["beech"]
+model_re = '^(BE)?[A-J]?50$|^TWINBONANZA'
+attrs = { wing = "low" }
+
+[[family]]
+id = "beech_queen_air"
+name = "Beech Queen Air (65/70/80/88)"
+class = "mep"
+makes = ["beech"]
+model_re = '^(BE)?(65)?[A-Z]?(65|70|80|88)[A-Z]?$|^QUEENAIR|^U8[DF]?$'
+attrs = { wing = "low" }
+
+[[family]]
+id = "beech_18"
+name = "Beech 18 Twin Beech"
+class = "mep"
+makes = ["beech"]
+model_re = '^(BE)?[A-H]?18[A-Z]?[0-9]*[A-Z]?$|^C45|^TWINBEECH|^SNB'
+attrs = { wing = "low", gear_config = "tailwheel", engine = "radial" }
+
+[[family]]
+id = "beech_king_air_90_100"
+name = "Beech King Air 90/100"
+class = "met"
+makes = ["beech"]
+model_re = '^(BE)?(65)?[A-Z]?90[A-Z0-9]*$|^(BE)?[A-Z]?100$|^KINGAIR(90|100)|^C90|^U21'
+priority = 150
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "ka100"
+  name = "A100 / B100"
+  model_re = '100$|KINGAIR100'
+
+  [[family.variant]]
+  id = "ka90"
+  name = "C90 / E90 / F90 / 65-90"
+  model_re = '90|^U21'
+
+[[family]]
+id = "beech_king_air_200_300"
+name = "Beech King Air 200/250/300/350"
+class = "met"
+makes = ["beech"]
+model_re = '^(BE)?[A-Z]?(200|300|350)[A-Z0-9]*$|^KINGAIR(200|250|260|300|350|360)|^SUPERKINGAIR|^C12[A-Z]?$|^(BE)?(250|260|360)$'
+priority = 140
+attrs = { wing = "low", pressurized = true }
+
+  [[family.variant]]
+  id = "ka300_350"
+  name = "300 / B300 / 350 / 360"
+  model_re = '^(BE)?[A-Z]?3[056]0|KINGAIR3'
+
+  [[family.variant]]
+  id = "ka200_250"
+  name = "200 / B200 / 250 / 260 / C-12"
+  model_re = '^(BE)?[A-Z]?2[056]0|KINGAIR2|^C12|SUPERKINGAIR'
+
+[[family]]
+id = "beech_99"
+name = "Beech 99 Airliner"
+class = "regional_turboprop"
+makes = ["beech"]
+model_re = '^(BE)?[A-C]?99[A-Z0-9]*$'
+attrs = { wing = "low" }
+
+[[family]]
+id = "beech_1900"
+name = "Beech 1900 Airliner"
+class = "regional_turboprop"
+makes = ["beech"]
+model_re = '^(BE)?1900[A-Z0-9]*$|^C12J'
+priority = 150
+attrs = { wing = "low" }
+
+[[family]]
+id = "beech_2000"
+name = "Beech 2000 Starship"
+class = "met"
+makes = ["beech"]
+model_re = '^2000A?$|^STARSHIP'
+priority = 200
+attrs = { wing = "mid", layout = "canard_pusher" }
+
+[[family]]
+id = "beech_t34"
+name = "Beech T-34 Mentor"
+class = "vintage"
+makes = ["beech"]
+model_re = '^(BE)?[AB]?45$|^T34[A-C]?$|^MENTOR'
+attrs = { engines = 1, propulsion = "piston", gear = "retract", gear_config = "tricycle", wing = "low" }
+
+[[family]]
+id = "beechjet_400"
+name = "Beechjet / Hawker 400 / Diamond (MU-300, 400, 400A, 400XP)"
+class = "bizjet_light"
+makes = ["beechjet"]
+model_re = '^(BE)?400[A-Z]*$|^MU300|^BEECHJET|^HAWKER400|^T1A$|^DIAMOND(I|II)?$'
+attrs = { wing = "low" }
+
+[[family]]
+id = "beech_premier"
+name = "Beech Premier I/IA (390)"
+class = "bizjet_light"
+makes = ["beechjet"]
+model_re = '^390$|^PREMIER'
+attrs = { wing = "low" }
+
+[[family]]
+id = "mooney_m20"
+name = "Mooney M20 series"
+class = "sep_retract"
+makes = ["mooney"]
+model_re = '^M20[A-Z0-9]*$|^OVATION|^ACCLAIM|^MOONEY(201|231|252)|^EXECUTIVE|^RANGER|^ENCORE|^EAGLE$'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "m20a_e"
+  name = "M20/M20A-M20E (early)"
+  model_re = '^M20[A-E]?$'
+
+  [[family.variant]]
+  id = "m20f_g"
+  name = "M20F Executive / M20G Statesman"
+  model_re = '^M20[FG]|^EXECUTIVE'
+
+  [[family.variant]]
+  id = "m20j"
+  name = "M20J 201 / MSE / Allegro"
+  model_re = '^M20J|^MOONEY201'
+
+  [[family.variant]]
+  id = "m20k"
+  name = "M20K 231/252/Encore"
+  model_re = '^M20K|^MOONEY2[35]|^ENCORE'
+
+  [[family.variant]]
+  id = "m20m"
+  name = "M20M Bravo / TLS"
+  model_re = '^M20M'
+
+  [[family.variant]]
+  id = "m20r"
+  name = "M20R Ovation"
+  model_re = '^M20R|^OVATION'
+
+  [[family.variant]]
+  id = "m20s"
+  name = "M20S Eagle"
+  model_re = '^M20S|^EAGLE'
+
+  [[family.variant]]
+  id = "m20tn"
+  name = "M20TN Acclaim"
+  model_re = '^M20TN|^ACCLAIM'
+
+  [[family.variant]]
+  id = "m20u_v"
+  name = "M20U Ovation Ultra / M20V Acclaim Ultra"
+  model_re = '^M20[UV]'
+
+[[family]]
+id = "cirrus_sr"
+name = "Cirrus SR20 / SR22 / SR22T"
+class = "sep_fixed"
+makes = ["cirrus"]
+model_re = '^SR2[02][A-Z0-9]*$'
+attrs = { wing = "low", parachute = true }
+
+  [[family.variant]]
+  id = "sr22t"
+  name = "SR22T"
+  model_re = '^SR22T'
+
+  [[family.variant]]
+  id = "sr22"
+  name = "SR22"
+  model_re = '^SR22'
+
+  [[family.variant]]
+  id = "sr20"
+  name = "SR20"
+  model_re = '^SR20'
+
+[[family]]
+id = "cirrus_sf50"
+name = "Cirrus SF50 Vision Jet"
+class = "bizjet_light"
+makes = ["cirrus"]
+model_re = '^SF50|^VISION'
+attrs = { engines = 1, wing = "low", parachute = true }
+
+[[family]]
+id = "diamond_da20"
+name = "Diamond DA20 / DV20 Katana"
+class = "sep_fixed"
+makes = ["diamond"]
+model_re = '^D[AV]20[A-Z0-9]*$|^KATANA|^ECLIPSE$'
+attrs = { wing = "low" }
+
+[[family]]
+id = "diamond_da40"
+name = "Diamond DA40 Diamond Star"
+class = "sep_fixed"
+makes = ["diamond"]
+model_re = '^DA40[A-Z0-9]*$|^DIAMONDSTAR|^STAR$'
+attrs = { wing = "low" }
+
+[[family]]
+id = "diamond_da42"
+name = "Diamond DA42 Twin Star"
+class = "mep"
+makes = ["diamond"]
+model_re = '^DA42[A-Z0-9]*$|^TWINSTAR'
+attrs = { wing = "low", fuel = "jet_a_diesel" }
+
+[[family]]
+id = "diamond_da62"
+name = "Diamond DA62"
+class = "mep"
+makes = ["diamond"]
+model_re = '^DA62'
+attrs = { wing = "low", fuel = "jet_a_diesel" }
+
+[[family]]
+id = "grumman_aa1"
+name = "Grumman American AA-1 Yankee / Trainer / T-Cat / Lynx"
+class = "sep_fixed"
+makes = ["grumman_american"]
+model_re = '^AA1[A-Z0-9]*$|^YANKEE|^TCAT|^LYNX|^TR2$'
+attrs = { wing = "low" }
+
+[[family]]
+id = "grumman_aa5"
+name = "Grumman American AA-5 Traveler / Cheetah / Tiger"
+class = "sep_fixed"
+makes = ["grumman_american"]
+model_re = '^A[AG]5[A-Z0-9]*$|^TRAVELER|^CHEETAH|^TIGER$'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "aa5b"
+  name = "AA-5B / AG-5B Tiger"
+  model_re = '^A[AG]5B|^TIGER'
+
+  [[family.variant]]
+  id = "aa5a"
+  name = "AA-5A Cheetah"
+  model_re = '^AA5A|^CHEETAH'
+
+  [[family.variant]]
+  id = "aa5"
+  name = "AA-5 Traveler"
+  model_re = '^AA5|^TRAVELER'
+
+[[family]]
+id = "grumman_ga7"
+name = "Grumman American GA-7 Cougar"
+class = "mep"
+makes = ["grumman_american"]
+model_re = '^GA7|^COUGAR'
+attrs = { wing = "low" }
+
+[[family]]
+id = "socata_tb"
+name = "Socata TB Tampico / Tobago / Trinidad"
+class = "sep_fixed"
+makes = ["socata"]
+model_re = '^TB(9|10|20|21|200)[A-Z0-9]*$|^TOBAGO|^TRINIDAD|^TAMPICO'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "tb20_21"
+  name = "TB20 / TB21 Trinidad"
+  model_re = '^TB2[01]|^TRINIDAD'
+  class = "sep_retract"
+  attrs = { gear = "retract" }
+
+  [[family.variant]]
+  id = "tb9_10_200"
+  name = "TB9 / TB10 / TB200"
+  model_re = '^TB(9|10|200)|^TOBAGO|^TAMPICO'
+
+[[family]]
+id = "commander_112_114"
+name = "Rockwell / Commander 112 / 114"
+class = "sep_retract"
+makes = ["commander_single"]
+model_re = '^1(12|14)[A-Z0-9]*$|^COMMANDER11[24]'
+attrs = { wing = "low" }
+
+[[family]]
+id = "navion"
+name = "Navion"
+class = "sep_retract"
+makes = ["navion"]
+model_re = '^NAVION|^L17[A-C]?$'
+attrs = { wing = "low" }
+
+[[family]]
+id = "ercoupe"
+name = "Ercoupe / Aircoupe / Alon / Mooney M10"
+class = "sep_fixed"
+makes = ["erco"]
+model_re = '^415[A-Z0-9]*$|^ERCOUPE|^A2A?$|^F1A?$|^M10$|^AIRCOUPE|^CADET'
+priority = 150
+attrs = { wing = "low", two_control = true }
+
+[[family]]
+id = "luscombe_8"
+name = "Luscombe 8 Silvaire"
+class = "sep_tailwheel"
+makes = ["luscombe"]
+model_re = '^T?8[A-F]?[A-Z0-9]*$|^SILVAIRE'
+attrs = { wing = "high" }
+
+[[family]]
+id = "aeronca_champ"
+name = "Aeronca / Champion 7AC Champ series"
+class = "sep_tailwheel"
+makes = ["aeronca"]
+model_re = '^7(AC|BCM|CCM|DC|EC|FC)[A-Z0-9]*$|^CHAMP$|^CHAMPION|^L16'
+attrs = { wing = "high" }
+
+  [[family.variant]]
+  id = "7ac"
+  name = "7AC Champ"
+  model_re = '^7AC|^CHAMP$'
+
+  [[family.variant]]
+  id = "7ec"
+  name = "7EC/7FC Traveler / Tri-Traveler"
+  model_re = '^7[EF]C'
+
+  [[family.variant]]
+  id = "7bcm_dc"
+  name = "7BCM / 7CCM / 7DC / L-16"
+  model_re = '^7(BCM|CCM|DC)|^L16'
+
+[[family]]
+id = "aeronca_chief"
+name = "Aeronca 11 Chief / 15 Sedan"
+class = "sep_tailwheel"
+makes = ["aeronca"]
+model_re = '^11(AC|BC|CC)[A-Z0-9]*$|^CHIEF|^SUPERCHIEF|^15AC|^SEDAN'
+attrs = { wing = "high" }
+
+[[family]]
+id = "champion_citabria"
+name = "Citabria (7ECA/7GCAA/7GCBC/7KCAB)"
+class = "sep_tailwheel"
+makes = ["champion"]
+model_re = '^7(ECA|GCA|GCAA|GCB|GCBA|GCBC|KC|KCAB)[A-Z0-9]*$|^CITABRIA|^AURORA|^ADVENTURE|^EXPLORER'
+priority = 150
+attrs = { wing = "high" }
+
+[[family]]
+id = "champion_decathlon"
+name = "Decathlon / Super Decathlon (8KCAB)"
+class = "sep_aerobatic"
+makes = ["champion"]
+model_re = '^8KCAB|^DECATHLON|^SUPERDECATHLON'
+attrs = { wing = "high" }
+
+[[family]]
+id = "champion_scout"
+name = "Scout (8GCBC)"
+class = "sep_tailwheel"
+makes = ["champion"]
+model_re = '^8GCBC|^SCOUT'
+attrs = { wing = "high" }
+
+[[family]]
+id = "bellanca_viking"
+name = "Bellanca 14-19 / 17-30 Viking (& 14-13 Cruisair)"
+class = "sep_retract"
+makes = ["bellanca"]
+model_re = '^1[47][0-9]{2,3}[A-Z]*$|^VIKING|^SUPERVIKING|^CRUISAIR|^CRUISEMASTER'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "cruisair"
+  name = "14-12 / 14-13 Cruisair"
+  model_re = '^141[23]|^CRUISAIR'
+  class = "sep_tailwheel"
+  attrs = { gear = "fixed", gear_config = "tailwheel" }
+
+  [[family.variant]]
+  id = "viking"
+  name = "17-30 / 17-31 Viking"
+  model_re = '^17|^VIKING|^SUPERVIKING'
+
+  [[family.variant]]
+  id = "cruisemaster"
+  name = "14-19 Cruisemaster"
+  model_re = '^1419|^CRUISEMASTER'
+
+[[family]]
+id = "taylorcraft"
+name = "Taylorcraft (BC-12, F-19, F-21, L-2)"
+class = "sep_tailwheel"
+makes = ["taylorcraft"]
+model_re = '.'
+priority = 50
+attrs = { wing = "high" }
+
+[[family]]
+id = "stinson"
+name = "Stinson 108 Voyager / L-5"
+class = "sep_tailwheel"
+makes = ["stinson"]
+model_re = '.'
+attrs = { wing = "high" }
+
+  [[family.variant]]
+  id = "s108"
+  name = "108 Voyager / Station Wagon"
+  model_re = '^108|VOYAGER|STATIONWAGON'
+
+  [[family.variant]]
+  id = "l5"
+  name = "L-5 Sentinel / V-77"
+  model_re = '^L5|^V77'
+
+[[family]]
+id = "maule"
+name = "Maule M-4 through M-9"
+class = "sep_tailwheel"
+makes = ["maule"]
+model_re = '.'
+attrs = { wing = "high" }
+
+  [[family.variant]]
+  id = "maule_tricycle"
+  name = "MXT-7 / MT-7 (tricycle)"
+  model_re = '^M?X?T7|^MXT|^MT7'
+  attrs = { gear_config = "tricycle" }
+
+  [[family.variant]]
+  id = "maule_m4_m6"
+  name = "M-4 / M-5 / M-6"
+  model_re = '^M[456]'
+
+  [[family.variant]]
+  id = "maule_m7_m9"
+  name = "M-7 / MX-7 / M-8 / M-9"
+  model_re = '^MX?[789]'
+
+[[family]]
+id = "aviat_husky"
+name = "Aviat Husky (A-1)"
+class = "sep_tailwheel"
+makes = ["aviat"]
+model_re = '^A1[A-C]?[A-Z0-9]*$|^HUSKY'
+attrs = { wing = "high" }
+
+[[family]]
+id = "cubcrafters"
+name = "CubCrafters Carbon Cub / Top Cub / XCub / NX Cub"
+class = "sep_tailwheel"
+makes = ["cubcrafters"]
+model_re = '.'
+homebuilt_model_re = '^CARBONCUB|^CCK'
+priority = 90
+attrs = { wing = "high" }
+
+  [[family.variant]]
+  id = "cc11"
+  name = "CC11 Carbon Cub (S-LSA / EX)"
+  model_re = '^CC11|^CARBONCUB|^EX'
+  attrs = { cert = "lsa_or_experimental" }
+
+  [[family.variant]]
+  id = "cc18"
+  name = "CC18 Top Cub"
+  model_re = '^CC18|^TOPCUB|^PA18'
+
+  [[family.variant]]
+  id = "cc19"
+  name = "CC19 XCub / NX Cub"
+  model_re = '^CC19|^XCUB|^NXCUB'
+
+[[family]]
+id = "globe_swift"
+name = "Globe / Temco Swift"
+class = "sep_tailwheel"
+makes = ["globe_temco"]
+model_re = '^GC1[A-Z]?$|^SWIFT'
+priority = 150
+attrs = { wing = "low", gear = "retract" }
+
+[[family]]
+id = "helio_courier"
+name = "Helio Courier / Super Courier"
+class = "sep_tailwheel"
+makes = ["helio"]
+model_re = '^H[0-9]{3}|^COURIER|^U10'
+attrs = { wing = "high" }
+
+[[family]]
+id = "gippsland_ga8"
+name = "Gippsland GA8 Airvan"
+class = "sep_fixed"
+makes = ["gippsland"]
+model_re = '^GA8|^AIRVAN'
+attrs = { wing = "high" }
+
+[[family]]
+id = "pitts"
+name = "Pitts Special (S-1 / S-2)"
+class = "sep_aerobatic"
+makes = ["aviat"]
+model_re = '^(PITTS)?S[12][A-Z0-9]*$|^PITTS'
+homebuilt_model_re = '^(PITTS)?S1(C|D|E|S|T|SS|11B)?$|^(PITTS)?S2[ABCES]?$|^PITTS'
+attrs = { wing = "biplane" }
+
+  [[family.variant]]
+  id = "s1"
+  name = "S-1 (single seat)"
+  model_re = '^(PITTS)?S1'
+
+  [[family.variant]]
+  id = "s2"
+  name = "S-2 (two seat)"
+  model_re = '^(PITTS)?S2'
+
+[[family]]
+id = "christen_eagle"
+name = "Christen Eagle"
+class = "sep_aerobatic"
+makes = ["christen"]
+model_re = '^(CHRISTEN)?EAGLE(II|2)?$|^CHRISTEN'
+homebuilt_model_re = '^CHRISTEN|^EAGLEII$'
+attrs = { wing = "biplane" }
+
+[[family]]
+id = "extra"
+name = "Extra 200/230/260/300/330"
+class = "sep_aerobatic"
+makes = ["extra"]
+model_re = '.'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "ea300_330"
+  name = "EA-300 / 330"
+  model_re = '(300|330)'
+
+  [[family.variant]]
+  id = "ea200_260"
+  name = "EA-200 / 230 / 260"
+  model_re = '(200|230|260)'
+
+[[family]]
+id = "zivko_edge"
+name = "Zivko Edge 540"
+class = "sep_aerobatic"
+makes = ["zivko"]
+model_re = '.'
+homebuilt_model_re = '^EDGE540|^EDGE'
+attrs = { wing = "low" }
+
+[[family]]
+id = "sukhoi"
+name = "Sukhoi Su-26/29/31"
+class = "sep_aerobatic"
+makes = ["sukhoi"]
+model_re = '.'
+attrs = { wing = "low" }
+
+[[family]]
+id = "flight_design_ct"
+name = "Flight Design CT series"
+class = "lsa"
+makes = ["flight_design"]
+model_re = '.'
+attrs = { wing = "high" }
+
+[[family]]
+id = "tecnam"
+name = "Tecnam (P92 / P2002 / P2008 / P2010 / P2006T)"
+class = "lsa"
+makes = ["tecnam"]
+model_re = '.'
+attrs = { wing = "high" }
+
+  [[family.variant]]
+  id = "p2006t"
+  name = "P2006T twin"
+  model_re = '^P2006'
+  class = "mep"
+  attrs = { engines = 2, gear = "retract", cert = "part23" }
+
+  [[family.variant]]
+  id = "p2010"
+  name = "P2010"
+  model_re = '^P2010'
+  class = "sep_fixed"
+  attrs = { cert = "part23" }
+
+  [[family.variant]]
+  id = "p2002"
+  name = "P2002 Sierra (low wing)"
+  model_re = '^P2002'
+  attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "p2008"
+  name = "P2008"
+  model_re = '^P2008'
+
+  [[family.variant]]
+  id = "p92"
+  name = "P92 Echo / Eaglet"
+  model_re = '^P92'
+
+[[family]]
+id = "icon_a5"
+name = "Icon A5"
+class = "lsa"
+makes = ["icon"]
+model_re = '.'
+attrs = { wing = "high", amphibian = true, gear = "retract" }
+
+[[family]]
+id = "sling"
+name = "Sling 2 / Sling 4 / TSi"
+class = "lsa"
+makes = ["sling"]
+model_re = '.'
+homebuilt_model_re = '^SLING'
+attrs = { wing = "low" }
+
+[[family]]
+id = "pipistrel"
+name = "Pipistrel (Alpha, Virus, Sinus, Velis)"
+class = "lsa"
+makes = ["pipistrel"]
+model_re = '.'
+attrs = { wing = "high" }
+
+[[family]]
+id = "evektor_sportstar"
+name = "Evektor SportStar / Harmony"
+class = "lsa"
+makes = ["evektor"]
+model_re = '.'
+attrs = { wing = "low" }
+
+[[family]]
+id = "remos"
+name = "Remos GX"
+class = "lsa"
+makes = ["remos"]
+model_re = '.'
+attrs = { wing = "high" }
+
+[[family]]
+id = "jabiru"
+name = "Jabiru J170/J230/J250"
+class = "lsa"
+makes = ["jabiru"]
+model_re = '.'
+homebuilt_model_re = '^JABIRU'
+attrs = { wing = "high" }
+
+[[family]]
+id = "aeropro_eurofox"
+name = "AeroPro EuroFOX"
+class = "lsa"
+makes = ["aeropro"]
+model_re = '.'
+attrs = { wing = "high" }
+
+[[family]]
+id = "american_legend_cub"
+name = "American Legend Cub"
+class = "lsa"
+makes = ["american_legend"]
+model_re = '.'
+attrs = { wing = "high", gear_config = "tailwheel" }
+
+[[family]]
+id = "vans_rv"
+name = "Van's RV series"
+class = "experimental"
+makes = ["vans"]
+model_re = '^(VANS)?RV[0-9]{1,2}[A-Z0-9]*$'
+homebuilt_model_re = '^(VANS)?RV[0-9]{1,2}[A-Z0-9]*$'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "rv10"
+  name = "RV-10"
+  model_re = '^(VANS)?RV10'
+  attrs = { gear_config = "tricycle" }
+
+  [[family.variant]]
+  id = "rv12"
+  name = "RV-12 / 12iS"
+  model_re = '^(VANS)?RV12'
+  attrs = { gear_config = "tricycle", cert = "lsa_or_experimental" }
+
+  [[family.variant]]
+  id = "rv14a"
+  name = "RV-14A"
+  model_re = '^(VANS)?RV14A'
+  attrs = { gear_config = "tricycle" }
+
+  [[family.variant]]
+  id = "rv14"
+  name = "RV-14"
+  model_re = '^(VANS)?RV14'
+  attrs = { gear_config = "tailwheel" }
+
+  [[family.variant]]
+  id = "rv15"
+  name = "RV-15"
+  model_re = '^(VANS)?RV15'
+  attrs = { gear_config = "tailwheel" }
+
+  [[family.variant]]
+  id = "rv3"
+  name = "RV-3"
+  model_re = '^(VANS)?RV3'
+  attrs = { gear_config = "tailwheel" }
+
+  [[family.variant]]
+  id = "rv4"
+  name = "RV-4"
+  model_re = '^(VANS)?RV4'
+  attrs = { gear_config = "tailwheel" }
+
+  [[family.variant]]
+  id = "rv6a"
+  name = "RV-6A"
+  model_re = '^(VANS)?RV6A'
+  attrs = { gear_config = "tricycle" }
+
+  [[family.variant]]
+  id = "rv6"
+  name = "RV-6"
+  model_re = '^(VANS)?RV6'
+  attrs = { gear_config = "tailwheel" }
+
+  [[family.variant]]
+  id = "rv7a"
+  name = "RV-7A"
+  model_re = '^(VANS)?RV7A'
+  attrs = { gear_config = "tricycle" }
+
+  [[family.variant]]
+  id = "rv7"
+  name = "RV-7"
+  model_re = '^(VANS)?RV7'
+  attrs = { gear_config = "tailwheel" }
+
+  [[family.variant]]
+  id = "rv8a"
+  name = "RV-8A"
+  model_re = '^(VANS)?RV8A'
+  attrs = { gear_config = "tricycle" }
+
+  [[family.variant]]
+  id = "rv8"
+  name = "RV-8"
+  model_re = '^(VANS)?RV8'
+  attrs = { gear_config = "tailwheel" }
+
+  [[family.variant]]
+  id = "rv9a"
+  name = "RV-9A"
+  model_re = '^(VANS)?RV9A'
+  attrs = { gear_config = "tricycle" }
+
+  [[family.variant]]
+  id = "rv9"
+  name = "RV-9"
+  model_re = '^(VANS)?RV9'
+  attrs = { gear_config = "tailwheel" }
+
+[[family]]
+id = "lancair"
+name = "Lancair (235/320/360/IV/ES/Legacy/Evolution)"
+class = "experimental"
+makes = ["lancair"]
+model_re = '^LANCAIR|^LEGACY(2000|FG|RG)?$|^EVOLUTION$|^(235|320|360)(MKII)?$|^(IV|IVP|4P|ES|ESP)$'
+homebuilt_model_re = '^LANCAIR|^LEGACY(2000|FG|RG)?$|^EVOLUTION$|^(320|360)(MKII)?$'
+attrs = { wing = "low", gear = "retract" }
+
+  [[family.variant]]
+  id = "lancair_iv"
+  name = "IV / IV-P / Propjet"
+  model_re = 'IVP?$|4P|PROPJET'
+  attrs = { pressurized = true }
+
+  [[family.variant]]
+  id = "lancair_es"
+  name = "ES / ES-P (fixed gear)"
+  model_re = 'ESP?$'
+  attrs = { gear = "fixed" }
+
+  [[family.variant]]
+  id = "lancair_legacy"
+  name = "Legacy"
+  model_re = 'LEGACY'
+
+  [[family.variant]]
+  id = "lancair_evolution"
+  name = "Evolution"
+  model_re = 'EVOLUTION'
+
+  [[family.variant]]
+  id = "lancair_2_3"
+  name = "235 / 320 / 360"
+  model_re = '(235|320|360)'
+
+[[family]]
+id = "glasair"
+name = "Glasair / GlaStar / Sportsman"
+class = "experimental"
+makes = ["glasair"]
+model_re = '^GLASAIR|^GLASTAR|^SPORTSMAN|^GS[12]|^(I|II|III)[A-Z]*$|^SUPERII'
+homebuilt_model_re = '^GLASAIR|^GLASTAR|^SPORTSMAN(22)?$'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "glastar_sportsman"
+  name = "GlaStar / Sportsman 2+2"
+  model_re = 'GLASTAR|SPORTSMAN|^GS1|^GS2'
+  attrs = { wing = "high", gear = "fixed" }
+
+  [[family.variant]]
+  id = "glasair_iii"
+  name = "Glasair III"
+  model_re = 'III'
+  attrs = { gear = "retract" }
+
+  [[family.variant]]
+  id = "glasair_i_ii"
+  name = "Glasair I / II / Super II"
+  model_re = '(I|II|SUPERII)'
+
+[[family]]
+id = "kitfox"
+name = "Kitfox"
+class = "experimental"
+makes = ["kitfox"]
+model_re = '.'
+homebuilt_model_re = '^KITFOX|^KF[0-9]'
+attrs = { wing = "high", gear_config = "tailwheel" }
+
+[[family]]
+id = "avid_flyer"
+name = "Avid Flyer / Magnum"
+class = "experimental"
+makes = ["avid"]
+model_re = '.'
+homebuilt_model_re = '^AVID'
+attrs = { wing = "high", gear_config = "tailwheel" }
+
+[[family]]
+id = "zenith"
+name = "Zenith / Zenair CH-series (Zodiac, STOL)"
+class = "experimental"
+makes = ["zenith"]
+model_re = '.'
+homebuilt_model_re = '^(ZENITH|ZENAIR)|^ZODIAC|^CH[0-9]{3}|^STOL(CH)?[0-9]{3}'
+attrs = { gear_config = "tricycle" }
+
+  [[family.variant]]
+  id = "zenith_stol"
+  name = "CH-701 / CH-750 / CH-801 STOL"
+  model_re = 'STOL|7[05]0|701|801'
+  attrs = { wing = "high" }
+
+  [[family.variant]]
+  id = "zenith_zodiac"
+  name = "CH-601 / CH-640 / CH-650 Zodiac"
+  model_re = 'ZODIAC|6(01|40|50)'
+  attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "zenith_200_300"
+  name = "CH-200 / CH-250 / CH-300"
+  model_re = '(200|250|300)'
+  attrs = { wing = "low" }
+
+[[family]]
+id = "sonex"
+name = "Sonex / Onex / Waiex / Xenos"
+class = "experimental"
+makes = ["sonex"]
+model_re = '.'
+homebuilt_model_re = '^SONEX|^ONEX|^WAIEX|^XENOS|^SUBSONEX'
+attrs = { wing = "low" }
+
+[[family]]
+id = "rans"
+name = "Rans S-series (Coyote, Courier, Airaile, S-20)"
+class = "experimental"
+makes = ["rans"]
+model_re = '.'
+homebuilt_model_re = '^RANS|^COYOTE|^AIRAILE|^S(4|5|6|7|9|10|12|14|19|20|21)(ES|S|XL|LS|C|COYOTE|COURIER|AIRAILE)[A-Z0-9]*$'
+attrs = { wing = "high" }
+
+[[family]]
+id = "canard_pusher"
+name = "Rutan-type canards (Long-EZ, VariEze, Cozy, Velocity, Berkut)"
+class = "experimental"
+makes = ["canard"]
+model_re = '^LONGEZ|^VARIEZE|^COZY|^VELOCITY|^BERKUT|^DEFIANT|^EZ$|^VARIVIGGEN'
+homebuilt_model_re = '^LONGEZ|^VARIEZE|^COZY|^VELOCITY|^BERKUT|^DEFIANT|^VARIVIGGEN'
+attrs = { wing = "canard_pusher" }
+
+  [[family.variant]]
+  id = "velocity"
+  name = "Velocity"
+  model_re = 'VELOCITY'
+
+  [[family.variant]]
+  id = "cozy"
+  name = "Cozy"
+  model_re = 'COZY'
+
+  [[family.variant]]
+  id = "longez"
+  name = "Long-EZ"
+  model_re = 'LONGEZ|^EZ$'
+
+  [[family.variant]]
+  id = "varieze"
+  name = "VariEze"
+  model_re = 'VARIEZE'
+
+  [[family.variant]]
+  id = "berkut"
+  name = "Berkut"
+  model_re = 'BERKUT'
+
+  [[family.variant]]
+  id = "defiant"
+  name = "Defiant (twin)"
+  model_re = 'DEFIANT'
+  attrs = { engines = 2 }
+
+[[family]]
+id = "murphy"
+name = "Murphy Rebel / Moose / Elite"
+class = "experimental"
+makes = ["murphy"]
+model_re = '.'
+homebuilt_model_re = '^MURPHY|^REBEL$|^MOOSE'
+attrs = { wing = "high" }
+
+[[family]]
+id = "just_highlander"
+name = "Just Aircraft Highlander / SuperSTOL"
+class = "experimental"
+makes = ["just"]
+model_re = '.'
+homebuilt_model_re = '^HIGHLANDER|^SUPERSTOL|^JUST'
+attrs = { wing = "high", gear_config = "tailwheel" }
+
+[[family]]
+id = "bearhawk"
+name = "Bearhawk"
+class = "experimental"
+makes = []
+model_re = '^BEARHAWK'
+homebuilt_model_re = '^BEARHAWK'
+attrs = { wing = "high", gear_config = "tailwheel" }
+
+[[family]]
+id = "pietenpol"
+name = "Pietenpol Air Camper"
+class = "experimental"
+makes = []
+model_re = '^PIETENPOL|^AIRCAMPER'
+homebuilt_model_re = '^PIETENPOL|^AIRCAMPER'
+attrs = { wing = "parasol", gear_config = "tailwheel" }
+
+[[family]]
+id = "kolb"
+name = "Kolb Firestar / Twinstar / Mark III"
+class = "experimental"
+makes = ["kolb"]
+model_re = '.'
+homebuilt_model_re = '^KOLB|^FIRESTAR|^FIREFLY'
+attrs = { wing = "high" }
+
+[[family]]
+id = "air_tractor"
+name = "Air Tractor AT-300 through AT-800 series"
+class = "agricultural"
+makes = ["air_tractor"]
+model_re = '.'
+attrs = { propulsion = "turboprop", wing = "low" }
+
+  [[family.variant]]
+  id = "at300_400p"
+  name = "AT-301 / AT-401 (radial piston)"
+  model_re = '^AT(30[0-9]|401)'
+  attrs = { propulsion = "piston" }
+
+  [[family.variant]]
+  id = "at802"
+  name = "AT-802 / 802A / Fire Boss"
+  model_re = '^AT8'
+
+  [[family.variant]]
+  id = "at602"
+  name = "AT-602"
+  model_re = '^AT6'
+
+  [[family.variant]]
+  id = "at50x"
+  name = "AT-502 / 503 / 504"
+  model_re = '^AT50'
+
+  [[family.variant]]
+  id = "at40x"
+  name = "AT-402"
+  model_re = '^AT40'
+
+[[family]]
+id = "thrush"
+name = "Thrush / Ayres / Rockwell S2R"
+class = "agricultural"
+makes = ["thrush"]
+model_re = '^S2R[A-Z0-9]*$|^THRUSH|^(510|710)[A-Z]*$'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "thrush_turbine"
+  name = "S2R-T / S2R-G / S2R-H / 510 / 710 (turbine)"
+  model_re = '^S2R(T|G|H|HG)|^S2R[0-9]+T|^(510|710)'
+  attrs = { propulsion = "turboprop" }
+
+  [[family.variant]]
+  id = "thrush_piston"
+  name = "S2R / S2R-R1340 / R1820 (radial)"
+  model_re = '^S2R'
+  attrs = { propulsion = "piston" }
+
+[[family]]
+id = "grumman_agcat"
+name = "Grumman / Schweizer G-164 Ag Cat"
+class = "agricultural"
+makes = ["agcat"]
+model_re = '^G164[A-Z0-9]*$|^AGCAT|^SUPERAGCAT|^164[A-Z0-9]*$'
+priority = 150
+attrs = { wing = "biplane", propulsion = "piston" }
+
+[[family]]
+id = "weatherly"
+name = "Weatherly 201/620"
+class = "agricultural"
+makes = ["weatherly"]
+model_re = '.'
+attrs = { wing = "low", propulsion = "piston" }
+
+[[family]]
+id = "pzl_dromader"
+name = "PZL M-18 Dromader"
+class = "agricultural"
+makes = ["pzl"]
+model_re = '^M18|^DROMADER'
+attrs = { wing = "low", propulsion = "piston" }
+
+[[family]]
+id = "lake"
+name = "Lake LA-4 Buccaneer / Renegade / Seawolf"
+class = "amphibian"
+makes = ["lake"]
+model_re = '.'
+attrs = { engines = 1, propulsion = "piston", gear = "retract", engine_layout = "pylon_pusher" }
+
+  [[family.variant]]
+  id = "la250"
+  name = "LA-250 Renegade / Seawolf"
+  model_re = '^LA250|RENEGADE|SEAWOLF|^250'
+
+  [[family.variant]]
+  id = "la4"
+  name = "LA-4 / LA-4-200 Buccaneer"
+  model_re = '^LA4|BUCCANEER'
+
+[[family]]
+id = "grumman_amphibians"
+name = "Grumman Goose / Widgeon / Mallard / Albatross"
+class = "amphibian"
+makes = ["grumman_amph"]
+model_re = '^G(21|44|73)[A-Z0-9]*$|^G111[A-Z]?$|^GOOSE|^WIDGEON|^MALLARD|^ALBATROSS|^HU16|^SCAN30'
+priority = 150
+attrs = { engines = 2, propulsion = "piston", gear = "retract" }
+
+  [[family.variant]]
+  id = "g21"
+  name = "G-21 Goose"
+  model_re = '^G21|GOOSE'
+
+  [[family.variant]]
+  id = "g44"
+  name = "G-44 Widgeon"
+  model_re = '^G44|WIDGEON|SCAN30'
+
+  [[family.variant]]
+  id = "g73"
+  name = "G-73 Mallard"
+  model_re = '^G73|MALLARD'
+
+  [[family.variant]]
+  id = "g111"
+  name = "G-111 / HU-16 Albatross"
+  model_re = '^G111|^HU16|ALBATROSS'
+
+[[family]]
+id = "republic_seabee"
+name = "Republic RC-3 Seabee"
+class = "amphibian"
+makes = ["republic"]
+model_re = '^RC3|^SEABEE'
+attrs = { engines = 1, propulsion = "piston" }
+
+[[family]]
+id = "seawind"
+name = "Seawind 3000/300C"
+class = "amphibian"
+makes = ["seawind"]
+model_re = '.'
+homebuilt_model_re = '^SEAWIND'
+attrs = { engines = 1, propulsion = "piston", gear = "retract" }
+
+[[family]]
+id = "searey"
+name = "Progressive Aerodyne SeaRey"
+class = "amphibian"
+makes = ["progressive"]
+model_re = '.'
+homebuilt_model_re = '^SEAREY'
+attrs = { engines = 1, propulsion = "piston", cert = "experimental" }
+
+[[family]]
+id = "britten_norman_islander"
+name = "Britten-Norman BN-2 Islander / Trislander"
+class = "mep"
+makes = ["britten_norman"]
+model_re = '^BN2'
+attrs = { wing = "high", gear = "fixed" }
+
+[[family]]
+id = "partenavia_p68"
+name = "Partenavia / Vulcanair P68"
+class = "mep"
+makes = ["partenavia"]
+model_re = '^P68|^AP68|^OBSERVER'
+attrs = { wing = "high", gear = "fixed" }
+
+[[family]]
+id = "aero_commander_piston"
+name = "Aero Commander 500/520/560/680 (piston)"
+class = "mep"
+makes = ["twin_commander"]
+model_re = '^(AC)?(500|520|560)[A-Z0-9]*$|^(AC)?680(E|F|FL|FLP|P)?$|^SHRIKE|^GRANDCOMMANDER'
+attrs = { wing = "high" }
+
+[[family]]
+id = "dhc2_beaver"
+name = "de Havilland Canada DHC-2 Beaver"
+class = "sep_tailwheel"
+makes = ["dehavilland"]
+model_re = '^DHC2[A-Z0-9]*$|^BEAVER|^L20|^U6A?$'
+attrs = { wing = "high" }
+
+  [[family.variant]]
+  id = "dhc2_turbo"
+  name = "DHC-2 Mk III Turbo Beaver"
+  model_re = '^DHC2(MKIII|MK3|T|III)'
+  class = "set"
+  attrs = { propulsion = "turboprop" }
+
+  [[family.variant]]
+  id = "dhc2"
+  name = "DHC-2 Mk I Beaver"
+  model_re = '^DHC2|BEAVER|^L20|^U6'
+
+[[family]]
+id = "dhc3_otter"
+name = "de Havilland Canada DHC-3 Otter"
+class = "set"
+makes = ["dehavilland"]
+model_re = '^DHC3[A-Z0-9]*$|^OTTER$|^U1A?$'
+attrs = { wing = "high", gear_config = "tailwheel" }
+notes = "Original is radial piston; most active US Otters are turbine conversions. Resolve propulsion from engines table."
+
+[[family]]
+id = "pilatus_pc6"
+name = "Pilatus PC-6 Porter"
+class = "set"
+makes = ["pilatus"]
+model_re = '^PC6[A-Z0-9]*$|^PORTER'
+attrs = { wing = "high", gear = "fixed", gear_config = "tailwheel" }
+
+[[family]]
+id = "pilatus_pc12"
+name = "Pilatus PC-12"
+class = "set"
+makes = ["pilatus"]
+model_re = '^PC12[A-Z0-9]*$'
+attrs = { wing = "low", gear = "retract", pressurized = true }
+
+  [[family.variant]]
+  id = "pc12_ngx"
+  name = "PC-12/47E (NG / NGX)"
+  model_re = '^PC1247E|NG'
+
+  [[family.variant]]
+  id = "pc12_legacy"
+  name = "PC-12 / PC-12/45 / PC-12/47"
+  model_re = '^PC12'
+
+[[family]]
+id = "daher_tbm"
+name = "Socata / Daher TBM 700-960"
+class = "set"
+makes = ["socata"]
+model_re = '^TBM[0-9]*[A-Z0-9]*$'
+priority = 150
+attrs = { wing = "low", gear = "retract", pressurized = true }
+
+  [[family.variant]]
+  id = "tbm700"
+  name = "TBM 700"
+  model_re = '^TBM700'
+
+  [[family.variant]]
+  id = "tbm850"
+  name = "TBM 850"
+  model_re = '^TBM850'
+
+  [[family.variant]]
+  id = "tbm9xx"
+  name = "TBM 900-960"
+  model_re = '^TBM9'
+
+[[family]]
+id = "quest_kodiak"
+name = "Quest / Daher Kodiak 100/900"
+class = "set"
+makes = ["kodiak"]
+model_re = '^KODIAK|^(K|KODIAK)?(100|900)[A-Z0-9]*$'
+attrs = { wing = "high", gear = "fixed", gear_config = "tricycle" }
+
+[[family]]
+id = "epic"
+name = "Epic LT / E1000"
+class = "set"
+makes = ["epic"]
+model_re = '.'
+homebuilt_model_re = '^EPICLT|^LT$'
+attrs = { wing = "low", gear = "retract", pressurized = true }
+
+[[family]]
+id = "pac_750xl"
+name = "PAC 750XL"
+class = "set"
+makes = ["pac"]
+model_re = '^750XL|^P750'
+attrs = { wing = "low", gear = "fixed" }
+
+[[family]]
+id = "turbo_commander"
+name = "Turbo Commander / Jetprop (680T/V/W, 681, 690, 695)"
+class = "met"
+makes = ["twin_commander"]
+model_re = '^(AC)?68(0T|0V|0W|1)[A-Z0-9]*$|^(AC)?69[05][A-Z0-9]*$|^JETPROP|^TURBOCOMMANDER'
+attrs = { wing = "high", pressurized = true }
+
+[[family]]
+id = "mitsubishi_mu2"
+name = "Mitsubishi MU-2"
+class = "met"
+makes = ["mitsubishi"]
+model_re = '^MU2[A-Z0-9]*$|^SOLITAIRE|^MARQUISE'
+attrs = { wing = "high", pressurized = true }
+
+  [[family.variant]]
+  id = "mu2_long"
+  name = "Long body (MU-2B-36/60, Marquise)"
+  model_re = '^MU2B(36|60)|MARQUISE'
+
+  [[family.variant]]
+  id = "mu2_short"
+  name = "Short body (MU-2B-25/35/40, Solitaire)"
+  model_re = '^MU2'
+
+[[family]]
+id = "piaggio_p180"
+name = "Piaggio P.180 Avanti"
+class = "met"
+makes = ["piaggio"]
+model_re = '^P180|^AVANTI'
+attrs = { wing = "mid", layout = "three_surface_pusher", pressurized = true }
+
+[[family]]
+id = "swearingen_merlin"
+name = "Swearingen / Fairchild Merlin"
+class = "met"
+makes = ["swearingen"]
+model_re = '^SA26[A-Z0-9]*$|^SA226(T|TB|AT)$|^SA227(TT|AT)$|^MERLIN'
+priority = 150
+attrs = { wing = "low", pressurized = true }
+
+[[family]]
+id = "swearingen_metro"
+name = "Swearingen / Fairchild Metro (SA226-TC / SA227)"
+class = "regional_turboprop"
+makes = ["swearingen"]
+model_re = '^SA22[67][A-Z0-9]*$|^METRO|^C26[AB]?$'
+attrs = { wing = "low", pressurized = true }
+
+  [[family.variant]]
+  id = "metro_ii"
+  name = "SA226-TC Metro II"
+  model_re = '^SA226'
+
+  [[family.variant]]
+  id = "metro_iii_23"
+  name = "SA227 Metro III / 23"
+  model_re = '^SA227|^METRO|^C26'
+
+[[family]]
+id = "dhc6_twin_otter"
+name = "de Havilland Canada DHC-6 Twin Otter"
+class = "regional_turboprop"
+makes = ["dehavilland"]
+model_re = '^DHC6[A-Z0-9]*$|^TWINOTTER|^UV18'
+attrs = { wing = "high", gear = "fixed" }
+
+[[family]]
+id = "dhc7"
+name = "de Havilland Canada DHC-7 Dash 7"
+class = "regional_turboprop"
+makes = ["dehavilland"]
+model_re = '^DHC7'
+attrs = { wing = "high", engines = 4 }
+
+[[family]]
+id = "dhc8"
+name = "de Havilland Canada / Bombardier DHC-8 Dash 8 / Q400"
+class = "regional_turboprop"
+makes = ["dehavilland"]
+model_re = '^DHC8[A-Z0-9]*$|^DASH8|^Q[1234]00'
+attrs = { wing = "high" }
+
+  [[family.variant]]
+  id = "dhc8_400"
+  name = "DHC-8-400 / Q400"
+  model_re = '^DHC84|Q400|DASH8400'
+
+  [[family.variant]]
+  id = "dhc8_300"
+  name = "DHC-8-300"
+  model_re = '^DHC83|Q300'
+
+  [[family.variant]]
+  id = "dhc8_100_200"
+  name = "DHC-8-100 / 200"
+  model_re = '^DHC8[12]|Q[12]00'
+
+[[family]]
+id = "jetstream"
+name = "BAe / Handley Page Jetstream 31/32/41"
+class = "regional_turboprop"
+makes = ["jetstream"]
+model_re = 'JETSTREAM|^(BA|BAE|HP)?(J|JS)?(31|32|41)[0-9]{2}[A-Z]*$|^HP137|^J(31|32|41)$'
+attrs = { wing = "low", pressurized = true }
+
+  [[family.variant]]
+  id = "j41"
+  name = "Jetstream 41"
+  model_re = '41[0-9]{2}|JETSTREAM41|^J41'
+
+  [[family.variant]]
+  id = "j31_32"
+  name = "Jetstream 31 / 32"
+  model_re = '3[12]|JETSTREAM|HP137'
+
+[[family]]
+id = "saab_340_2000"
+name = "Saab 340 / 2000"
+class = "regional_turboprop"
+makes = ["saab"]
+model_re = '^(SF)?340[A-Z0-9]*$|^2000$'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "saab340"
+  name = "340A / 340B"
+  model_re = '340'
+
+  [[family.variant]]
+  id = "saab2000"
+  name = "2000"
+  model_re = '^2000'
+
+[[family]]
+id = "embraer_110"
+name = "Embraer EMB-110 Bandeirante"
+class = "regional_turboprop"
+makes = ["embraer"]
+model_re = '^EMB110|^110P|^BANDEIRANTE'
+attrs = { wing = "low" }
+
+[[family]]
+id = "embraer_120"
+name = "Embraer EMB-120 Brasilia"
+class = "regional_turboprop"
+makes = ["embraer"]
+model_re = '^EMB120|^120(ER|RT|FC)?$|^BRASILIA'
+attrs = { wing = "low", pressurized = true }
+
+[[family]]
+id = "atr"
+name = "ATR 42 / 72"
+class = "regional_turboprop"
+makes = ["atr"]
+model_re = '^ATR(42|72)|^(42|72)[0-9]*$|^ATR$'
+attrs = { wing = "high" }
+
+  [[family.variant]]
+  id = "atr72"
+  name = "ATR 72"
+  model_re = '72'
+
+  [[family.variant]]
+  id = "atr42"
+  name = "ATR 42"
+  model_re = '42'
+
+[[family]]
+id = "dornier_228_328"
+name = "Dornier 228 / 328 / 328JET"
+class = "regional_turboprop"
+makes = ["dornier"]
+model_re = '^(DO)?2[23]8[A-Z0-9]*$|^(DO)?328'
+attrs = { wing = "high" }
+
+  [[family.variant]]
+  id = "do328jet"
+  name = "328-300 (328JET)"
+  model_re = '328(300|JET)'
+  class = "regional_jet"
+  attrs = { propulsion = "turbofan" }
+
+  [[family.variant]]
+  id = "do328"
+  name = "328-100"
+  model_re = '328'
+
+  [[family.variant]]
+  id = "do228"
+  name = "228"
+  model_re = '228'
+
+[[family]]
+id = "shorts_330_360"
+name = "Shorts 330 / 360 / Skyvan / C-23 Sherpa"
+class = "regional_turboprop"
+makes = ["shorts"]
+model_re = '^(SD)?3[36]0[A-Z0-9]*$|^SC7|^SKYVAN|^SHERPA|^C23'
+attrs = { wing = "high" }
+
+  [[family.variant]]
+  id = "sd360"
+  name = "360"
+  model_re = '360'
+
+  [[family.variant]]
+  id = "sd330"
+  name = "330 / Sherpa"
+  model_re = '330|SHERPA|^C23'
+
+  [[family.variant]]
+  id = "skyvan"
+  name = "SC.7 Skyvan"
+  model_re = 'SC7|SKYVAN'
+  attrs = { gear = "fixed" }
+
+[[family]]
+id = "casa_212_235"
+name = "CASA C-212 / CN-235 / C-295"
+class = "regional_turboprop"
+makes = ["casa"]
+model_re = '^C?212|^(CN|C)?235$|^CN235|^C295'
+priority = 90
+attrs = { wing = "high" }
+
+[[family]]
+id = "let_410"
+name = "Let L-410 Turbolet"
+class = "regional_turboprop"
+makes = ["let"]
+model_re = '^L410'
+attrs = { wing = "high" }
+
+[[family]]
+id = "fokker_f27_50"
+name = "Fokker F27 / Fairchild FH-227 / Fokker 50"
+class = "regional_turboprop"
+makes = ["fokker"]
+model_re = '^F27|^FH227|^F50$|^50$'
+attrs = { wing = "high" }
+
+[[family]]
+id = "gulfstream_i"
+name = "Grumman Gulfstream I (G-159)"
+class = "regional_turboprop"
+makes = ["gulfstream"]
+model_re = '^G159|^GULFSTREAMI$'
+attrs = { wing = "low" }
+
+[[family]]
+id = "convair_580"
+name = "Convair 580 / 600 / 640 / 5800 (turboprop)"
+class = "legacy_transport"
+makes = ["convair"]
+model_re = '^(CV|CONVAIR)?(580|600|640|5800)[A-Z0-9]*$'
+priority = 150
+attrs = { engines = 2, propulsion = "turboprop", wing = "low" }
+
+[[family]]
+id = "eclipse"
+name = "Eclipse 500 / 550"
+class = "bizjet_light"
+makes = ["eclipse"]
+model_re = '.'
+attrs = { wing = "low" }
+
+[[family]]
+id = "hondajet"
+name = "Honda HA-420 HondaJet"
+class = "bizjet_light"
+makes = ["honda"]
+model_re = '.'
+attrs = { wing = "low", engine_layout = "over_wing" }
+
+[[family]]
+id = "embraer_phenom"
+name = "Embraer Phenom 100 / 300 (EMB-500/505)"
+class = "bizjet_light"
+makes = ["embraer"]
+model_re = '^EMB50[05]|^PHENOM|^50[05][A-Z]*$'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "phenom300"
+  name = "Phenom 300 (EMB-505)"
+  model_re = '505|PHENOM300'
+
+  [[family.variant]]
+  id = "phenom100"
+  name = "Phenom 100 (EMB-500)"
+  model_re = '500|PHENOM100'
+
+[[family]]
+id = "embraer_legacy_praetor"
+name = "Embraer Legacy 450/500 / Praetor 500/600"
+class = "bizjet_midsize"
+makes = ["embraer"]
+model_re = '^EMB5(45|50)|^LEGACY(450|500)|^PRAETOR'
+attrs = { wing = "low" }
+
+[[family]]
+id = "embraer_legacy_600"
+name = "Embraer Legacy 600/650 (EMB-135BJ)"
+class = "bizjet_large"
+makes = ["embraer"]
+model_re = '^EMB135BJ|^(ERJ)?135BJ|^LEGACY(600|650)'
+priority = 160
+attrs = { wing = "low" }
+
+[[family]]
+id = "learjet"
+name = "Learjet (23-75)"
+class = "bizjet_light"
+makes = ["learjet"]
+model_re = '^(LJ|LR|LEARJET|GATES)?(23|24|25|28|29|31|35|36|40|45|55|60|70|75)[A-Z0-9]*$|^LEARJET|^C21'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "lj20s"
+  name = "23 / 24 / 25 / 28 / 29"
+  model_re = '(23|24|25|28|29)'
+
+  [[family.variant]]
+  id = "lj30s"
+  name = "31 / 35 / 36 / C-21"
+  model_re = '(31|35|36)|^C21'
+
+  [[family.variant]]
+  id = "lj55_60"
+  name = "55 / 60"
+  model_re = '(55|60)'
+  class = "bizjet_midsize"
+
+  [[family.variant]]
+  id = "lj40_45_70_75"
+  name = "40 / 45 / 70 / 75"
+  model_re = '(40|45|70|75)'
+
+[[family]]
+id = "hawker_125"
+name = "Hawker Siddeley / BAe / Hawker 125 (700/800/850/900)"
+class = "bizjet_midsize"
+makes = ["hawker"]
+model_re = '^(HS|BAE|BH|DH)?125[A-Z0-9]*$|^HAWKER(600|700|750|800|850|900|1000)|^(600|700|750|800|850|900|1000)(A|B|XP|XPI|XPR|XP2)?$|^U125|^C29'
+priority = 160
+attrs = { wing = "low" }
+
+[[family]]
+id = "hawker_4000"
+name = "Hawker 4000 Horizon"
+class = "bizjet_midsize"
+makes = ["hawker"]
+model_re = '^4000$|^HAWKER4000|^HORIZON'
+attrs = { wing = "low" }
+
+[[family]]
+id = "dassault_falcon"
+name = "Dassault Falcon"
+class = "bizjet_large"
+makes = ["dassault"]
+model_re = '^(FALCON|FANJETFALCON|MYSTERE|MYSTEREFALCON|DA)?(10|20|50|100|200|900|2000|7X|8X|6X)[A-Z0-9]*$|^FALCON|^MYSTERE|^HU25|^FANJETFALCON'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "f2000"
+  name = "Falcon 2000 series"
+  model_re = '2000'
+  attrs = { engines = 2 }
+
+  [[family.variant]]
+  id = "f900"
+  name = "Falcon 900 series"
+  model_re = '900'
+  attrs = { engines = 3 }
+
+  [[family.variant]]
+  id = "f7x_8x"
+  name = "Falcon 7X / 8X"
+  model_re = '[78]X'
+  attrs = { engines = 3 }
+
+  [[family.variant]]
+  id = "f6x"
+  name = "Falcon 6X"
+  model_re = '6X'
+  attrs = { engines = 2 }
+
+  [[family.variant]]
+  id = "f200"
+  name = "Falcon 200"
+  model_re = '200'
+  class = "bizjet_midsize"
+
+  [[family.variant]]
+  id = "f10_100"
+  name = "Falcon 10 / 100"
+  model_re = '(10|100)'
+  class = "bizjet_midsize"
+
+  [[family.variant]]
+  id = "f50"
+  name = "Falcon 50 series"
+  model_re = '50'
+  attrs = { engines = 3 }
+
+  [[family.variant]]
+  id = "f20"
+  name = "Fan Jet Falcon / Falcon 20 / HU-25"
+  model_re = '20|HU25|FANJET'
+  class = "bizjet_midsize"
+
+[[family]]
+id = "gulfstream"
+name = "Gulfstream jets (GII-G800, G100-G280)"
+class = "bizjet_large"
+makes = ["gulfstream"]
+model_re = '^G?1159[A-Z0-9]*$|^(GULFSTREAM)?G(II|IIB|III|IV|IVSP|IVX|V|VSP|VI|VII)[A-Z0-9]*$|^GULFSTREAM(II|IIB|III|IV|IVSP|V|VSP)$|^(GULFSTREAM)?G(100|150|200|280|300|350|400|450|500|550|600|650|650ER|700|800)$|^C(20|37)[A-Z]?$|^GALAXY|^112[56]|^ASTRA'
+attrs = { wing = "low" }
+notes = "Bare 'G500' is ambiguous (GV-SP-era G500 vs GVII-G500) -> family-only."
+
+  [[family.variant]]
+  id = "g1159_gii_giii"
+  name = "G-1159 / GII / GIIB / GIII (C-20)"
+  model_re = '^G?1159[AB]?$|^(GULFSTREAM)?G?(II|IIB|III)$|^C20'
+
+  [[family.variant]]
+  id = "giv_g450"
+  name = "GIV / GIV-SP / G300-G450"
+  model_re = '^G?1159C|^(GULFSTREAM)?G?IV|^(GULFSTREAM)?G(300|350|400|450)$'
+
+  [[family.variant]]
+  id = "gv_g550"
+  name = "GV / GV-SP / G550 (C-37)"
+  model_re = '^(GULFSTREAM)?G?V$|^(GULFSTREAM)?G?VSP|^(GULFSTREAM)?G550$|^C37'
+
+  [[family.variant]]
+  id = "gvi_g650"
+  name = "GVI / G650 / G650ER"
+  model_re = '^(GULFSTREAM)?G?VI$|^(GULFSTREAM)?G650'
+
+  [[family.variant]]
+  id = "gvii"
+  name = "GVII G500 / G600 / G700 / G800"
+  model_re = '^(GULFSTREAM)?G?VII|^(GULFSTREAM)?G(600|700|800)$'
+
+  [[family.variant]]
+  id = "g280_g200"
+  name = "G200 Galaxy / G280 (IAI 1126)"
+  model_re = '^(GULFSTREAM)?G(200|280)$|^GALAXY|^1126'
+  class = "bizjet_midsize"
+
+  [[family.variant]]
+  id = "g100_g150"
+  name = "Astra / G100 / G150 (IAI 1125)"
+  model_re = '^(GULFSTREAM)?G(100|150)$|^1125|^ASTRA'
+  class = "bizjet_midsize"
+
+[[family]]
+id = "iai_westwind"
+name = "IAI 1121/1123/1124 Jet Commander / Westwind"
+class = "bizjet_midsize"
+makes = ["iai", "twin_commander"]
+model_re = '^112[134][A-Z0-9]*$|^WESTWIND|^JETCOMMANDER'
+priority = 150
+attrs = { wing = "low" }
+
+[[family]]
+id = "bombardier_challenger"
+name = "Canadair / Bombardier Challenger & Global"
+class = "bizjet_large"
+makes = ["bombardier"]
+model_re = '^CL600(1A11|2A12|2B16)[A-Z0-9]*$|^CL60[014]$|^CHALLENGER|^BD100|^BD700|^GLOBAL'
+priority = 150
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "global"
+  name = "BD-700 Global Express / 5000-8000"
+  model_re = '^BD700|GLOBAL'
+
+  [[family.variant]]
+  id = "c300_350"
+  name = "BD-100 Challenger 300 / 350 / 3500"
+  model_re = '^BD100|CHALLENGER3'
+  class = "bizjet_midsize"
+
+  [[family.variant]]
+  id = "c604_650"
+  name = "CL-600-2B16 Challenger 604 / 605 / 650"
+  model_re = '2B16|^CL604|CHALLENGER6(04|05|50)'
+
+  [[family.variant]]
+  id = "c601"
+  name = "CL-600-2A12 Challenger 601"
+  model_re = '2A12|^CL601|CHALLENGER601'
+
+  [[family.variant]]
+  id = "c600"
+  name = "CL-600-1A11 Challenger 600"
+  model_re = '1A11|^CL600$|CHALLENGER600'
+
+[[family]]
+id = "sabreliner"
+name = "North American / Rockwell Sabreliner"
+class = "bizjet_midsize"
+makes = ["sabreliner"]
+model_re = '^(NA)?265[A-Z0-9]*$|^SABRE|^T39'
+attrs = { wing = "low" }
+
+[[family]]
+id = "lockheed_jetstar"
+name = "Lockheed JetStar (1329)"
+class = "bizjet_large"
+makes = ["lockheed"]
+model_re = '^(L)?1329|^JETSTAR'
+attrs = { wing = "low", engines = 4 }
+
+[[family]]
+id = "pilatus_pc24"
+name = "Pilatus PC-24"
+class = "bizjet_light"
+makes = ["pilatus"]
+model_re = '^PC24'
+attrs = { wing = "low" }
+
+[[family]]
+id = "bombardier_crj"
+name = "Bombardier CRJ100/200/440/700/900/1000"
+class = "regional_jet"
+makes = ["bombardier"]
+model_re = '^CL6002(B19|C10|C11|D15|D24|E25)[A-Z0-9]*$|^CRJ|^RJ(100|200|440|550|700|705|900|1000)|^CL65'
+priority = 150
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "crj1000"
+  name = "CRJ1000 (CL-600-2E25)"
+  model_re = '2E25|CRJ1000|^RJ1000'
+
+  [[family.variant]]
+  id = "crj900"
+  name = "CRJ900 (CL-600-2D24/2D15)"
+  model_re = '2D24|2D15|CRJ9|^RJ9'
+
+  [[family.variant]]
+  id = "crj700"
+  name = "CRJ700/550 (CL-600-2C10/2C11)"
+  model_re = '2C1[01]|CRJ(7|55)|^RJ(7|55)'
+
+  [[family.variant]]
+  id = "crj100_200"
+  name = "CRJ100/200/440 (CL-600-2B19)"
+  model_re = '2B19|CRJ(1|2|44)|^RJ(1|2|44)|^CL65'
+
+[[family]]
+id = "embraer_erj145"
+name = "Embraer ERJ-135 / 140 / 145"
+class = "regional_jet"
+makes = ["embraer"]
+model_re = '^(EMB|ERJ)?1(35|40|45)[A-Z0-9]*$'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "erj135"
+  name = "ERJ-135"
+  model_re = '135'
+
+  [[family.variant]]
+  id = "erj140"
+  name = "ERJ-140"
+  model_re = '140'
+
+  [[family.variant]]
+  id = "erj145"
+  name = "ERJ-145"
+  model_re = '145'
+
+[[family]]
+id = "embraer_ejet"
+name = "Embraer E-Jets (E170/175/190/195, E2)"
+class = "regional_jet"
+makes = ["embraer"]
+model_re = '^(EMB|ERJ|E)?1(70|75|90|95)[A-Z0-9]*$'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "ejet_e2"
+  name = "E175-E2 / E190-E2 / E195-E2"
+  model_re = 'E2$|^(ERJ|EMB)?190(300|400)|E2[A-Z]*$'
+
+  [[family.variant]]
+  id = "e175"
+  name = "E175 (ERJ 170-200)"
+  model_re = '^(ERJ|EMB)?170200|^(ERJ|EMB|E)?175'
+
+  [[family.variant]]
+  id = "e170"
+  name = "E170 (ERJ 170-100)"
+  model_re = '^(ERJ|EMB|E)?170'
+
+  [[family.variant]]
+  id = "e195"
+  name = "E195 (ERJ 190-200)"
+  model_re = '^(ERJ|EMB)?190200|^(ERJ|EMB|E)?195'
+
+  [[family.variant]]
+  id = "e190"
+  name = "E190 (ERJ 190-100)"
+  model_re = '^(ERJ|EMB|E)?190'
+
+[[family]]
+id = "bae146_avro"
+name = "BAe 146 / Avro RJ"
+class = "regional_jet"
+makes = ["bae146"]
+model_re = '^(BAE)?146[A-Z0-9]*$|^AVRORJ|^RJ(70|85|100)$|^AVRO146'
+attrs = { wing = "high", engines = 4 }
+
+[[family]]
+id = "fokker_f28_70_100"
+name = "Fokker F28 / 70 / 100"
+class = "regional_jet"
+makes = ["fokker"]
+model_re = '^F28[A-Z0-9]*$|^F(70|100)$|^(FOKKER)?(70|100)$'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "f100"
+  name = "Fokker 100"
+  model_re = '0100|100$'
+
+  [[family.variant]]
+  id = "f70"
+  name = "Fokker 70"
+  model_re = '0070|70$'
+
+  [[family.variant]]
+  id = "f28"
+  name = "F28 Fellowship"
+  model_re = '^F28'
+
+[[family]]
+id = "boeing_707_720"
+name = "Boeing 707 / 720"
+class = "narrowbody"
+makes = ["boeing"]
+model_re = '^7(07|20)[A-Z0-9]*$'
+attrs = { wing = "low", engines = 4 }
+
+[[family]]
+id = "boeing_717"
+name = "Boeing 717 (MD-95)"
+class = "narrowbody"
+makes = ["douglas"]
+model_re = '^717[A-Z0-9]*$|^MD95'
+priority = 150
+attrs = { wing = "low", engines = 2 }
+
+[[family]]
+id = "boeing_727"
+name = "Boeing 727"
+class = "narrowbody"
+makes = ["boeing"]
+model_re = '^727[A-Z0-9]*$'
+attrs = { wing = "low", engines = 3 }
+
+  [[family.variant]]
+  id = "b727_200"
+  name = "727-200"
+  model_re = '^7272'
+
+  [[family.variant]]
+  id = "b727_100"
+  name = "727-100"
+  model_re = '^7271'
+
+[[family]]
+id = "boeing_737"
+name = "Boeing 737"
+class = "narrowbody"
+makes = ["boeing"]
+model_re = '^737[A-Z0-9]*$|^C40[AB]?$|^P8A?$|^T43'
+attrs = { wing = "low", engines = 2 }
+
+  [[family.variant]]
+  id = "b737_max"
+  name = "737 MAX 7/8/9/10"
+  model_re = '^737(MAX)?(7|8|9|10)$|MAX|^7378200|^737(7|8|9|10)MAX'
+
+  [[family.variant]]
+  id = "b737_ng"
+  name = "737 NG (-600/700/800/900/BBJ)"
+  model_re = '^737[6789][0-9A-Z]{2}|^737BBJ|^C40|^P8'
+
+  [[family.variant]]
+  id = "b737_classic"
+  name = "737 Classic (-300/400/500)"
+  model_re = '^737[345][0-9A-Z]{2}'
+
+  [[family.variant]]
+  id = "b737_original"
+  name = "737 Original (-100/200, T-43)"
+  model_re = '^737[12][0-9A-Z]{2}|^T43'
+
+[[family]]
+id = "boeing_757"
+name = "Boeing 757"
+class = "narrowbody"
+makes = ["boeing"]
+model_re = '^757[A-Z0-9]*$|^C32'
+attrs = { wing = "low", engines = 2 }
+
+  [[family.variant]]
+  id = "b757_300"
+  name = "757-300"
+  model_re = '^7573'
+
+  [[family.variant]]
+  id = "b757_200"
+  name = "757-200"
+  model_re = '^7572|^C32'
+
+[[family]]
+id = "douglas_dc8"
+name = "Douglas DC-8"
+class = "narrowbody"
+makes = ["douglas"]
+model_re = '^DC8[A-Z0-9]*$'
+attrs = { wing = "low", engines = 4 }
+
+[[family]]
+id = "douglas_dc9_md80_90"
+name = "Douglas DC-9 / MD-80 / MD-90"
+class = "narrowbody"
+makes = ["douglas"]
+model_re = '^DC9[A-Z0-9]*$|^MD8[0-9][A-Z0-9]*$|^MD90[A-Z0-9]*$|^C9[AB]?$'
+attrs = { wing = "low", engines = 2, engine_layout = "aft_fuselage" }
+
+  [[family.variant]]
+  id = "md90"
+  name = "MD-90"
+  model_re = '^MD90|^DC99'
+
+  [[family.variant]]
+  id = "md80"
+  name = "MD-80 series (DC-9-81/82/83/87, MD-88)"
+  model_re = '^DC98|^MD8'
+
+  [[family.variant]]
+  id = "dc9"
+  name = "DC-9-10 to -50"
+  model_re = '^DC9|^C9'
+
+[[family]]
+id = "airbus_a220"
+name = "Airbus A220 (Bombardier CS100/CS300, BD-500)"
+class = "narrowbody"
+makes = ["airbus"]
+model_re = '^A220|^BD500|^CS[13]00'
+priority = 150
+attrs = { wing = "low" }
+
+[[family]]
+id = "airbus_a320_family"
+name = "Airbus A318 / A319 / A320 / A321"
+class = "narrowbody"
+makes = ["airbus"]
+model_re = '^A3(18|19|20|21)[A-Z0-9]*$'
+attrs = { wing = "low" }
+
+  [[family.variant]]
+  id = "a318"
+  name = "A318"
+  model_re = '^A318'
+
+  [[family.variant]]
+  id = "a319"
+  name = "A319"
+  model_re = '^A319'
+
+  [[family.variant]]
+  id = "a320"
+  name = "A320"
+  model_re = '^A320'
+
+  [[family.variant]]
+  id = "a321"
+  name = "A321"
+  model_re = '^A321'
+
+[[family]]
+id = "boeing_747"
+name = "Boeing 747"
+class = "widebody"
+makes = ["boeing"]
+model_re = '^747[A-Z0-9]*$|^VC25|^E4B?$'
+attrs = { wing = "low", engines = 4 }
+
+  [[family.variant]]
+  id = "b747_8"
+  name = "747-8"
+  model_re = '^7478'
+
+  [[family.variant]]
+  id = "b747_400"
+  name = "747-400"
+  model_re = '^7474'
+
+  [[family.variant]]
+  id = "b747_classic"
+  name = "747-100/200/300/SP"
+  model_re = '^747(1|2|3|SP)|^VC25|^E4'
+
+[[family]]
+id = "boeing_767"
+name = "Boeing 767"
+class = "widebody"
+makes = ["boeing"]
+model_re = '^767[A-Z0-9]*$|^KC46'
+attrs = { wing = "low", engines = 2 }
+
+  [[family.variant]]
+  id = "b767_400"
+  name = "767-400"
+  model_re = '^7674'
+
+  [[family.variant]]
+  id = "b767_300"
+  name = "767-300"
+  model_re = '^7673'
+
+  [[family.variant]]
+  id = "b767_200"
+  name = "767-200 / KC-46"
+  model_re = '^7672|^KC46'
+
+[[family]]
+id = "boeing_777"
+name = "Boeing 777"
+class = "widebody"
+makes = ["boeing"]
+model_re = '^777[A-Z0-9]*$'
+attrs = { wing = "low", engines = 2 }
+
+  [[family.variant]]
+  id = "b777x"
+  name = "777-8 / 777-9"
+  model_re = '^777[89]$|^777[89]X'
+
+  [[family.variant]]
+  id = "b777_300"
+  name = "777-300 / 300ER"
+  model_re = '^7773'
+
+  [[family.variant]]
+  id = "b777_200"
+  name = "777-200 / 200ER / 200LR / F"
+  model_re = '^7772|^777F'
+
+[[family]]
+id = "boeing_787"
+name = "Boeing 787"
+class = "widebody"
+makes = ["boeing"]
+model_re = '^787[A-Z0-9]*$'
+attrs = { wing = "low", engines = 2 }
+
+  [[family.variant]]
+  id = "b787_8"
+  name = "787-8"
+  model_re = '^7878'
+
+  [[family.variant]]
+  id = "b787_9"
+  name = "787-9"
+  model_re = '^7879'
+
+  [[family.variant]]
+  id = "b787_10"
+  name = "787-10"
+  model_re = '^78710'
+
+[[family]]
+id = "douglas_dc10_md11"
+name = "McDonnell Douglas DC-10 / MD-10 / MD-11"
+class = "widebody"
+makes = ["douglas"]
+model_re = '^DC10[A-Z0-9]*$|^MD1[01][A-Z0-9]*$|^KC10'
+attrs = { wing = "low", engines = 3 }
+
+  [[family.variant]]
+  id = "md11"
+  name = "MD-11"
+  model_re = '^MD11'
+
+  [[family.variant]]
+  id = "dc10"
+  name = "DC-10 / MD-10 / KC-10"
+  model_re = '^DC10|^MD10|^KC10'
+
+[[family]]
+id = "lockheed_l1011"
+name = "Lockheed L-1011 TriStar"
+class = "widebody"
+makes = ["lockheed"]
+model_re = '^L?1011[A-Z0-9]*$|^TRISTAR'
+attrs = { wing = "low", engines = 3 }
+
+[[family]]
+id = "airbus_a300_310"
+name = "Airbus A300 / A310"
+class = "widebody"
+makes = ["airbus"]
+model_re = '^A3[01]0[A-Z0-9]*$'
+attrs = { wing = "low", engines = 2 }
+
+  [[family.variant]]
+  id = "a300"
+  name = "A300"
+  model_re = '^A300'
+
+  [[family.variant]]
+  id = "a310"
+  name = "A310"
+  model_re = '^A310'
+
+[[family]]
+id = "airbus_a330"
+name = "Airbus A330"
+class = "widebody"
+makes = ["airbus"]
+model_re = '^A330[A-Z0-9]*$'
+attrs = { wing = "low", engines = 2 }
+
+[[family]]
+id = "airbus_a340"
+name = "Airbus A340"
+class = "widebody"
+makes = ["airbus"]
+model_re = '^A340[A-Z0-9]*$'
+attrs = { wing = "low", engines = 4 }
+
+[[family]]
+id = "airbus_a350"
+name = "Airbus A350"
+class = "widebody"
+makes = ["airbus"]
+model_re = '^A350[A-Z0-9]*$'
+attrs = { wing = "low", engines = 2 }
+
+[[family]]
+id = "airbus_a380"
+name = "Airbus A380"
+class = "widebody"
+makes = ["airbus"]
+model_re = '^A380[A-Z0-9]*$'
+attrs = { wing = "low", engines = 4 }
+
+[[family]]
+id = "douglas_dc3"
+name = "Douglas DC-3 / C-47 / Basler BT-67"
+class = "legacy_transport"
+makes = ["douglas"]
+model_re = '^DC3[A-Z0-9]*$|^C47[A-Z0-9]*$|^C53|^R4D|^BT67|^SUPERDC3|^C117|^DST|^TP3'
+priority = 150
+attrs = { engines = 2, propulsion = "piston", gear_config = "tailwheel", wing = "low" }
+
+  [[family.variant]]
+  id = "bt67"
+  name = "Basler BT-67 / turbine DC-3"
+  model_re = '^BT67|^DC3(TP|65TP)|^TP3'
+  attrs = { propulsion = "turboprop" }
+
+  [[family.variant]]
+  id = "dc3"
+  name = "DC-3 / C-47 / R4D"
+  model_re = '.'
+
+[[family]]
+id = "douglas_dc4_6_7"
+name = "Douglas DC-4 / DC-6 / DC-7"
+class = "legacy_transport"
+makes = ["douglas"]
+model_re = '^DC[467][A-Z0-9]*$|^C54|^C118|^R[56]D'
+attrs = { engines = 4, propulsion = "piston", gear_config = "tricycle", wing = "low" }
+
+  [[family.variant]]
+  id = "dc4"
+  name = "DC-4 / C-54"
+  model_re = '^DC4|^C54|^R5D'
+
+  [[family.variant]]
+  id = "dc6"
+  name = "DC-6 / C-118"
+  model_re = '^DC6|^C118|^R6D'
+
+  [[family.variant]]
+  id = "dc7"
+  name = "DC-7"
+  model_re = '^DC7'
+
+[[family]]
+id = "convair_piston"
+name = "Convair 240 / 340 / 440"
+class = "legacy_transport"
+makes = ["convair"]
+model_re = '^(CV|CONVAIR)?[234]40[A-Z0-9]*$|^T29|^C131'
+attrs = { engines = 2, propulsion = "piston", wing = "low" }
+
+[[family]]
+id = "curtiss_c46"
+name = "Curtiss C-46 Commando"
+class = "legacy_transport"
+makes = ["curtiss"]
+model_re = '^C46|^CW20'
+attrs = { engines = 2, propulsion = "piston", gear_config = "tailwheel" }
+
+[[family]]
+id = "lockheed_l188"
+name = "Lockheed L-188 Electra"
+class = "legacy_transport"
+makes = ["lockheed"]
+model_re = '^L?188[A-Z0-9]*$|^ELECTRA'
+attrs = { engines = 4, propulsion = "turboprop" }
+
+[[family]]
+id = "lockheed_l382"
+name = "Lockheed L-100/L-382 Hercules / C-130"
+class = "legacy_transport"
+makes = ["lockheed"]
+model_re = '^L?382[A-Z0-9]*$|^L100|^C130|^HERCULES'
+attrs = { engines = 4, propulsion = "turboprop", wing = "high" }
+
+[[family]]
+id = "stearman"
+name = "Boeing-Stearman Model 75 / PT-17 / N2S Kaydet"
+class = "vintage"
+makes = ["stearman"]
+model_re = '^[ABDE]75[A-Z]?[0-9]*[A-Z]?[0-9]*$|^75$|^PT1[378][A-Z]?$|^N2S[0-9]*$|^STEARMAN|^KAYDET'
+priority = 150
+attrs = { engines = 1, propulsion = "piston", gear = "fixed", gear_config = "tailwheel", wing = "biplane" }
+
+[[family]]
+id = "north_american_t6"
+name = "North American T-6 / SNJ / Harvard"
+class = "vintage"
+makes = ["north_american"]
+model_re = '^(AT|T)6[A-Z0-9]*$|^SNJ|^HARVARD|^TEXAN$|^NA(16|66|77|88)'
+attrs = { engines = 1, propulsion = "piston", gear = "retract", gear_config = "tailwheel", wing = "low" }
+
+[[family]]
+id = "north_american_p51"
+name = "North American P-51 Mustang"
+class = "vintage"
+makes = ["north_american"]
+model_re = '^T?F?P?51[A-Z]?$|^P51|^TF51|^F51|^CA18|^MUSTANG'
+attrs = { engines = 1, propulsion = "piston", gear = "retract", gear_config = "tailwheel", wing = "low" }
+
+[[family]]
+id = "north_american_t28"
+name = "North American T-28 Trojan"
+class = "vintage"
+makes = ["north_american"]
+model_re = '^T28|^TROJAN|^FENNEC'
+attrs = { engines = 1, propulsion = "piston", gear = "retract", gear_config = "tricycle", wing = "low" }
+
+[[family]]
+id = "yak_nanchang"
+name = "Yak-52 / Yak-18 / Yak-50/54/55 / Nanchang CJ-6"
+class = "vintage"
+makes = ["yak"]
+model_re = '^YAK|^IAK|^CJ6|^PT6A?$'
+attrs = { engines = 1, propulsion = "piston", gear = "retract", wing = "low" }
+
+  [[family.variant]]
+  id = "yak52"
+  name = "Yak-52 / Yak-52TW"
+  model_re = '52'
+
+  [[family.variant]]
+  id = "cj6"
+  name = "Nanchang CJ-6"
+  model_re = 'CJ6|^PT6'
+
+  [[family.variant]]
+  id = "yak_aerobatic"
+  name = "Yak-50 / 54 / 55"
+  model_re = '5[045]'
+  class = "sep_aerobatic"
+
+  [[family.variant]]
+  id = "yak18"
+  name = "Yak-18"
+  model_re = '18'
+
+[[family]]
+id = "aero_l39"
+name = "Aero L-29 Delfin / L-39 Albatros"
+class = "vintage"
+makes = ["aero_vodochody"]
+model_re = '^L(29|39|59)[A-Z0-9]*$|^ALBATROS|^DELFIN'
+attrs = { engines = 1, propulsion = "turbofan", gear = "retract", gear_config = "tricycle", wing = "low" }
+
+[[family]]
+id = "waco"
+name = "Waco biplanes (UPF-7, YMF, YKS, etc.)"
+class = "vintage"
+makes = ["waco"]
+model_re = '.'
+attrs = { engines = 1, propulsion = "piston", gear = "fixed", gear_config = "tailwheel", wing = "biplane" }
+
+[[family]]
+id = "ryan_pt22"
+name = "Ryan ST / PT-22 Recruit"
+class = "vintage"
+makes = ["ryan"]
+model_re = '^ST[A-Z0-9]*$|^PT2[012]|^STM|^RECRUIT'
+attrs = { engines = 1, propulsion = "piston", gear = "fixed", gear_config = "tailwheel", wing = "low" }
+
+[[family]]
+id = "fairchild_pt19"
+name = "Fairchild PT-19 / PT-23 / PT-26 (M-62)"
+class = "vintage"
+makes = ["fairchild_vintage"]
+model_re = '^M62|^PT(19|23|26)|^CORNELL'
+attrs = { engines = 1, propulsion = "piston", gear = "fixed", gear_config = "tailwheel", wing = "low" }
+
+[[family]]
+id = "great_lakes"
+name = "Great Lakes 2T-1A"
+class = "vintage"
+makes = ["great_lakes"]
+model_re = '.'
+attrs = { engines = 1, propulsion = "piston", gear = "fixed", gear_config = "tailwheel", wing = "biplane" }
