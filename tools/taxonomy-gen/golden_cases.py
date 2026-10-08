@@ -283,4 +283,15 @@ CASES = [
     ("WACO", "UPF-7", "", False, "waco", ""),
     ("BRITTEN-NORMAN", "BN-2A-26", "", False, "britten_norman_islander", ""),
     ("ROBINSON", "R44", "", False, None, None),
+    # gaps found in the 2024-25 fatal batch
+    ("MX AIRCRAFT TECH PTY LTD", "MXS", "", False, "mx_aircraft", ""),
+    ("MX AIRCRAFT LLC", "MX2", "", False, "mx_aircraft", ""),
+    ("GAME COMPOSITES LLC", "GB1 GAMEBIRD", "", False, "gamebird", ""),
+    ("FANTASY AIR SRO", "ALLEGRO 2000", "", False, "fantasy_air_allegro", ""),
+    ("LOCKWOOD", "AIR CAM", "", True, "lockwood_aircam", ""),
+    ("GOOD JAMES", "AIR CAM", "", True, "lockwood_aircam", ""),
+    ("AERO COMMANDER", "200D", "", False, "aero_commander_200", ""),
+    ("AERO COMMANDER", "100-180", "", False, "aero_commander_100", ""),
+    ("LOCKHEED", "12A", "", False, "lockheed_10_12", ""),
+    ("AERO COMMANDER", "500-B", "", False, "aero_commander_piston", ""),
 ]

@@ -1,5 +1,5 @@
 # Fixed-wing aircraft taxonomy for NTSB accident analysis
-# Generated 2026-10-06 - 229 families, 276 variants, 20 classes.
+# Generated 2026-10-07 - 236 families, 276 variants, 20 classes.
 #
 # Hierarchy: class -> family (airframe lineage) -> variant (specific model).
 # A variant may override the family's class and attrs (e.g. 172RG -> sep_retract).
@@ -127,6 +127,10 @@ waco = ['^WACO\b', '^CLASSIC AIRCRAFT\b']
 ryan = ['^RYAN\b']
 fairchild_vintage = ['^FAIRCHILD\b']
 great_lakes = ['^GREAT LAKES\b']
+mx_aircraft = ['^MX AIRCRAFT\b', '^MXR TECHNOLOGIES\b']
+game_composites = ['^GAME COMPOSITES\b']
+fantasy_air = ['^FANTASY AIR\b']
+lockwood = ['^LOCKWOOD\b', '^ADMORE\b']
 
 [[class]]
 id = "sep_fixed"
@@ -1498,6 +1502,22 @@ attrs = { wing = "low" }
   model_re = '^TB(9|10|200)|^TOBAGO|^TAMPICO'
 
 [[family]]
+id = "aero_commander_100"
+name = "Aero Commander 100 / Darter Commander"
+class = "sep_fixed"
+makes = ["commander_single"]
+model_re = '^(AC)?100([0-9]{3})?$|^DARTER'
+attrs = { wing = "high" }
+
+[[family]]
+id = "aero_commander_200"
+name = "Aero Commander 200 / Meyers 200"
+class = "sep_retract"
+makes = ["commander_single"]
+model_re = '^(AC)?200[A-D]?$'
+attrs = { wing = "low" }
+
+[[family]]
 id = "commander_112_114"
 name = "Rockwell / Commander 112 / 114"
 class = "sep_retract"
@@ -1777,6 +1797,24 @@ homebuilt_model_re = '^EDGE540|^EDGE'
 attrs = { wing = "low" }
 
 [[family]]
+id = "mx_aircraft"
+name = "MX Aircraft MXS / MX2"
+class = "sep_aerobatic"
+makes = ["mx_aircraft"]
+model_re = '^MX'
+homebuilt_model_re = '^MXS$|^MX2$'
+attrs = { wing = "low" }
+
+[[family]]
+id = "gamebird"
+name = "Game Composites GB1 GameBird"
+class = "sep_aerobatic"
+makes = ["game_composites"]
+model_re = '.'
+homebuilt_model_re = '^GB1|GAMEBIRD'
+attrs = { wing = "low" }
+
+[[family]]
 id = "sukhoi"
 name = "Sukhoi Su-26/29/31"
 class = "sep_aerobatic"
@@ -1885,6 +1923,14 @@ id = "aeropro_eurofox"
 name = "AeroPro EuroFOX"
 class = "lsa"
 makes = ["aeropro"]
+model_re = '.'
+attrs = { wing = "high" }
+
+[[family]]
+id = "fantasy_air_allegro"
+name = "Fantasy Air Allegro"
+class = "lsa"
+makes = ["fantasy_air"]
 model_re = '.'
 attrs = { wing = "high" }
 
@@ -2197,6 +2243,15 @@ homebuilt_model_re = '^PIETENPOL|^AIRCAMPER'
 attrs = { wing = "parasol", gear_config = "tailwheel" }
 
 [[family]]
+id = "lockwood_aircam"
+name = "Lockwood Air Cam (twin-engine pusher)"
+class = "experimental"
+makes = ["lockwood"]
+model_re = '^AIRCAM'
+homebuilt_model_re = '^AIRCAM'
+attrs = { wing = "high", engines = 2, gear_config = "tailwheel" }
+
+[[family]]
 id = "kolb"
 name = "Kolb Firestar / Twinstar / Mark III"
 class = "experimental"
@@ -2267,6 +2322,7 @@ makes = ["agcat"]
 model_re = '^G164[A-Z0-9]*$|^AGCAT|^SUPERAGCAT|^164[A-Z0-9]*$'
 priority = 150
 attrs = { wing = "biplane", propulsion = "piston" }
+notes = "Turbine conversions (Turbo Cat, some G-164A/B) carry the same model strings; propulsion is the common case."
 
 [[family]]
 id = "weatherly"
@@ -2372,6 +2428,14 @@ class = "mep"
 makes = ["partenavia"]
 model_re = '^P68|^AP68|^OBSERVER'
 attrs = { wing = "high", gear = "fixed" }
+
+[[family]]
+id = "lockheed_10_12"
+name = "Lockheed 10 / 12 Electra (Junior)"
+class = "mep"
+makes = ["lockheed"]
+model_re = '^(L)?1[02][A-Z]?$|^ELECTRAJUNIOR'
+attrs = { wing = "low" }
 
 [[family]]
 id = "aero_commander_piston"

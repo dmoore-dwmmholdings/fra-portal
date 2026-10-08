@@ -198,6 +198,10 @@ MAKES = {
     "ryan": [r"^RYAN\b"],
     "fairchild_vintage": [r"^FAIRCHILD\b"],
     "great_lakes": [r"^GREAT LAKES\b"],
+    "mx_aircraft": [r"^MX AIRCRAFT\b", r"^MXR TECHNOLOGIES\b"],
+    "game_composites": [r"^GAME COMPOSITES\b"],
+    "fantasy_air": [r"^FANTASY AIR\b"],
+    "lockwood": [r"^LOCKWOOD\b", r"^ADMORE\b"],
 }
 
 # ---------------------------------------------------------------- families
@@ -439,6 +443,8 @@ F("socata_tb", "Socata TB Tampico / Tobago / Trinidad", "sep_fixed", ["socata"],
   r"^TB(9|10|20|21|200)[A-Z0-9]*$|^TOBAGO|^TRINIDAD|^TAMPICO", LW,
   [V("tb20_21", "TB20 / TB21 Trinidad", r"^TB2[01]|^TRINIDAD", cls="sep_retract", gear="retract"),
    V("tb9_10_200", "TB9 / TB10 / TB200", r"^TB(9|10|200)|^TOBAGO|^TAMPICO")])
+F("aero_commander_100", "Aero Commander 100 / Darter Commander", "sep_fixed", ["commander_single"], r"^(AC)?100([0-9]{3})?$|^DARTER", HW)
+F("aero_commander_200", "Aero Commander 200 / Meyers 200", "sep_retract", ["commander_single"], r"^(AC)?200[A-D]?$", LW)
 F("commander_112_114", "Rockwell / Commander 112 / 114", "sep_retract", ["commander_single"],
   r"^1(12|14)[A-Z0-9]*$|^COMMANDER11[24]", LW)
 F("navion", "Navion", "sep_retract", ["navion"], r"^NAVION|^L17[A-C]?$", LW)
@@ -488,6 +494,9 @@ F("christen_eagle", "Christen Eagle", "sep_aerobatic", ["christen"], r"^(CHRISTE
 F("extra", "Extra 200/230/260/300/330", "sep_aerobatic", ["extra"], r".", LW,
   [V("ea300_330", "EA-300 / 330", r"(300|330)"), V("ea200_260", "EA-200 / 230 / 260", r"(200|230|260)")])
 F("zivko_edge", "Zivko Edge 540", "sep_aerobatic", ["zivko"], r".", LW, homebuilt_model_re=r"^EDGE540|^EDGE")
+F("mx_aircraft", "MX Aircraft MXS / MX2", "sep_aerobatic", ["mx_aircraft"], r"^MX", LW, homebuilt_model_re=r"^MXS$|^MX2$")
+F("gamebird", "Game Composites GB1 GameBird", "sep_aerobatic", ["game_composites"], r".", LW,
+  homebuilt_model_re=r"^GB1|GAMEBIRD")
 F("sukhoi", "Sukhoi Su-26/29/31", "sep_aerobatic", ["sukhoi"], r".", LW)
 
 # ======== LSA
@@ -505,6 +514,7 @@ F("evektor_sportstar", "Evektor SportStar / Harmony", "lsa", ["evektor"], r".", 
 F("remos", "Remos GX", "lsa", ["remos"], r".", HW)
 F("jabiru", "Jabiru J170/J230/J250", "lsa", ["jabiru"], r".", HW, homebuilt_model_re=r"^JABIRU")
 F("aeropro_eurofox", "AeroPro EuroFOX", "lsa", ["aeropro"], r".", HW)
+F("fantasy_air_allegro", "Fantasy Air Allegro", "lsa", ["fantasy_air"], r".", HW)
 F("american_legend_cub", "American Legend Cub", "lsa", ["american_legend"], r".", dict(wing="high", gear_config="tailwheel"))
 
 # ======== Experimental amateur-built (kits; builders' names often appear as make)
@@ -558,6 +568,8 @@ F("bearhawk", "Bearhawk", "experimental", [], r"^BEARHAWK", dict(wing="high", ge
   homebuilt_model_re=r"^BEARHAWK")
 F("pietenpol", "Pietenpol Air Camper", "experimental", [], r"^PIETENPOL|^AIRCAMPER",
   dict(wing="parasol", gear_config="tailwheel"), homebuilt_model_re=r"^PIETENPOL|^AIRCAMPER")
+F("lockwood_aircam", "Lockwood Air Cam (twin-engine pusher)", "experimental", ["lockwood"], r"^AIRCAM",
+  dict(wing="high", engines=2, gear_config="tailwheel"), homebuilt_model_re=r"^AIRCAM")
 F("kolb", "Kolb Firestar / Twinstar / Mark III", "experimental", ["kolb"], r".", HW,
   homebuilt_model_re=r"^KOLB|^FIRESTAR|^FIREFLY")
 
@@ -572,7 +584,8 @@ F("thrush", "Thrush / Ayres / Rockwell S2R", "agricultural", ["thrush"], r"^S2R[
   [V("thrush_turbine", "S2R-T / S2R-G / S2R-H / 510 / 710 (turbine)", r"^S2R(T|G|H|HG)|^S2R[0-9]+T|^(510|710)", propulsion="turboprop"),
    V("thrush_piston", "S2R / S2R-R1340 / R1820 (radial)", r"^S2R", propulsion="piston")])
 F("grumman_agcat", "Grumman / Schweizer G-164 Ag Cat", "agricultural", ["agcat"], r"^G164[A-Z0-9]*$|^AGCAT|^SUPERAGCAT|^164[A-Z0-9]*$",
-  dict(wing="biplane", propulsion="piston"), priority=150)
+  dict(wing="biplane", propulsion="piston"), priority=150,
+  notes="Turbine conversions (Turbo Cat, some G-164A/B) carry the same model strings; propulsion is the common case.")
 F("weatherly", "Weatherly 201/620", "agricultural", ["weatherly"], r".", dict(wing="low", propulsion="piston"))
 F("pzl_dromader", "PZL M-18 Dromader", "agricultural", ["pzl"], r"^M18|^DROMADER", dict(wing="low", propulsion="piston"))
 
@@ -594,6 +607,7 @@ F("searey", "Progressive Aerodyne SeaRey", "amphibian", ["progressive"], r".", d
 # ======== Multi-engine piston (other)
 F("britten_norman_islander", "Britten-Norman BN-2 Islander / Trislander", "mep", ["britten_norman"], r"^BN2", dict(wing="high", gear="fixed"))
 F("partenavia_p68", "Partenavia / Vulcanair P68", "mep", ["partenavia"], r"^P68|^AP68|^OBSERVER", dict(wing="high", gear="fixed"))
+F("lockheed_10_12", "Lockheed 10 / 12 Electra (Junior)", "mep", ["lockheed"], r"^(L)?1[02][A-Z]?$|^ELECTRAJUNIOR", LW)
 F("aero_commander_piston", "Aero Commander 500/520/560/680 (piston)", "mep", ["twin_commander"],
   r"^(AC)?(500|520|560)[A-Z0-9]*$|^(AC)?680(E|F|FL|FLP|P)?$|^SHRIKE|^GRANDCOMMANDER", HW)
 

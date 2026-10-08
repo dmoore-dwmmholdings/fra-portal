@@ -1,4 +1,5 @@
 class_id,class_name,family_id,family_name,variant_id,variant_name,resolved_class_id,engines,propulsion,gear,gear_config,wing
+sep_fixed,"Single-engine piston, fixed tricycle gear",aero_commander_100,Aero Commander 100 / Darter Commander,,,sep_fixed,1,piston,fixed,tricycle,high
 sep_fixed,"Single-engine piston, fixed tricycle gear",beech_77,Beech 77 Skipper,,,sep_fixed,1,piston,fixed,tricycle,low
 sep_fixed,"Single-engine piston, fixed tricycle gear",beech_musketeer,Beech Musketeer / Sport / Sundowner / Sierra (19/23/24),sierra,24R / A24R / B24R Sierra,sep_retract,1,piston,retract,tricycle,low
 sep_fixed,"Single-engine piston, fixed tricycle gear",beech_musketeer,Beech Musketeer / Sport / Sundowner / Sierra (19/23/24),sundowner,C23 Sundowner / 23 / A23 Musketeer,sep_fixed,1,piston,fixed,tricycle,low
@@ -51,6 +52,7 @@ sep_fixed,"Single-engine piston, fixed tricycle gear",piper_pa32,Piper PA-32 Che
 sep_fixed,"Single-engine piston, fixed tricycle gear",piper_pa38,Piper PA-38 Tomahawk,,,sep_fixed,1,piston,fixed,tricycle,low
 sep_fixed,"Single-engine piston, fixed tricycle gear",socata_tb,Socata TB Tampico / Tobago / Trinidad,tb20_21,TB20 / TB21 Trinidad,sep_retract,1,piston,retract,tricycle,low
 sep_fixed,"Single-engine piston, fixed tricycle gear",socata_tb,Socata TB Tampico / Tobago / Trinidad,tb9_10_200,TB9 / TB10 / TB200,sep_fixed,1,piston,fixed,tricycle,low
+sep_retract,"Single-engine piston, retractable gear",aero_commander_200,Aero Commander 200 / Meyers 200,,,sep_retract,1,piston,retract,tricycle,low
 sep_retract,"Single-engine piston, retractable gear",beech_bonanza,Beech Bonanza / Debonair (33/35/36),be33,33 / F33 Debonair & Bonanza,sep_retract,1,piston,retract,tricycle,low
 sep_retract,"Single-engine piston, retractable gear",beech_bonanza,Beech Bonanza / Debonair (33/35/36),be35,35 V-tail Bonanza,sep_retract,1,piston,retract,tricycle,low
 sep_retract,"Single-engine piston, retractable gear",beech_bonanza,Beech Bonanza / Debonair (33/35/36),be36,36 / A36 / G36 Bonanza,sep_retract,1,piston,retract,tricycle,low
@@ -113,6 +115,8 @@ sep_aerobatic,Aerobatic,christen_eagle,Christen Eagle,,,sep_aerobatic,1,piston,f
 sep_aerobatic,Aerobatic,champion_decathlon,Decathlon / Super Decathlon (8KCAB),,,sep_aerobatic,1,piston,fixed,tailwheel,high
 sep_aerobatic,Aerobatic,extra,Extra 200/230/260/300/330,ea300_330,EA-300 / 330,sep_aerobatic,1,piston,fixed,tailwheel,low
 sep_aerobatic,Aerobatic,extra,Extra 200/230/260/300/330,ea200_260,EA-200 / 230 / 260,sep_aerobatic,1,piston,fixed,tailwheel,low
+sep_aerobatic,Aerobatic,gamebird,Game Composites GB1 GameBird,,,sep_aerobatic,1,piston,fixed,tailwheel,low
+sep_aerobatic,Aerobatic,mx_aircraft,MX Aircraft MXS / MX2,,,sep_aerobatic,1,piston,fixed,tailwheel,low
 sep_aerobatic,Aerobatic,pitts,Pitts Special (S-1 / S-2),s1,S-1 (single seat),sep_aerobatic,1,piston,fixed,tailwheel,biplane
 sep_aerobatic,Aerobatic,pitts,Pitts Special (S-1 / S-2),s2,S-2 (two seat),sep_aerobatic,1,piston,fixed,tailwheel,biplane
 sep_aerobatic,Aerobatic,sukhoi,Sukhoi Su-26/29/31,,,sep_aerobatic,1,piston,fixed,tailwheel,low
@@ -121,6 +125,7 @@ lsa,Light sport (S-LSA / E-LSA),aeropro_eurofox,AeroPro EuroFOX,,,lsa,1,piston,f
 lsa,Light sport (S-LSA / E-LSA),american_legend_cub,American Legend Cub,,,lsa,1,piston,fixed,tailwheel,high
 lsa,Light sport (S-LSA / E-LSA),cessna_162,Cessna 162 Skycatcher,,,lsa,1,piston,fixed,tricycle,high
 lsa,Light sport (S-LSA / E-LSA),evektor_sportstar,Evektor SportStar / Harmony,,,lsa,1,piston,fixed,tricycle,low
+lsa,Light sport (S-LSA / E-LSA),fantasy_air_allegro,Fantasy Air Allegro,,,lsa,1,piston,fixed,tricycle,high
 lsa,Light sport (S-LSA / E-LSA),flight_design_ct,Flight Design CT series,,,lsa,1,piston,fixed,tricycle,high
 lsa,Light sport (S-LSA / E-LSA),icon_a5,Icon A5,,,lsa,1,piston,retract,tricycle,high
 lsa,Light sport (S-LSA / E-LSA),jabiru,Jabiru J170/J230/J250,,,lsa,1,piston,fixed,tricycle,high
@@ -146,6 +151,7 @@ experimental,Experimental amateur-built (kit),lancair,Lancair (235/320/360/IV/ES
 experimental,Experimental amateur-built (kit),lancair,Lancair (235/320/360/IV/ES/Legacy/Evolution),lancair_legacy,Legacy,experimental,1,piston,retract,,low
 experimental,Experimental amateur-built (kit),lancair,Lancair (235/320/360/IV/ES/Legacy/Evolution),lancair_evolution,Evolution,experimental,1,piston,retract,,low
 experimental,Experimental amateur-built (kit),lancair,Lancair (235/320/360/IV/ES/Legacy/Evolution),lancair_2_3,235 / 320 / 360,experimental,1,piston,retract,,low
+experimental,Experimental amateur-built (kit),lockwood_aircam,Lockwood Air Cam (twin-engine pusher),,,experimental,2,piston,,tailwheel,high
 experimental,Experimental amateur-built (kit),murphy,Murphy Rebel / Moose / Elite,,,experimental,1,piston,,,high
 experimental,Experimental amateur-built (kit),pietenpol,Pietenpol Air Camper,,,experimental,1,piston,,tailwheel,parasol
 experimental,Experimental amateur-built (kit),rans,"Rans S-series (Coyote, Courier, Airaile, S-20)",,,experimental,1,piston,,,high
@@ -237,6 +243,7 @@ mep,Multi-engine piston,cessna_414_421,Cessna 414/421,c421,421 Golden Eagle,mep,
 mep,Multi-engine piston,diamond_da42,Diamond DA42 Twin Star,,,mep,2,piston,retract,tricycle,low
 mep,Multi-engine piston,diamond_da62,Diamond DA62,,,mep,2,piston,retract,tricycle,low
 mep,Multi-engine piston,grumman_ga7,Grumman American GA-7 Cougar,,,mep,2,piston,retract,tricycle,low
+mep,Multi-engine piston,lockheed_10_12,Lockheed 10 / 12 Electra (Junior),,,mep,2,piston,retract,tricycle,low
 mep,Multi-engine piston,partenavia_p68,Partenavia / Vulcanair P68,,,mep,2,piston,fixed,tricycle,high
 mep,Multi-engine piston,piper_aerostar,"Piper / Ted Smith Aerostar (PA-60, 600/601/602)",,,mep,2,piston,retract,tricycle,low
 mep,Multi-engine piston,piper_pa23,Piper PA-23 Apache / Aztec,aztec,PA-23-250 Aztec,mep,2,piston,retract,tricycle,low
