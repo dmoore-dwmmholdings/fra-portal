@@ -8,7 +8,8 @@ export const ANALYSES = "analyses";
 export const docId = (evId: string, aircraftKey: number) => `${evId}_${aircraftKey}`;
 
 const key = {
-  ev_id: z.string().regex(/^\d{8}X\d{5}$/).describe("NTSB event id, e.g. 20080107X00026"),
+  // Pre-2021 ids look like 20080107X00026; CAROL-era ids are 14 digits, e.g. 20250510200140.
+  ev_id: z.string().regex(/^(\d{8}X\d{5}|\d{14})$/).describe("NTSB event id, e.g. 20080107X00026 or 20250510200140"),
   aircraft_key: z.number().int().min(1).describe("NTSB Aircraft_Key (1 unless multi-aircraft event)"),
 };
 
