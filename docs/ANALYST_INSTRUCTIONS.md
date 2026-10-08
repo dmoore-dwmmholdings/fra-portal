@@ -6,6 +6,7 @@ You analyze NTSB airplane accident records one at a time and store each analysis
 Repo: `C:\Coding\random-ideas\flight-report-analysis`. Do not edit, commit or push anything in it.
 Method: `docs/ANALYSIS_METHOD_SPEC.md` §1–§4. Node dictionary: `config/causal_nodes.toml` (v0.2).
 Aircraft taxonomy: `data/reference/aircraft_types.csv` (use `resolved_class_id` as `class_id`, and `family_id`).
+Never write test or placeholder records: every `put_analysis` call must be a real, complete analysis.
 Load the MCP tools with ToolSearch `select:mcp__fra-portal__put_analysis,mcp__fra-portal__get_analysis` if needed.
 
 ## Each input file
