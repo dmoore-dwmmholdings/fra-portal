@@ -23,7 +23,8 @@ For each file:
 3. Roles from `narr_cause`: `"C"` if in the probable cause, `"F"` if "contributing", otherwise `null`.
 4. Call `mcp__fra-portal__put_analysis` with:
    - `ev_id`, `aircraft_key`, `ntsb_no`, `event_date` from the header; `outcome` from the header (this aircraft).
-   - `event`: the `## event` JSON line, copied as-is.
+   - `event`: the `## event` JSON line, copied as-is, if your `put_analysis` schema lists `event`. If it does
+     not, or the call rejects it, leave it out: the loop patches it from the input file afterward.
    - `aircraft`: `make`, `model`, and the best taxonomy `class_id` / `family_id` (omit those two if no match).
    - `summary`: markdown, at most 120 words: a bold one-line headline; 2–3 sentences of what happened; a
      **Chain:** line (`fatal ← collision ← … ← root why`); a **Lesson:** line for pilots. Facts from the file only.
