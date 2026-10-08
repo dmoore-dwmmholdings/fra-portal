@@ -13,6 +13,26 @@ const key = {
   aircraft_key: z.number().int().min(1).describe("NTSB Aircraft_Key (1 unless multi-aircraft event)"),
 };
 
+/** Event facts the chain viewer shows; taken from the NTSB record, not the analysis. */
+const event = z
+  .object({
+    location: z.string().optional().describe("City, ST"),
+    operation: z.string().optional().describe("e.g. Part 91, Part 135, Public use"),
+    conditions: z.string().optional().describe("e.g. VMC, daylight"),
+    fatalities: z.number().int().min(0).optional(),
+    probable_cause: z.string().optional().describe("NTSB probable cause (narr_cause), verbatim"),
+  })
+  .optional();
+
+const aircraft = z
+  .object({
+    make: z.string().optional(),
+    model: z.string().optional(),
+    class_id: z.string().optional(),
+    family_id: z.string().optional(),
+  })
+  .optional();
+
 const json = (v: unknown) => ({ content: [{ type: "text" as const, text: JSON.stringify(v, null, 2) }] });
 
 export function buildServer(db: Firestore = getFirestore()): McpServer {
@@ -31,14 +51,8 @@ export function buildServer(db: Firestore = getFirestore()): McpServer {
         ntsb_no: z.string().optional(),
         event_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
         outcome: z.enum(["fatal", "serious", "minor", "none", "unknown"]).optional(),
-        aircraft: z
-          .object({
-            make: z.string().optional(),
-            model: z.string().optional(),
-            class_id: z.string().optional(),
-            family_id: z.string().optional(),
-          })
-          .optional(),
+        aircraft,
+        event,
         summary: z.string().min(1).describe("Plain-language summary of the chain, markdown allowed"),
         nodes: z.array(z.string()).optional().describe("Causal node ids on the chain, for filtering"),
         analysis: z.record(z.string(), z.unknown()).describe("Free-form structured analysis"),
@@ -56,6 +70,33 @@ export function buildServer(db: Firestore = getFirestore()): McpServer {
         created_at: prev.exists ? prev.get("created_at") : FieldValue.serverTimestamp(),
       });
       return json({ id, status: prev.exists ? "replaced" : "created" });
+    },
+  );
+
+  server.registerTool(
+    "patch_analysis",
+    {
+      title: "Patch analysis fields",
+      description:
+        "Merge indexed fields into an existing analysis without resending `analysis`. " +
+        "`event` and `aircraft` merge key by key; other fields replace.",
+      inputSchema: {
+        ...key,
+        ntsb_no: z.string().optional(),
+        event_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        outcome: z.enum(["fatal", "serious", "minor", "none", "unknown"]).optional(),
+        aircraft,
+        event,
+        summary: z.string().min(1).optional(),
+        nodes: z.array(z.string()).optional(),
+      },
+    },
+    async ({ ev_id, aircraft_key, ...fields }) => {
+      const ref = col.doc(docId(ev_id, aircraft_key));
+      if (!(await ref.get()).exists) return json({ error: "not found" });
+      // set+merge merges nested maps (event, aircraft) instead of replacing them
+      await ref.set({ ...fields, updated_at: FieldValue.serverTimestamp() }, { merge: true });
+      return json({ id: ref.id, status: "patched", fields: Object.keys(fields) });
     },
   );
 

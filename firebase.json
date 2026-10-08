@@ -16,6 +16,7 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       { "source": "/mcp", "function": { "functionId": "mcp", "region": "us-central1" } },
+      { "source": "/api/chains", "function": { "functionId": "chains", "region": "us-central1" } },
       { "source": "**", "destination": "/index.html" }
     ]
   },

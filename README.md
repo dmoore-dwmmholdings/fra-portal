@@ -9,8 +9,8 @@ NTSB avdata ──ntsb fetch──▶ data/raw/*.mdb ──Claude Code──▶ 
 ```
 
 ```
-web/                           Vite + React + TS portal (Firebase Hosting)
-functions/                     Cloud Functions: `mcp` — Streamable HTTP MCP server (put/get/list_analysis)
+web/                           chain viewer: Vite + TS + Preact (React API), reads /api/chains (Firebase Hosting)
+functions/                     Cloud Functions: `mcp` (put/patch/get/list_analysis), `chains` (GET /api/chains)
 firebase.json, firestore.*     Firebase config; analyses are public-read, written only by the function
 .mcp.json                      Claude Code MCP client config (token from $FRA_MCP_TOKEN)
 docs/
@@ -46,11 +46,18 @@ Raw data is gitignored. Inspect the MDBs with `cargo install jetdb-cli`, then
 ## Web app and MCP
 
 ```
-cd web && cp .env.example .env.local     # fill from `firebase apps:sdkconfig web`
-npm install && npm run dev
+cd web && npm install && npm run dev     # proxies /api to the live site (FRA_API overrides)
 cd functions && npm install && npm run build
+python tools/gen_node_labels.py          # after changing node labels in config/causal_nodes.toml
 firebase deploy                          # hosting + functions + firestore rules (Blaze plan, for functions)
 ```
+
+The viewer at `https://<project>.web.app` loads one payload, `/api/chains`: every analysis compacted to its
+narrative chain, headline and event facts, Brotli-compressed by the function and cached by the Hosting CDN for
+5 minutes. View state (filters, selected report, focal node) lives in the URL. The page needs no Firebase SDK.
+
+Event facts shown in the viewer (location, operation, conditions, fatalities, NTSB probable cause) go in the
+`event` field of `put_analysis`, or later with `patch_analysis`.
 
 The MCP endpoint is `https://<project>.web.app/mcp`. It requires `Authorization: Bearer <token>`,
 where the token is the `MCP_TOKEN` secret (`firebase functions:secrets:set MCP_TOKEN`). Claude Code

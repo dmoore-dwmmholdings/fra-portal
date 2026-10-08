@@ -1,40 +1,79 @@
 :root {
-  --bg: #fafaf9;
-  --fg: #1c1917;
-  --muted: #57534e;
-  --line: #e7e5e4;
-  --accent: #1d4ed8;
-  --fatal: #b91c1c;
-  font-family: system-ui, sans-serif;
+  --bg: #efefea;
+  --fg: #1d1d1b;
+  --muted: #55554f;
+  --glyph: #8a8a83;
+  --rule: #b9b9b1;
+  --field: #f7f7f3;
+  --field-line: #a5a59c;
+  --on: #e0e0d8;
+  --link: #1f3f6e;
+  --link-hover: #0f2547;
+  color-scheme: light;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  font-size: 13px;
+  line-height: 1.5;
   color: var(--fg);
   background: var(--bg);
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #1c1917;
-    --fg: #f5f5f4;
-    --muted: #a8a29e;
-    --line: #44403c;
-    --accent: #93c5fd;
-    --fatal: #f87171;
+    --bg: #1d1d1b;
+    --fg: #d9d9d1;
+    --muted: #9c9c94;
+    --glyph: #6f6f68;
+    --rule: #45453f;
+    --field: #262624;
+    --field-line: #5a5a53;
+    --on: #2c2c29;
+    --link: #9db5d9;
+    --link-hover: #c4d4ec;
+    color-scheme: dark;
   }
 }
-body { margin: 0; }
-main { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
-header p { color: var(--muted); }
-.mono { font-family: ui-monospace, monospace; }
-.error { color: var(--fatal); }
-.analyses { list-style: none; padding: 0; }
-.analyses li { border-bottom: 1px solid var(--line); }
-.analyses button {
-  all: unset; box-sizing: border-box; width: 100%; padding: 12px 0; cursor: pointer;
-  display: grid; grid-template-columns: 9rem 7rem 1fr auto; gap: 12px;
-}
-.analyses button:focus-visible { outline: 2px solid var(--accent); }
-.tag { font-size: 0.8rem; text-transform: uppercase; color: var(--muted); }
-.tag.fatal { color: var(--fatal); }
-.detail { padding: 0 0 16px; }
-.detail pre { overflow-x: auto; font-size: 0.8rem; }
-@media (max-width: 600px) {
-  .analyses button { grid-template-columns: 1fr auto; }
-}
+body { margin: 0; background: var(--bg); }
+* { box-sizing: border-box; }
+a { color: var(--link); }
+a:hover { color: var(--link-hover); }
+a:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--link); outline-offset: 1px; }
+select, input { font: inherit; color: inherit; background: var(--field); border: 1px solid var(--field-line); padding: 2px 4px; min-height: 28px; }
+h2 { font: inherit; text-transform: uppercase; color: var(--muted); margin: 18px 0 4px; }
+h2 .muted { text-transform: none; }
+.muted { color: var(--muted); }
+
+.page { max-width: 1240px; margin: 0 auto; padding: 20px 16px 40px; }
+.top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; border-bottom: 1px solid var(--rule); padding-bottom: 10px; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--rule); }
+.filters label { display: flex; gap: 6px; align-items: center; }
+.filters input { width: 230px; }
+
+.cols { display: flex; flex-wrap: wrap; gap: 24px; padding-top: 14px; }
+.list { flex: 1 1 380px; min-width: 0; }
+.detail { flex: 999 1 560px; min-width: 0; }
+
+.row-head, .line { display: grid; grid-template-columns: 12ch 12ch minmax(0, 1fr); }
+.row-head { border-bottom: 1px dashed var(--rule); padding: 0 4px 2px; }
+.item { display: block; padding: 6px 4px; border-bottom: 1px dashed var(--rule); color: var(--fg); text-decoration: none; }
+.item:hover { background: var(--on); color: var(--fg); }
+.item.on { background: var(--on); font-weight: 700; }
+.item.on .muted { font-weight: 400; }
+.line span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item > .muted { display: block; }
+.pager { display: flex; flex-wrap: wrap; gap: 16px; padding: 8px 0; }
+
+.facts { display: grid; grid-template-columns: 11ch minmax(0, 1fr); margin: 6px 0 0; color: var(--muted); }
+.facts dt { margin: 0; }
+.facts dd { margin: 0; color: var(--fg); }
+.cause { margin: 0; max-width: 78ch; }
+
+.tree { border-top: 1px dashed var(--rule); border-bottom: 1px dashed var(--rule); padding: 8px 0; overflow-x: auto; }
+.node { display: grid; grid-template-columns: minmax(0, 1fr) 4ch 12ch; gap: 8px; min-width: 600px; white-space: pre; }
+.glyph { color: var(--glyph); }
+.focal { font-weight: 700; color: var(--link-hover); }
+.toggle { display: inline-flex; gap: 10px; text-transform: none; margin-left: 8px; }
+
+.bars { overflow-x: auto; }
+.bar { display: grid; grid-template-columns: minmax(18ch, 30ch) 4ch 5ch minmax(0, 1fr); gap: 8px; min-width: 560px; white-space: nowrap; }
+.bar > a { overflow: hidden; text-overflow: ellipsis; }
+.bar > span:last-child { overflow: hidden; }
+.num { text-align: right; }
