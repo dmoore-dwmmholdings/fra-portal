@@ -1,13 +1,14 @@
 # Analyst instructions (batch agents)
 
-You analyze NTSB airplane accident records one at a time and store each analysis in the FRA portal through the
-`fra-portal` MCP tools. The batch loop gives you a batch directory and a list of input files.
+You analyze NTSB airplane accident records one at a time and store each analysis in the FRA portal with
+`tools/batch/put.py`. The batch loop gives you a batch directory and a list of input files.
 
 Repo: `C:\Coding\random-ideas\flight-report-analysis`. Do not edit, commit or push anything in it.
 Method: `docs/ANALYSIS_METHOD_SPEC.md` §1–§4. Node dictionary: `config/causal_nodes.toml` (v0.2).
 Aircraft taxonomy: `data/reference/aircraft_types.csv` (use `resolved_class_id` as `class_id`, and `family_id`).
-Never write test or placeholder records: every `put_analysis` call must be a real, complete analysis.
-Load the MCP tools with ToolSearch `select:mcp__fra-portal__put_analysis,mcp__fra-portal__get_analysis` if needed.
+Never write test or placeholder records: every store must be a real, complete analysis.
+Do not use the `mcp__fra-portal__*` tools: their cached schema in this session is stale (old ev_id pattern, no
+`event`). Never change an ev_id to fit a schema; use it exactly as the input file gives it.
 
 ## Each input file
 
@@ -22,10 +23,10 @@ For each file:
    (end → critical → mechanism → act → latent, context where it fits). Use dictionary node ids. When no node
    fits, use `proposed: <tier>.<name>` and say so in `dictionary_feedback`.
 3. Roles from `narr_cause`: `"C"` if in the probable cause, `"F"` if "contributing", otherwise `null`.
-4. Call `mcp__fra-portal__put_analysis` with:
+4. Write the arguments below as JSON to `data/reports/batches/<batch>/<ev_id>_<aircraft_key>.json`, then run
+   `python tools/batch/put.py <that file>` from the repo root. Arguments:
    - `ev_id`, `aircraft_key`, `ntsb_no`, `event_date` from the header; `outcome` from the header (this aircraft).
-   - `event`: the `## event` JSON line, copied as-is, if your `put_analysis` schema lists `event`. If it does
-     not, or the call rejects it, leave it out: the loop patches it from the input file afterward.
+   - `event`: the `## event` JSON line, copied as-is (an object).
    - `aircraft`: `make`, `model`, and the best taxonomy `class_id` / `family_id` (omit those two if no match).
    - `summary`: markdown, at most 120 words: a bold one-line headline; 2–3 sentences of what happened; a
      **Chain:** line (`fatal ← collision ← … ← root why`); a **Lesson:** line for pilots. Facts from the file only.
@@ -51,7 +52,8 @@ For each file:
 ```
 
    `label` is plain words for that accident ("Door not verified latched"), not the node's generic label.
-5. Confirm the reply says `created` or `replaced`. On an error, fix the input and retry once.
+5. `put.py` prints the server's reply and exits non-zero unless it says `created` or `replaced`. On an error,
+   fix the JSON and retry once; otherwise list the ev_id as failed.
 
 If the cause is not determined, the chain ends in `und.not_determined` (or `mech.engine.undetermined` for an
 unexplained power loss), and the summary says so.
