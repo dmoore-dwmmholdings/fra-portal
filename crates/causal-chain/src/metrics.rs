@@ -610,9 +610,17 @@ pub struct Qa {
     pub inversions: usize,
     pub edges_by_prov: BTreeMap<String, usize>,
     pub no_why_below_outcome: usize,
+    /// involvements whose chain has no end-tier node (NTSB coded no collision/landing/etc.)
+    pub no_end: usize,
+    /// involvements with no cause/factor-coded finding (Auto role filter kept all findings)
+    pub roles_uncoded: usize,
+    /// involvements whose spine was reordered (§4.4)
+    pub reordered: usize,
+    /// nodes inserted by `implies` rules
+    pub implied_nodes: usize,
 }
 
-pub fn qa(graphs: &[&Graph], top: usize) -> Qa {
+pub fn qa(dict: &Dict, graphs: &[&Graph], top: usize) -> Qa {
     let mut q = Qa { involvements: graphs.len(), ..Default::default() };
     let mut um: HashMap<String, usize> = HashMap::new();
     for g in graphs {
@@ -627,6 +635,10 @@ pub fn qa(graphs: &[&Graph], top: usize) -> Qa {
         if g.whys(g.outcome).next().is_none() {
             q.no_why_below_outcome += 1;
         }
+        q.no_end += usize::from(!g.has_end(dict));
+        q.roles_uncoded += usize::from(!g.roles_coded);
+        q.reordered += usize::from(g.reordered > 0);
+        q.implied_nodes += g.nodes.iter().filter(|n| n.implied).count();
     }
     let mut v: Vec<(String, usize)> = um.into_iter().collect();
     v.sort_by(|a, b| b.1.cmp(&a.1));

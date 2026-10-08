@@ -7,7 +7,8 @@ outcome.none
       act.pilot.directional_control [C]  <Rule>
         env.wx.wind [F]  <Rule>
 
-QA: 20000 involvements, 0 unmapped rows, 0 inversions, edges by provenance {"Default": 44, "Explicit": 17754, "Outcome": 20000, "Rule": 18989, "Sequence": 22723}
+QA: 20000 involvements, 0 unmapped rows, 0 inversions, edges by provenance {"Default": 34, "Explicit": 17754, "Outcome": 20000, "Rule": 18999, "Sequence": 22723}
+    no end node 1946, roles uncoded 391, spines reordered 0, implied nodes 0
 
 TIER end gran=0
   N = 20000  (fatal 3792)
@@ -136,8 +137,8 @@ LETHALITY (critical tier)
   crit.power_loss.total        n=  7457 fatal=  9.9% [ 9.3,10.6] lift=0.52
   crit.loc_ground              n=  3926 fatal=  0.2% [ 0.1, 0.4] lift=0.01
   crit.stall_spin              n=  1895 fatal= 62.0% [59.7,64.1] lift=3.27
-  crit.loc_inflight            n=  1108 fatal= 88.0% [86.0,89.8] lift=4.64
   crit.vfr_into_imc            n=  1108 fatal= 88.0% [86.0,89.8] lift=4.64
+  crit.loc_inflight            n=  1108 fatal= 88.0% [86.0,89.8] lift=4.64
   crit.power_loss.partial      n=   859 fatal=  6.6% [ 5.2, 8.5] lift=0.35
 
 TOP CHAIN SIGNATURES (gran 2, context excluded)

@@ -1,4 +1,5 @@
 //! Text -> node golden cases. Extend with every string fixed from the `unmapped` QA report.
+//! `CASES` are hand-written (including pre-2008 forms); the fixture holds real 2008+ avall texts.
 use causal_chain::{Dict, Source};
 
 const CASES: &[(Source, &str, &str)] = &[
@@ -98,5 +99,29 @@ fn text_maps_to_expected_node() {
             bad.push(format!("{src:?} {text:?}: got {got}, want {want}"));
         }
     }
+    assert!(bad.is_empty(), "\n{}", bad.join("\n"));
+}
+
+/// Real avall texts (2008+), reviewed by hand: tests/fixtures/node_golden_08.tsv.
+#[test]
+fn real_texts_map_to_expected_node() {
+    let d = Dict::from_toml(include_str!("../../../config/causal_nodes.toml")).unwrap();
+    let mut bad = Vec::new();
+    let mut n = 0;
+    for line in include_str!("fixtures/node_golden_08.tsv").lines().filter(|l| !l.starts_with('#') && !l.is_empty()) {
+        let mut p = line.splitn(3, '\t');
+        let (src, want, text) = (p.next().unwrap(), p.next().unwrap(), p.next().unwrap());
+        let src = match src {
+            "occ08" => Source::Occ08,
+            "find08" => Source::Find08,
+            s => panic!("unknown src {s}"),
+        };
+        let got = d.map(src, text).map(|i| d.nodes[i].id.as_str()).unwrap_or("(unmapped)");
+        if got != want {
+            bad.push(format!("{src:?} {text:?}: got {got}, want {want}"));
+        }
+        n += 1;
+    }
+    assert!(n >= 400, "fixture has {n} cases");
     assert!(bad.is_empty(), "\n{}", bad.join("\n"));
 }

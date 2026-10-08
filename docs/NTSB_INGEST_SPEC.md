@@ -112,6 +112,16 @@ Rules:
 - **De-duplicate** `ev_id` across sources. Prefer the `avall` row; record both sources in `core.events._sources`. Report the overlap count.
 - Parse dates to `DATE`; keep the raw string in `*_raw`. Unparseable values go to `data/reports/parse_errors.csv`, not silent NULLs.
 - Keep both cause-coding systems in separate tables. Do **not** crosswalk them in phase 1.
+- `ev_id` has two formats: `20080107X00026` (to about 2020) and 14 digits, `20250510200140` (CAROL era, about 2021 on;
+  9,879 avall events). Accept both everywhere. The date inside a 14-digit id is the record date and can be a day after
+  `ev_date`; always use `ev_date`.
+- In CAROL-era records `ev_time` can be UTC while the narrative gives local time. Keep `ev_time` and `ev_tmzn` raw; do not
+  derive day/night from `ev_time` alone (use `light_cond`).
+- `Findings.Cause_Factor` is blank for every CAROL-era finding (17,388 rows). About half of the 2008–2020 rows also repeat
+  the role as a " - C"/" - F" suffix inside `finding_description`. Load the raw text; phase 2 normalises it
+  (`causal-chain/src/text.rs`).
+- `Events_Sequence.Occurrence_Description` is "<phase> <event>" joined by a space; `phase_no` and `eventsoe_no` code the
+  two parts. Load both codes so the split never depends on the text.
 - Re-running `load` on the same inputs gives the same DB (drop and rebuild `core`; truncate and reload `raw`).
 
 ### 4.4 `ntsb classify`

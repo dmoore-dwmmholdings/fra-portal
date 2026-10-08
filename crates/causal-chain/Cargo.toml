@@ -15,3 +15,11 @@ csv = "1"
 [[bin]]
 name = "wwca-demo"
 path = "src/bin/wwca_demo.rs"
+
+[[bin]]
+name = "dict-map"
+path = "src/bin/dict_map.rs"
+
+[[bin]]
+name = "wwca-qa"
+path = "src/bin/wwca_qa.rs"

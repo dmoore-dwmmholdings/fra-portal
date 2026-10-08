@@ -208,8 +208,9 @@ fn main() -> anyhow::Result<()> {
 
     println!("=== SYNTHETIC DATA — illustrates the method only ===\n");
     println!("Example chain (involvement 0):\n{}", causal_chain::build::render(&dict, &graphs[0]));
-    let q = metrics::qa(&all, 10);
-    println!("QA: {} involvements, {} unmapped rows, {} inversions, edges by provenance {:?}\n", q.involvements, q.unmapped_rows, q.inversions, q.edges_by_prov);
+    let q = metrics::qa(&dict, &all, 10);
+    println!("QA: {} involvements, {} unmapped rows, {} inversions, edges by provenance {:?}", q.involvements, q.unmapped_rows, q.inversions, q.edges_by_prov);
+    println!("    no end node {}, roles uncoded {}, spines reordered {}, implied nodes {}\n", q.no_end, q.roles_uncoded, q.reordered, q.implied_nodes);
     for (t, n) in &q.unmapped_top {
         println!("  unmapped {n:>6}  {t}");
     }

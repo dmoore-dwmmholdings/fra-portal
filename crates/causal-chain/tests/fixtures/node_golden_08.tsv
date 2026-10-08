@@ -1,0 +1,405 @@
+# Real avall texts (2008+) -> expected node. src<TAB>node<TAB>text; texts already normalised.
+# Regenerate candidates with dict-map; review every changed line by hand before accepting it.
+occ08	end.collision	Collision with terr/obj (non-CFIT)
+occ08	crit.loc_inflight	Loss of control in flight
+occ08	crit.loc_ground	Loss of control on ground
+occ08	crit.power_loss.total	Loss of engine power (total)
+occ08	end.runway_excursion	Runway excursion
+occ08	end.forced_landing	Off-field or emergency landing
+occ08	end.nose_over	Nose over/nose down
+occ08	end.hard_landing	Hard landing
+occ08	crit.power_loss.partial	Loss of engine power (partial)
+occ08	end.gear_collapse	Landing gear collapse
+occ08	und.not_determined	Unknown or undetermined
+occ08	crit.other	Miscellaneous/other
+occ08	crit.stall_spin	Aerodynamic stall/spin
+occ08	end.abnormal_runway_contact	Abnormal runway contact
+occ08	crit.recovery_attempt	Attempted remediation/recovery
+occ08	end.collision	Collision during takeoff/land
+occ08	crit.wx_encounter	Other weather encounter
+occ08	end.cfit	Controlled flight into terr/obj (CFIT)
+occ08	crit.sys_failure	Sys/Comp malf/fail (non-power)
+occ08	crit.powerplant	Powerplant sys/comp malf/fail
+occ08	mech.fuel.exhaustion	Fuel exhaustion
+occ08	end.ground_collision	Ground collision
+occ08	mech.fuel.starvation	Fuel starvation
+occ08	crit.low_alt	Low altitude operation/event
+occ08	end.gear_up	Landing gear not configured
+occ08	crit.structural	Part(s) separation from AC
+occ08	crit.fire_inflight	Fire/smoke (non-impact)
+occ08	act.maint.improper	Aircraft maintenance event
+occ08	crit.turbulence	Turbulence encounter
+occ08	crit.sys_failure	Flight control sys malf/fail
+occ08	end.runway_excursion	Landing area overshoot
+occ08	crit.vfr_into_imc	VFR encounter with IMC
+occ08	end.midair	Midair collision
+occ08	mech.fuel.other	Fuel related
+occ08	end.post_impact_fire	Fire/smoke (post-impact)
+occ08	act.pilot.preflight	Preflight or dispatch event
+occ08	crit.abrupt_maneuver	Abrupt maneuver
+occ08	end.dragged_wing	Dragged wing/rotor/float/other
+occ08	crit.structural	Aircraft structural failure
+occ08	end.nose_over	Roll over
+occ08	crit.loss_of_lift	Loss of lift
+occ08	crit.birdstrike	Birdstrike
+occ08	crit.loss_visual_ref	Loss of visual reference
+occ08	act.maint.improper	Aircraft inspection event
+occ08	mech.fuel.contamination	Fuel contamination
+occ08	crit.windshear	Windshear or thunderstorm
+occ08	end.runway_excursion	Landing area undershoot
+occ08	end.ditching	Ditching
+occ08	crit.sys_failure	Electrical system malf/failure
+occ08	crit.simulated	Simulated/training event
+occ08	crit.loc_ground	Dynamic rollover
+occ08	crit.other	Cabin safety event
+occ08	act.atc	Air traffic event
+occ08	end.abnormal_runway_contact	Tailstrike
+occ08	crit.other	Near midair/TCAS alert/loss of separation
+occ08	crit.runway_incursion	Runway incursion veh/AC/person
+occ08	crit.sys_failure	Pressure/environ sys malf/fail
+occ08	act.ground_ops	Ground handling event
+occ08	crit.birdstrike	Wildlife encounter (non-bird)
+occ08	crit.nav_deviation	Altitude deviation
+occ08	crit.loc_inflight	Loss of tail rotor effectiveness
+occ08	mech.icing	Structural icing
+occ08	end.evacuation	Evacuation
+occ08	mech.wb.cg_weight	Aircraft loading event
+occ08	crit.powerplant	Engine shutdown
+occ08	crit.upset	Inflight upset
+occ08	act.maint.improper	Aircraft servicing event
+occ08	latent.pilot.incapacitation	Medical event
+occ08	end.ground_collision	AC/prop/rotor contact w person
+occ08	crit.sys_failure	Flight instrument malf/fail
+occ08	crit.loc_inflight	Settling with power/vortex ring state
+occ08	crit.nav_deviation	Course deviation
+occ08	crit.other	Airport occurrence
+occ08	crit.nav_deviation	Wrong surface or wrong airport
+occ08	crit.other	External load event (Rotorcraft)
+occ08	crit.other	Glider tow event
+occ08	crit.powerplant	Uncontained engine failure
+occ08	end.post_impact_fire	Explosion (post-impact)
+occ08	crit.other	Prop/jet/rotor blast/suction
+occ08	crit.other	Emergency descent initiated
+occ08	crit.other	Stall warn/stick-shaker/pusher
+occ08	crit.turbulence	Aircraft wake turb encounter
+occ08	crit.other	Security/criminal event
+occ08	crit.turbulence	Clear air turbulence encounter
+occ08	crit.loc_ground	Ground resonance
+occ08	crit.nav_deviation	Navigation error
+occ08	crit.fire_inflight	Explosion (non-impact)
+occ08	crit.loc_inflight	Mast bumping
+occ08	crit.sys_failure	Comm system malf/failure
+occ08	und.not_determined	Missing aircraft
+occ08	crit.other	Hazardous material leak/spill
+occ08	crit.other	Collision avoidance alert
+occ08	mech.fuel.contamination	Wrong fuel
+occ08	crit.sys_failure	Nav system malfunction/failure
+occ08	crit.other	Terrain avoidance alert
+occ08	crit.loc_inflight	Retreating blade stall
+occ08	crit.nav_deviation	Airspace incursion
+find08	act.pilot.aircraft_control	Personnel issues-Task performance-Use of equip/info-Aircraft control-Pilot
+find08	act.pilot.aircraft_control	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-(general)-Not attained/maintained
+find08	act.pilot.aircraft_control	Personnel issues-Task performance-Use of equip/info-Aircraft control-Student/instructed pilot
+find08	act.pilot.directional_control	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Directional control-Not attained/maintained
+find08	act.pilot.directional_control	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Directional control-Incorrect use/operation
+find08	act.pilot.directional_control	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Directional control-Not specified
+find08	act.pilot.decision	Personnel issues-Action/decision-Info processing/decision-Decision making/judgment-Pilot
+find08	act.pilot.decision	Personnel issues-Action/decision-Info processing/decision-Decision making/judgment-Instructor/check pilot
+find08	act.pilot.decision	Personnel issues-Action/decision-Info processing/decision-Decision making/judgment-Student/instructed pilot
+find08	und.not_determined	Not determined-Not determined-(general)-(general)-Unknown/Not determined
+find08	und.not_determined	Not determined-Not determined-(general)-(general)-Other authority investigated
+find08	act.pilot.airspeed	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Airspeed-Not attained/maintained
+find08	act.pilot.airspeed	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Airspeed-Incorrect use/operation
+find08	act.pilot.airspeed	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Airspeed-Not specified
+find08	act.pilot.other	Personnel issues-Task performance-Use of equip/info-Use of equip/system-Pilot
+find08	act.pilot.other	Personnel issues-Action/decision-Action-Incorrect action performance-Pilot
+find08	act.pilot.other	Personnel issues-Action/decision-Action-Lack of action-Pilot
+find08	act.pilot.altitude_clearance	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Altitude-Not attained/maintained
+find08	act.pilot.altitude_clearance	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Altitude-Incorrect use/operation
+find08	act.pilot.altitude_clearance	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Altitude-Not specified
+find08	act.pilot.flare_landing	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Landing flare-Not attained/maintained
+find08	act.pilot.flare_landing	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Landing flare-Incorrect use/operation
+find08	act.pilot.flare_landing	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Surface speed/braking-Incorrect use/operation
+find08	mech.fuel.exhaustion	Aircraft-Fluids/misc hardware-Fluids-Fuel-Fluid level
+find08	latent.pilot.attention	Personnel issues-Psychological-Attention/monitoring-Monitoring environment-Pilot
+find08	latent.pilot.attention	Personnel issues-Psychological-Attention/monitoring-Task monitoring/vigilance-Pilot
+find08	latent.pilot.attention	Personnel issues-Psychological-Attention/monitoring-Attention-Pilot
+find08	act.pilot.approach	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Descent/approach/glide path-Not attained/maintained
+find08	act.pilot.approach	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Descent rate-Not attained/maintained
+find08	act.pilot.approach	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Descent/approach/glide path-Incorrect use/operation
+find08	act.pilot.fuel_mgmt	Personnel issues-Task performance-Planning/preparation-Fuel planning-Pilot
+find08	act.pilot.fuel_mgmt	Aircraft-Fluids/misc hardware-Fluids-Fuel-Fluid management
+find08	act.pilot.fuel_mgmt	Aircraft-Aircraft systems-Fuel system-Fuel selector/shutoff valve-Incorrect use/operation
+find08	env.wx.wind	Environmental issues-Conditions/weather/phenomena-Wind-Gusts-Effect on operation
+find08	env.wx.wind	Environmental issues-Conditions/weather/phenomena-Wind-Crosswind-Effect on operation
+find08	env.wx.wind	Environmental issues-Conditions/weather/phenomena-Wind-Tailwind-Effect on operation
+find08	env.terrain	Environmental issues-Physical environment-Object/animal/substance-Tree(s)-Contributed to outcome
+find08	env.terrain	Environmental issues-Physical environment-Terrain-Rough terrain-Contributed to outcome
+find08	env.terrain	Environmental issues-Physical environment-Object/animal/substance-Tree(s)-Effect on operation
+find08	mech.aero.aoa_exceeded	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Angle of attack-Not attained/maintained
+find08	mech.aero.aoa_exceeded	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Angle of attack-Capability exceeded
+find08	mech.aero.aoa_exceeded	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Angle of attack-Attain/maintain not possible
+find08	act.pilot.preflight	Personnel issues-Task performance-Inspection-Preflight inspection-Pilot
+find08	act.pilot.preflight	Personnel issues-Task performance-Planning/preparation-(general)-Pilot
+find08	act.pilot.preflight	Aircraft-Fluids/misc hardware-Fluids-Fuel-Inadequate inspection
+find08	act.instructor	Personnel issues-Action/decision-Action-Delayed action-Instructor/check pilot
+find08	act.instructor	Personnel issues-Psychological-Attention/monitoring-Monitoring other person-Instructor/check pilot
+find08	act.instructor	Personnel issues-Action/decision-Action-Lack of action-Instructor/check pilot
+find08	act.pilot.recognition	Personnel issues-Action/decision-Info processing/decision-Identification/recognition-Pilot
+find08	act.pilot.recognition	Personnel issues-Action/decision-Info processing/decision-Understanding/comprehension-Pilot
+find08	act.pilot.recognition	Personnel issues-Action/decision-Info processing/decision-Identification/recognition-Flight crew
+find08	act.pilot.checklist	Personnel issues-Action/decision-Action-Forgotten action/omission-Pilot
+find08	act.pilot.checklist	Personnel issues-Task performance-Use of equip/info-Use of checklist-Pilot
+find08	act.pilot.checklist	Personnel issues-Task performance-Use of equip/info-Use of policy/procedure-Pilot
+find08	mech.aero.uncontrollable	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Directional control-Attain/maintain not possible
+find08	mech.aero.uncontrollable	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-(general)-Attain/maintain not possible
+find08	mech.aero.uncontrollable	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Pitch control-Attain/maintain not possible
+find08	mech.spatial_disorientation	Personnel issues-Psychological-Perception/orientation/illusion-Spatial disorientation-Pilot
+find08	mech.spatial_disorientation	Personnel issues-Psychological-Perception/orientation/illusio-Spatial disorientation-Pilot
+find08	mech.spatial_disorientation	Personnel issues-Psychological-Perception/orientation/illusion-Spatial disorientation-Student/instructed pilot
+find08	act.pilot.lookout	Personnel issues-Psychological-Attention/monitoring-Monitoring other aircraft-Pilot
+find08	act.pilot.lookout	Personnel issues-Psychological-Attention/monitoring-Monitoring other aircraft-Pilot of other aircraft
+find08	act.pilot.lookout	Personnel issues-Psychological-Attention/monitoring-Monitoring other aircraft-Instructor/check pilot
+find08	env.wx.icing	Environmental issues-Conditions/weather/phenomena-Temp/humidity/pressure-Conducive to carburetor icing-Effect on equipment
+find08	env.wx.icing	Environmental issues-Conditions/weather/phenomena-Temp/humidity/pressure-Conducive to carburetor icing-Contributed to outcome
+find08	env.wx.icing	Environmental issues-Conditions/weather/phenomena-Temp/humidity/pressure-Conducive to carburetor icing-Effect on operation
+find08	latent.pilot.qualification	Personnel issues-Experience/knowledge-Experience/qualifications-Qualification/certification-Pilot
+find08	latent.pilot.qualification	Personnel issues-Experience/knowledge-Experience/qualifications-Qualification/certification-Student/instructed pilot
+find08	latent.pilot.qualification	Personnel issues-Experience/knowledge-Experience/qualifications-Qualification/certification-Passenger
+find08	act.maint.improper	Personnel issues-Task performance-Maintenance-Installation-Maintenance personnel
+find08	act.maint.improper	Personnel issues-Task performance-Maintenance-Scheduled/routine maintenance-Maintenance personnel
+find08	act.maint.improper	Personnel issues-Task performance-Inspection-Scheduled/routine inspection-Maintenance personnel
+find08	latent.pilot.experience	Personnel issues-Experience/knowledge-Experience/qualifications-Total experience w/ equipment-Pilot
+find08	latent.pilot.experience	Personnel issues-Experience/knowledge-Experience/qualifications-Total experience-Pilot
+find08	latent.pilot.experience	Personnel issues-Experience/knowledge-Experience/qualifications-Recent experience-Pilot
+find08	act.pilot.gear	Aircraft-Aircraft systems-Landing gear system-Gear extension and retract sys-Not used/operated
+find08	act.pilot.gear	Aircraft-Aircraft systems-Landing gear system-(general)-Not used/operated
+find08	act.pilot.gear	Aircraft-Aircraft systems-Landing gear system-Gear extension and retract sys-Incorrect use/operation
+find08	mech.fuel.contamination	Aircraft-Fluids/misc hardware-Fluids-Fuel-Fluid condition
+find08	mech.fuel.contamination	Aircraft-Fluids/misc hardware-Fluids-Fuel-Fluid type
+find08	mech.engine.internal	Aircraft-Aircraft power plant-Engine (reciprocating)-Recip eng cyl section-Failure
+find08	mech.engine.other	Aircraft-Aircraft power plant-Engine (reciprocating)-(general)-Failure
+find08	mech.engine.internal	Aircraft-Aircraft power plant-Engine (reciprocating)-Recip eng cyl section-Fatigue/wear/corrosion
+find08	env.obstacle	Environmental issues-Physical environment-Object/animal/substance-Fence/fence post-Contributed to outcome
+find08	env.obstacle	Environmental issues-Physical environment-Object/animal/substance-Wire-Contributed to outcome
+find08	env.obstacle	Environmental issues-Physical environment-Object/animal/substance-Wire-Awareness of condition
+find08	mech.aero.performance	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Climb rate-Not attained/maintained
+find08	mech.aero.performance	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Altitude-Attain/maintain not possible
+find08	mech.aero.performance	Aircraft-Aircraft oper/perf/capability-Aircraft capability-Climb capability-Capability exceeded
+find08	env.wildlife	Environmental issues-Physical environment-Object/animal/substance-Animal(s)/bird(s)-Effect on equipment
+find08	env.wildlife	Environmental issues-Physical environment-Object/animal/substance-Animal(s)/bird(s)-Ability to respond/compensate
+find08	env.wildlife	Environmental issues-Physical environment-Object/animal/substance-Animal(s)/bird(s)-Effect on operation
+find08	act.pilot.navigation	Personnel issues-Task performance-Planning/preparation-Flight planning/navigation-Pilot
+find08	act.pilot.navigation	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Heading/course-Not attained/maintained
+find08	act.pilot.navigation	Personnel issues-Psychological-Perception/orientation/illusion-Geographic disorient (lost)-Pilot
+find08	act.pilot.wind_comp	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Crosswind correction-Not attained/maintained
+find08	act.pilot.wind_comp	Aircraft-Aircraft oper/perf/capability-Aircraft capability-Maximum crosswind component-Capability exceeded
+find08	act.pilot.wind_comp	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Crosswind correction-Incorrect use/operation
+find08	mech.engine.internal	Aircraft-Aircraft power plant-Engine (reciprocating)-Recip engine power section-Failure
+find08	mech.engine.internal	Aircraft-Aircraft power plant-Engine (reciprocating)-Recip engine power section-Fatigue/wear/corrosion
+find08	mech.engine.internal	Aircraft-Aircraft power plant-Engine (reciprocating)-Recip engine power section-Damaged/degraded
+find08	env.light.dark	Environmental issues-Conditions/weather/phenomena-Light condition-Dark-Effect on operation
+find08	env.light.dark	Environmental issues-Conditions/weather/phenomena-Light condition-Dark-Effect on personnel
+find08	env.light.dark	Environmental issues-Conditions/weather/phenomena-Light condition-Dark-Contributed to outcome
+find08	act.pilot.mixture	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Prop/rotor parameters-Not attained/maintained
+find08	act.pilot.mixture	Aircraft-Aircraft power plant-Engine controls-Power lever-Incorrect use/operation
+find08	act.pilot.mixture	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Powerplant parameters-Incorrect use/operation
+find08	act.pilot.wx_planning	Personnel issues-Task performance-Planning/preparation-Weather planning-Pilot
+find08	act.pilot.wx_planning	Personnel issues-Task performance-Planning/preparation-Weather planning-Instructor/check pilot
+find08	act.pilot.wx_planning	Personnel issues-Task performance-Planning/preparation-Weather planning-Flight crew
+find08	act.pilot.configuration	Aircraft-Aircraft systems-Landing gear system-Brake-Incorrect use/operation
+find08	act.pilot.configuration	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Configuration-Incorrect use/operation
+find08	act.pilot.configuration	Aircraft-Aircraft systems-Flight control system-TE flap control system-Incorrect use/operation
+find08	env.wx.density_altitude	Environmental issues-Conditions/weather/phenomena-Temp/humidity/pressure-High density altitude-Effect on operation
+find08	env.wx.density_altitude	Environmental issues-Conditions/weather/phenomena-Temp/humidity/pressure-High density altitude-Effect on equipment
+find08	env.wx.density_altitude	Environmental issues-Conditions/weather/phenomena-Temp/humidity/pressure-High density altitude-Contributed to outcome
+find08	mech.engine.undetermined	Aircraft-Aircraft power plant-Engine (reciprocating)-(general)-Unknown/Not determined
+find08	mech.engine.undetermined	Aircraft-Aircraft power plant-Power plant-(general)-Unknown/Not determined
+find08	mech.engine.undetermined	Aircraft-Aircraft power plant-(general)-(general)-Unknown/Not determined
+find08	mech.engine.oil	Aircraft-Fluids/misc hardware-Fluids-Oil-Fluid level
+find08	mech.engine.oil	Aircraft-Aircraft power plant-Engine (reciprocating)-Recip eng oil sys-Failure
+find08	mech.engine.oil	Aircraft-Fluids/misc hardware-Fluids-Oil-Not specified
+find08	mech.wb.cg_weight	Aircraft-Aircraft oper/perf/capability-Aircraft capability-Maximum weight-Capability exceeded
+find08	mech.wb.cg_weight	Aircraft-Aircraft oper/perf/capability-Aircraft capability-CG/weight distribution-Capability exceeded
+find08	mech.wb.cg_weight	Aircraft-Aircraft oper/perf/capability-Aircraft capability-Maximum weight-Not specified
+find08	act.pilot.performance_planning	Personnel issues-Task performance-Planning/preparation-Performance calculations-Pilot
+find08	act.pilot.performance_planning	Personnel issues-Task performance-Planning/preparation-Performance calculations-Instructor/check pilot
+find08	act.pilot.performance_planning	Personnel issues-Task performance-Planning/preparation-Performance calculations-Flight crew
+find08	act.pilot.wb_planning	Personnel issues-Task performance-Planning/preparation-Weight/balance calculations-Pilot
+find08	act.pilot.wb_planning	Personnel issues-Task performance-Planning/preparation-Weight/balance calculations-Not specified
+find08	act.pilot.wb_planning	Personnel issues-Task performance-Planning/preparation-Weight/balance calculations-Instructor/check pilot
+find08	env.wx.convective	Environmental issues-Conditions/weather/phenomena-Turbulence-Convective turbulence-Effect on personnel
+find08	env.wx.convective	Environmental issues-Conditions/weather/phenomena-Convective weather-Thunderstorm-Decision related to condition
+find08	env.wx.convective	Environmental issues-Conditions/weather/phenomena-Convective weather-Thunderstorm-Effect on operation
+find08	mech.gear_system	Aircraft-Aircraft systems-Landing gear system-Main landing gear-Failure
+find08	mech.gear_system	Aircraft-Aircraft systems-Landing gear system-Nose/tail landing gear-Failure
+find08	mech.gear_system	Aircraft-Aircraft systems-Landing gear system-Gear extension and retract sys-Malfunction
+find08	latent.pilot.impairment	Personnel issues-Physical-Impairment/incapacitation-Alcohol-Pilot
+find08	latent.pilot.impairment	Personnel issues-Physical-Impairment/incapacitation-Prescription medication-Pilot
+find08	latent.pilot.impairment	Personnel issues-Physical-Health/Fitness-Use of medication/drugs-Pilot
+find08	act.pilot.carb_heat	Aircraft-Aircraft systems-Ice/rain protection system-Intake anti-ice, deice-Not used/operated
+find08	act.pilot.carb_heat	Aircraft-Aircraft systems-Ice/rain protection system-Intake anti-ice, deice-Incorrect use/operation
+find08	env.wx.imc	Environmental issues-Conditions/weather/phenomena-Ceiling/visibility/precip-Below VFR minima-Decision related to condition
+find08	env.wx.imc	Environmental issues-Conditions/weather/phenomena-Ceiling/visibility/precip-Below VFR minima-Effect on operation
+find08	env.wx.imc	Environmental issues-Conditions/weather/phenomena-Ceiling/visibility/precip-Low ceiling-Effect on operation
+find08	env.runway	Environmental issues-Physical environment-Runway/land/takeoff/taxi surface-Soft surface-Effect on operation
+find08	env.runway	Environmental issues-Physical environment-Object/animal/substance-Runway/taxi/approach light-Contributed to outcome
+find08	env.runway	Environmental issues-Physical environment-Runway/land/takeoff/taxi surface-Snow/slush/ice covered surface-Effect on operation
+find08	latent.pilot.incapacitation	Personnel issues-Physical-Impairment/incapacitation-Cardiovascular-Pilot
+find08	latent.pilot.incapacitation	Personnel issues-Physical-Impairment/incapacitation-(general)-Pilot
+find08	latent.pilot.incapacitation	Personnel issues-Physical-Impairment/incapacitation-Illness/injury-Pilot
+find08	mech.aircraft_other	Aircraft-Fluids/misc hardware-Fluids-Fuel-Not specified
+find08	mech.aircraft_other	Aircraft-Fluids/misc hardware-Fluids-Hydraulic fluid-Fluid level
+find08	mech.aircraft_other	Aircraft-Fluids/misc hardware-Fluids-Fuel-Related operating info
+find08	latent.pilot.training	Personnel issues-Experience/knowledge-Knowledge-Knowledge of equipment-Pilot
+find08	latent.pilot.training	Personnel issues-Experience/knowledge-Knowledge-Knowledge of procedures-Pilot
+find08	latent.pilot.training	Personnel issues-Experience/knowledge-Training-Training with equipment-Pilot
+find08	env.wx.turbulence	Environmental issues-Conditions/weather/phenomena-Turbulence-Clear air turbulence-Effect on personnel
+find08	env.wx.turbulence	Environmental issues-Conditions/weather/phenomena-Turbulence-(general)-Effect on operation
+find08	env.wx.turbulence	Environmental issues-Conditions/weather/phenomena-Turbulence-Terrain induced turbulence-Effect on operation
+find08	latent.org.operator	Organizational issues-Management-Policy/procedure-Adequacy of policy/proc-Operator
+find08	latent.org.operator	Organizational issues-Support/oversight/monitoring-Oversight-Oversight of operation-Operator
+find08	latent.org.operator	Organizational issues-Support/oversight/monitoring-Training-(general)-Operator
+find08	latent.pilot.medical	Personnel issues-Physical-Health/Fitness-Predisposing condition-Pilot
+find08	latent.pilot.medical	Personnel issues-Physical-Sensory ability/limitation-Visual function-Pilot
+find08	latent.pilot.medical	Personnel issues-Physical-(general)-(general)-Pilot
+find08	latent.pilot.attitude	Personnel issues-Psychological-Personality/attitude-Motivation/respond to pressure-Pilot
+find08	latent.pilot.attitude	Personnel issues-Psychological-Mental/emotional state-(general)-Pilot
+find08	latent.pilot.attitude	Personnel issues-Psychological-Personality/attitude-Complacency-Pilot
+find08	mech.engine.turbine	Aircraft-Aircraft power plant-Engine (turbine/turboprop)-Turbine section-Failure
+find08	mech.engine.turbine	Aircraft-Aircraft power plant-Engine (turbine/turboprop)-Turbine section-Fatigue/wear/corrosion
+find08	mech.engine.turbine	Aircraft-Aircraft power plant-Engine (turbine/turboprop)-Compressor section-Failure
+find08	latent.pilot.fatigue	Personnel issues-Physical-Alertness/Fatigue-(general)-Pilot
+find08	latent.pilot.fatigue	Personnel issues-Physical-Alertness/Fatigue-Fatigue due to work schedule-Pilot
+find08	latent.pilot.fatigue	Personnel issues-Physical-Alertness/Fatigue-Lack of sleep-Pilot
+find08	env.other	Environmental issues-Conditions/weather/phenomena-Temp/humidity/pressure-Thermal lifting-Effect on operation
+find08	env.other	Environmental issues-Operating environment-Airport facilities/design-(general)-Not specified
+find08	env.other	Environmental issues-Conditions/weather/phenomena-(general)-(general)-Effect on operation
+find08	mech.door_open	Aircraft-Aircraft structures-Doors-Passenger/crew doors-Incorrect use/operation
+find08	mech.door_open	Aircraft-Aircraft structures-Doors-Passenger/crew doors-Not specified
+find08	mech.door_open	Aircraft-Aircraft structures-Doors-Passenger/crew doors-Unintentional use/operation
+find08	act.design_mfg	Organizational issues-Development-Manufacture/production-Equipment manufacture-Manufacturer
+find08	act.design_mfg	Organizational issues-Development-Design-Equipment design-Manufacturer
+find08	act.design_mfg	Organizational issues-Management-Policy/procedure-Adequacy of policy/proc-Manufacturer
+find08	act.atc	Personnel issues-Task performance-Communication (personnel)-Lack of communication-ATC personnel
+find08	act.atc	Personnel issues-Action/decision-Action-Lack of action-ATC personnel
+find08	act.atc	Personnel issues-Action/decision-Action-Incorrect action selection-ATC personnel
+find08	mech.engine.ignition	Aircraft-Aircraft power plant-Ignition system-Magneto/distributor-Failure
+find08	mech.engine.ignition	Aircraft-Aircraft power plant-Ignition system-Magneto/distributor-Malfunction
+find08	mech.engine.ignition	Aircraft-Aircraft power plant-Ignition system-Spark plugs/igniters-Damaged/degraded
+find08	mech.visual.illusion	Personnel issues-Psychological-Perception/orientation/illusion-Visual illusion/disorientation-Pilot
+find08	mech.visual.illusion	Personnel issues-Psychological-Perception/orientation/illusio-Visual illusion/disorientation-Pilot
+find08	mech.visual.illusion	Personnel issues-Psychological-Perception/orientation/illusion-Visual illusion/disorientation-Student/instructed pilot
+find08	mech.engine.fuel_system	Aircraft-Aircraft systems-Fuel system-Fuel distribution-Damaged/degraded
+find08	mech.engine.fuel_system	Aircraft-Aircraft power plant-Engine fuel and control-Fuel control/carburetor-Damaged/degraded
+find08	mech.engine.fuel_system	Aircraft-Aircraft systems-Fuel system-(general)-Not specified
+find08	act.other	Personnel issues-Action/decision-Action-Incorrect action performance-Pilot of other aircraft
+find08	act.other	Personnel issues-Action/decision-Action-Incorrect action performance-Passenger
+find08	act.other	Personnel issues-Task performance-Use of equip/info-Use of equip/system-Passenger
+find08	mech.structure	Aircraft-Aircraft structures-(general)-(general)-Capability exceeded
+find08	mech.structure	Aircraft-Aircraft structures-Wing structure-Spar (on wing)-Capability exceeded
+find08	mech.structure	Aircraft-Aircraft structures-Wing structure-(general)-Capability exceeded
+find08	latent.reg.oversight	Organizational issues-Support/oversight/monitoring-Oversight-Oversight of operation-FAA/Regulator
+find08	latent.reg.oversight	Organizational issues-Management-Policy/procedure-Adequacy of policy/proc-FAA/Regulator
+find08	latent.reg.oversight	Organizational issues-Support/oversight/monitoring-Oversight-Oversight of reg compliance-FAA/Regulator
+find08	mech.aero.overspeed	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Airspeed-Capability exceeded
+find08	mech.aero.overspeed	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Prop/rotor parameters-Capability exceeded
+find08	mech.aero.overspeed	Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Dynamic load-Capability exceeded
+find08	mech.prop	Aircraft-Aircraft propeller/rotor-Propeller system-Propeller blade section-Failure
+find08	mech.prop	Aircraft-Aircraft propeller/rotor-Propeller system-Propeller blade section-Fatigue/wear/corrosion
+find08	act.pilot.configuration	Aircraft-Aircraft propeller/rotor-Rotorcraft flight control-Main rotor control-Incorrect use/operation
+find08	mech.control_system	Aircraft-Aircraft systems-Flight control system-Rudder control system-Failure
+find08	mech.control_system	Aircraft-Aircraft systems-Flight control system-Elevator control system-Failure
+find08	mech.control_system	Aircraft-Aircraft systems-Flight control system-(general)-Malfunction
+find08	act.ground_ops	Aircraft-Aircraft handling/service-Towing and taxiing-Taxiing-Incorrect use/operation
+find08	act.ground_ops	Personnel issues-Action/decision-Action-Incorrect action performance-Ground crew
+find08	act.ground_ops	Aircraft-Aircraft handling/service-Parking/securing-Tie-down/mooring-Incorrect use/operation
+find08	act.pilot.intentional	Personnel issues-Miscellaneous-Intentional act-Suicide-Pilot
+find08	act.pilot.intentional	Personnel issues-Miscellaneous-Intentional act-Stolen/unauthorized-Pilot
+find08	act.pilot.intentional	Personnel issues-Miscellaneous-Intentional act-(general)-Pilot
+find08	mech.electrical	Aircraft-Aircraft systems-Electrical power system-(general)-Failure
+find08	mech.electrical	Aircraft-Aircraft systems-Electrical power system-Alternator-generator drive sys-Failure
+find08	mech.electrical	Aircraft-Aircraft systems-Electrical power system-Electrical pwr sys wiring-Damaged/degraded
+find08	mech.fuel.other	Aircraft-Aircraft systems-Fuel system-Fuel storage-Damaged/degraded
+find08	mech.fuel.other	Aircraft-Aircraft systems-Fuel system-Fuel storage-Fatigue/wear/corrosion
+find08	mech.fuel.other	Aircraft-Aircraft systems-Fuel system-Fuel storage-Malfunction
+find08	env.traffic	Environmental issues-Conditions/weather/phenomena-Turbulence-Wake turbulence-Effect on operation
+find08	env.traffic	Environmental issues-Conditions/weather/phenomena-Turbulence-Wake turbulence-Effect on equipment
+find08	env.traffic	Environmental issues-Conditions/weather/phenomena-Turbulence-Wake turbulence-Contributed to outcome
+find08	latent.pilot.workload	Personnel issues-Task performance-Workload management-Task overload-Pilot
+find08	latent.pilot.workload	Personnel issues-Task performance-Workload management-Task allocation-Pilot
+find08	latent.pilot.workload	Personnel issues-Task performance-Workload management-(general)-Pilot
+find08	mech.instrument	Aircraft-Aircraft systems-Vacuum system-(general)-Failure
+find08	mech.instrument	Aircraft-Aircraft systems-Navigation system-Attitude gyro & indication-Failure
+find08	mech.instrument	Aircraft-Aircraft systems-Indicating/recording systems-Instrument panel   -Malfunction
+find08	mech.icing	Aircraft-Aircraft systems-Ice/rain protection system-Airfoil anti-ice, deice-Not installed/available
+find08	mech.icing	Aircraft-Aircraft systems-Ice/rain protection system-Airfoil anti-ice, deice-Capability exceeded
+find08	mech.icing	Aircraft-Aircraft systems-Ice/rain protection system-(general)-Not installed/available
+find08	latent.pilot.attention	Personnel issues-Psychological-Perception/orientation/illusion-Situational awareness-Pilot
+find08	act.pilot.decision	Personnel issues-Action/decision-Info processing/decision-Decision making/judgment-Flight crew
+find08	act.pilot.aircraft_control	Personnel issues-Task performance-Use of equip/info-Aircraft control-Flight crew
+find08	act.pilot.other	Personnel issues-Action/decision-Action-Incorrect action performance-Flight crew
+find08	act.pilot.other	Personnel issues-Task performance-Use of equip/info-Use of equip/system-Flight crew
+find08	act.maint.improper	Aircraft-Aircraft systems-Fuel system-Fuel distribution-Incorrect service/maintenance
+find08	act.pilot.other	Personnel issues-Action/decision-Action-Lack of action-Flight crew
+find08	act.pilot.checklist	Personnel issues-Task performance-Use of equip/info-Use of checklist-Flight crew
+find08	act.pilot.preflight	Personnel issues-Task performance-Inspection-Preflight inspection-Flight crew
+find08	act.pilot.other	Personnel issues-Task performance-Communication (personnel)-CRM/MRM techniques-Flight crew
+find08	env.obstacle	Environmental issues-Physical environment-Object/animal/substance-Ground equipment-Contributed to outcome
+find08	env.runway	Environmental issues-Physical environment-Runway/land/takeoff/taxi surface-Snow/slush/ice covered surface-Contributed to outcome
+find08	latent.pilot.attention	Personnel issues-Psychological-Perception/orientation/illusio-Situational awareness-Pilot
+find08	act.pilot.checklist	Personnel issues-Action/decision-Action-Forgotten action/omission-Flight crew
+find08	env.runway	Environmental issues-Physical environment-Runway/land/takeoff/taxi surface-Snow/slush/ice covered surface-Decision related to condition
+find08	latent.pilot.training	Personnel issues-Experience/knowledge-Training-Total instruct/training recvd-Pilot
+find08	act.pilot.other	Personnel issues-Action/decision-Action-Delayed action-Flight crew
+find08	env.wx.icing	Environmental issues-Conditions/weather/phenomena-Ceiling/visibility/precip-Freezing rain/sleet-Effect on equipment
+find08	env.wx.turbulence	Environmental issues-Conditions/weather/phenomena-Turbulence-Terrain induced turbulence-Contributed to outcome
+find08	act.maint.improper	Aircraft-Aircraft power plant-Engine fuel and control-Fuel distribution-Incorrect service/maintenance
+find08	env.obstacle	Environmental issues-Physical environment-Object/animal/substance-Ground equipment-Effect on operation
+find08	env.runway	Environmental issues-Physical environment-Runway/land/takeoff/taxi surface-Snow/slush/ice covered surface-Effect on equipment
+find08	latent.pilot.attention	Personnel issues-Psychological-Attention/monitoring-Monitoring environment-Flight crew
+find08	latent.pilot.training	Personnel issues-Experience/knowledge-Knowledge-Knowledge of meteorologic cond-Flight crew
+find08	latent.pilot.attention	Personnel issues-Psychological-Attention/monitoring-Task monitoring/vigilance-Flight crew
+find08	act.pilot.checklist	Personnel issues-Task performance-Use of equip/info-Use of policy/procedure-Flight crew
+find08	act.pilot.lookout	Personnel issues-Psychological-Attention/monitoring-Monitoring other aircraft-Flight crew
+find08	act.pilot.other	Personnel issues-Action/decision-Action-Incorrect action selection-Flight crew
+find08	act.pilot.fuel_mgmt	Personnel issues-Task performance-Planning/preparation-Fuel planning-Flight crew
+find08	act.pilot.other	Personnel issues-Task performance-Communication (personnel)-Lack of communication-Flight crew
+find08	env.wx.turbulence	Environmental issues-Conditions/weather/phenomena-Turbulence-Terrain induced turbulence-Effect on equipment
+find08	latent.pilot.attention	Personnel issues-Psychological-Attention/monitoring-Monitoring equip/instruments-Flight crew
+find08	act.pilot.navigation	Personnel issues-Psychological-Perception/orientation/illusio-Geographic disorient (lost)-Pilot
+find08	env.obstacle	Environmental issues-Physical environment-Object/animal/substance-Ground equipment-Effect on equipment
+find08	act.pilot.other	Personnel issues-Action/decision-Action-Incomplete action-Flight crew
+find08	latent.pilot.attention	Personnel issues-Psychological-Attention/monitoring-Attention-Pilot of other aircraft
+find08	latent.pilot.attention	Personnel issues-Psychological-Attention/monitoring-Monitoring environment-Pilot of other aircraft
+find08	act.pilot.navigation	Personnel issues-Task performance-Planning/preparation-Flight planning/navigation-Flight crew
+find08	act.pilot.recognition	Personnel issues-Action/decision-Info processing/decision-Expectation/assumption-Flight crew
+find08	act.pilot.recognition	Personnel issues-Action/decision-Info processing/decision-Understanding/comprehension-Flight crew
+find08	env.wx.turbulence	Environmental issues-Conditions/weather/phenomena-Turbulence-Terrain induced turbulence-Effect on personnel
+find08	latent.pilot.attention	Personnel issues-Psychological-Perception/orientation/illusion-Situational awareness-Flight crew
+find08	env.wx.icing	Environmental issues-Conditions/weather/phenomena-Ceiling/visibility/precip-Freezing rain/sleet-Effect on operation
+find08	env.wx.turbulence	Environmental issues-Conditions/weather/phenomena-Turbulence-Terrain induced turbulence-Response/compensation
+find08	latent.pilot.attention	Personnel issues-Psychological-Perception/orientation/illusion-Perception-Flight crew
+find08	latent.pilot.attitude	Environmental issues-Task environment-Pressures/demands-Time/schedule pressure-Effect on personnel
+find08	latent.pilot.fatigue	Personnel issues-Physical-Alertness/Fatigue-Lack of sleep-Flight crew
+find08	act.pilot.other	Personnel issues-Action/decision-Action-(general)-Flight crew
+find08	act.pilot.other	Personnel issues-Action/decision-Action-Incorrect action sequence-Flight crew
+find08	env.obstacle	Environmental issues-Physical environment-Object/animal/substance-Ground equipment-Awareness of condition
+find08	env.runway	Environmental issues-Physical environment-Runway/land/takeoff/taxi surface-Snow/slush/ice covered surface-Ability to respond/compensate
+find08	env.wx.turbulence	Environmental issues-Conditions/weather/phenomena-Turbulence-Terrain induced turbulence-Ability to respond/compensate
+find08	latent.pilot.fatigue	Personnel issues-Physical-Alertness/Fatigue-Circadian rhythms or jetlag-Flight crew
+find08	act.pilot.decision	Aircraft-Aircraft oper/perf/capability-Aircraft capability-Instrument flight capability-Capability exceeded
+find08	act.pilot.other	Personnel issues-Task performance-Use of equip/info-(general)-Flight crew
+find08	act.pilot.other	Personnel issues-Task performance-Use of equip/info-Use of available resources-Flight crew
+find08	act.pilot.preflight	Personnel issues-Task performance-Planning/preparation-(general)-Flight crew
+find08	act.pilot.wb_planning	Personnel issues-Task performance-Planning/preparation-Weight/balance calculations-Flight crew
+find08	env.obstacle	Environmental issues-Physical environment-Object/animal/substance-Ground equipment-Response/compensation
+find08	env.runway	Environmental issues-Physical environment-Runway/land/takeoff/taxi surface-Snow/slush/ice covered surface-Effect on personnel
+find08	env.runway	Environmental issues-Physical environment-Runway/land/takeoff/taxi surface-Snow/slush/ice covered surface-Not specified
+find08	env.wx.icing	Environmental issues-Conditions/weather/phenomena-Ceiling/visibility/precip-Freezing rain/sleet-Awareness of condition
+find08	env.wx.icing	Environmental issues-Conditions/weather/phenomena-Ceiling/visibility/precip-Freezing rain/sleet-Decision related to condition
+find08	env.wx.turbulence	Environmental issues-Conditions/weather/phenomena-Turbulence-Terrain induced turbulence-Awareness of condition
+find08	latent.pilot.attitude	Environmental issues-Task environment-Pressures/demands-Time/schedule pressure-Decision related to condition
+find08	latent.pilot.attitude	Personnel issues-Psychological-Personality/attitude-Motivation/respond to pressure-Flight crew
+find08	mech.aero.performance	Aircraft-Aircraft oper/perf/capability-Aircraft capability-Engine out capability-Not attained/maintained
+find08	mech.spatial_disorientation	Personnel issues-Psychological-Perception/orientation/illusion-Spatial disorientation-Flight crew

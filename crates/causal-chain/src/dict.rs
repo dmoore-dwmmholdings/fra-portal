@@ -64,6 +64,9 @@ pub enum Source {
 struct RawMatch {
     src: Source,
     re: String,
+    /// higher wins over file order (default 0)
+    #[serde(default)]
+    prio: i32,
 }
 #[derive(Deserialize)]
 struct RawNode {
@@ -74,6 +77,10 @@ struct RawNode {
     explains: Vec<String>,
     #[serde(default, rename = "match")]
     matchers: Vec<RawMatch>,
+    #[serde(default)]
+    attribute: bool,
+    #[serde(default)]
+    implies: Option<String>,
 }
 #[derive(Deserialize, Clone, Copy, Debug)]
 pub struct Weights {
@@ -100,12 +107,17 @@ pub struct Node {
     pub label: String,
     pub tier: Tier,
     pub explains: Vec<String>,
+    /// severity attribute (post-impact fire, evacuation): recorded on the graph, kept off the chain
+    pub attribute: bool,
+    /// node inserted by the builder when this one is present and the implied node's group is absent
+    pub implies: Option<usize>,
 }
 
 pub struct Dict {
     pub nodes: Vec<Node>,
     pub weights: Weights,
     index: HashMap<String, usize>,
+    /// sorted by priority (highest first), then file order
     matchers: Vec<(Source, Regex, usize)>,
 }
 
@@ -129,15 +141,26 @@ impl Dict {
         let mut nodes = Vec::new();
         let mut index = HashMap::new();
         let mut matchers = Vec::new();
+        let mut implies = Vec::new();
         for (i, n) in raw.node.into_iter().enumerate() {
             if index.insert(n.id.clone(), i).is_some() {
                 bail!("duplicate node id {}", n.id);
             }
             for m in n.matchers {
                 let re = Regex::new(&m.re).with_context(|| format!("node {} regex {}", n.id, m.re))?;
-                matchers.push((m.src, re, i));
+                matchers.push((m.prio, m.src, re, i));
             }
-            nodes.push(Node { id: n.id, label: n.label, tier: n.tier, explains: n.explains });
+            implies.push(n.implies);
+            nodes.push(Node { id: n.id, label: n.label, tier: n.tier, explains: n.explains, attribute: n.attribute, implies: None });
+        }
+        // stable: equal priorities keep file order
+        matchers.sort_by_key(|m| std::cmp::Reverse(m.0));
+        let matchers = matchers.into_iter().map(|(_, s, r, i)| (s, r, i)).collect();
+        for (i, imp) in implies.into_iter().enumerate() {
+            if let Some(id) = imp {
+                let Some(&j) = index.get(&id) else { bail!("node {}: implies unknown node {id}", nodes[i].id) };
+                nodes[i].implies = Some(j);
+            }
         }
         for o in ["outcome.fatal", "outcome.serious", "outcome.minor", "outcome.none"] {
             if !index.contains_key(o) {
@@ -159,7 +182,7 @@ impl Dict {
         self.index.get(id).copied()
     }
 
-    /// First matcher (file order) for this source whose regex matches the text.
+    /// Highest-priority matcher (then file order) for this source whose regex matches the text.
     pub fn map(&self, src: Source, text: &str) -> Option<usize> {
         self.matchers.iter().find(|(s, re, _)| *s == src && re.is_match(text)).map(|(_, _, i)| *i)
     }

@@ -1,7 +1,9 @@
-# What–Why Chain Analysis (WWCA) — Method Spec v0.1
+# What–Why Chain Analysis (WWCA) — Method Spec v0.2
 
-Owner: Dawson Moore (DWMM Holdings) · Phase 2 of the NTSB pipeline · Date: 2026-10-06
-Reference implementation: `crates/causal-chain/` (Rust, 9 tests passing). Node dictionary: `config/causal_nodes.toml`.
+Owner: Dawson Moore (DWMM Holdings) · Phase 2 of the NTSB pipeline · v0.1 2026-10-06 · v0.2 2026-10-07
+Reference implementation: `crates/causal-chain/` (Rust). Node dictionary: `config/causal_nodes.toml` (schema 2).
+
+v0.2 changes, from a 112-report review of 2024–25 fatal accidents and a QA run over all 31,149 avall involvements: text normalisation (§3.1), matcher priority (§4.1), the `Auto` role filter for CAROL-era records (§4.2), severity attributes and implied nodes (§4.3), causal reordering of the spine (§4.4), and new QA counts (§10).
 
 ---
 
@@ -31,7 +33,9 @@ outcome.fatal
 | **Edge** | `what ← why`. Each node except the outcome has exactly one *what*, so each involvement is a **tree** rooted at its outcome. |
 | **Depth** | Number of edges between the focal node and an answer node. |
 | **Root why** | A leaf of the why-subtree: the deepest cause NTSB coded on that branch. |
-| **Role** | NTSB `Cause_Factor`: C (cause), F (factor), blank (finding). Occurrence-derived nodes have role *sequence*. |
+| **Role** | NTSB `Cause_Factor`: C (cause), F (factor), blank (finding). Occurrence-derived nodes have role *sequence*. CAROL-era (2021+) findings have no role (§4.2). |
+| **Attribute** | A severity node (post-impact fire, evacuation) recorded on the involvement, not placed in the tree. |
+| **Implied node** | A node the builder inserts because a coded node requires it (fuel starvation → power loss), marked *implied*. |
 | **Provenance** | How an edge was made: Sequence, Explicit, Rule, Default, Outcome (§4). |
 
 ## 2. The causal ladder
@@ -53,22 +57,28 @@ Rules: lower rank = closer to the outcome. A *why* has the same rank as its *wha
 
 | WWCA record | 2008+ (avall) | pre-2008 |
 |---|---|---|
-| Occurrence (spine) | `events_sequence`: `Occurrence_No` → `seq`; event part of `Occurrence_Description` ("Phase-**Event**") → `text`; `Defining_ev` | `Occurrences`: `Occurrence_No`, decoded occurrence code → `text` |
-| Finding | `Findings`: `finding_description` → `text`; `Cause_Factor` → role; no occurrence link | `seq_of_events`: decode subject/modifier/person → `"SUBJECT - MODIFIER - PERSON"`; `Cause_Factor`; **`Occurrence_No` → explicit link** |
+| Occurrence (spine) | `events_sequence`: `Occurrence_No` → `seq`; event part of `Occurrence_Description` ("Phase **Event**", §3.1) → `text`; `Defining_ev` | `Occurrences`: `Occurrence_No`, decoded occurrence code → `text` |
+| Finding | `Findings`: `finding_description` without its role suffix (§3.1) → `text`; `Cause_Factor`, else the suffix → role; no occurrence link | `seq_of_events`: decode subject/modifier/person → `"SUBJECT - MODIFIER - PERSON"`; `Cause_Factor`; **`Occurrence_No` → explicit link** |
 | Outcome | Highest injury among this aircraft's occupants (`injury` table). Fall back to `events.ev_highest_injury` for single-aircraft events | same |
 | Cohort attributes | `core.aircraft_class` (class/family/variant), year, `far_part`, era, phase of the defining occurrence, `light_cond`, `wx_cond_basic`, PIC total hours bucket, homebuilt | same |
 
-Keep the phase of each spine occurrence as an attribute of that node instance (planned field; not in v0.1 code). Phase is a cohort filter, not a node.
+Keep the phase of each spine occurrence as an attribute of that node instance (planned field; not in v0.2 code). Phase is a cohort filter, not a node.
+
+### 3.1 Text normalisation (`src/text.rs`)
+
+- **Occurrences.** `Occurrence_Description` is "<phase> <event>" joined by a **space**, not a hyphen, and phase names contain hyphens ("Landing-landing roll Runway excursion"). `normalize_occ08` returns the event: a known event suffix wins, so "Landing gear collapse" keeps its first word; otherwise the longest known phase prefix is stripped. The lists are the 48 phases and 97 events in avall (`phase_no`, `eventsoe_no`).
+- **Findings.** About 57 % of 2008–2020 finding rows end in " - C" or " - F", repeating `Cause_Factor` inside the text. `split_find08` strips it and returns it; the adapter uses it as the role when `Cause_Factor` is blank.
+- 2008+ finding text has the shape `<Category>-<Section>-<Subsection>-<Item>-<Condition or person>`. For `Aircraft` rows, the final condition says what kind of why the row is: *Incorrect service/maintenance*, *Not serviced/maintained*, *Inadequate inspection* → maintenance act; *Incorrect use/operation*, *Unintentional use/operation*, *Not used/operated* → pilot act; *Failure*, *Malfunction*, *Fatigue/wear/corrosion* … → the system's mechanism. `Performance/control parameters-<parameter>-…` rows name the parameter the pilot did not hold (airspeed, altitude, directional control, flare …) and map to the matching pilot act; *Attain/maintain not possible* means the aircraft could not, and maps to a mechanism.
 
 ## 4. Chain construction (normative; `src/build.rs`)
 
-**4.1 Map.** Each row maps to the node of the first matcher, in file order, whose `src` equals the row's source and whose regex matches `text`. Rows that match nothing go to `unmapped`. Nothing is dropped silently.
+**4.1 Map.** Each row maps to the node of the matcher with the highest `prio` (default 0), then the first in file order, whose `src` equals the row's source and whose regex matches `text`. Priority lets a specific rule beat a broad one without lookahead (the Rust regex crate has none) and without moving nodes, whose file order also drives attachment (§4.6). Rows that match nothing go to `unmapped`. Nothing is dropped silently.
 
-**4.2 Role filter.** Default `CausesAndFactors`. Plain findings are dropped before building. The other options are `CausesOnly` and `All`. Occurrences are always kept.
+**4.2 Role filter.** Default `Auto`: `CausesAndFactors` when any finding of the involvement is coded C or F, otherwise `All`. CAROL-era findings (all 17,388 in avall from about 2021 on) have a blank `Cause_Factor`; a fixed `CausesAndFactors` filter would drop every one of them and leave spine-only chains. Under `Auto` those findings take part with role *finding* (weight 0.25); within one involvement they are weighted equally, so attribution is unaffected, but cross-era comparisons must be run per era (§7). The other options are `CausesAndFactors`, `CausesOnly` and `All`. Occurrences are always kept. The graph records `roles_coded` and the filter applied.
 
-**4.3 Merge.** If two rows map to the same node in one involvement, they make one node. A finding keeps the strongest role.
+**4.3 Merge, attributes, implied nodes.** If two rows map to the same node in one involvement, they make one node: a spine node keeps the first `seq` and ORs `Defining_ev`; a finding keeps the strongest role. Rows mapping to an `attribute` node (post-impact fire or explosion, evacuation) are recorded on the graph and kept off the spine, so they can never become its top. A node with `implies = X` inserts X (marked implied) when no node shares X's first two id segments: fuel starvation or exhaustion with no `crit.power_loss.*` node inserts `crit.power_loss.total`, right after its source on the spine or as a finding with the source's role.
 
-**4.4 Sequence edges.** Sort spine nodes by `seq`. Each spine node's *what* is the **nearest later** spine node with rank ≤ its own rank (earlier and deeper explains later). Spine nodes with no such node are *tops*.
+**4.4 Causal order and sequence edges.** Sort spine nodes by `seq`, then reorder within each tier: if node A `explains` node B (and not the reverse) and both have the same rank, A goes before B; otherwise NTSB order stands, and a cycle falls back to NTSB order. NTSB often lists "Loss of control in flight" before the stall or power loss that caused it, which would otherwise make the cause the effect's *what*. Cross-tier disorder is left to the inversion repair in 4.5–4.6. Each spine node's *what* is then the **nearest later** spine node with rank ≤ its own rank (earlier and deeper explains later). Spine nodes with no such node are *tops*. Positions after reordering replace `seq` in every later tie-break.
 
 **4.5 Outcome edge.** The primary top is the lowest rank, latest `seq`. The edge is `outcome ← primary top`. Other tops are *inversions* (NTSB listed them out of causal order) and are attached in 4.6.
 
@@ -78,7 +88,7 @@ Keep the phase of each spine occurrence as an attribute of that node instance (p
 2. **Rule**: from all placed nodes *c* where `rank(c) ≤ rank(f)`, or any non-context node if *f* is context, and *f*.`explains` has a prefix of *c*. Pick the **deepest** one.
 3. **Default**: the deepest placed spine node with rank ≤ rank(f), else the outcome.
 
-Tie-break for "deepest" is, in order: higher rank; then finding over spine node; then **earlier** spine `seq` (deeper in the chain); then earlier in the dictionary. List more proximate nodes first in a tier. For example, `act.pilot.decision` comes before `act.pilot.wx_planning`, so weather planning can attach under the decision.
+Tie-break for "deepest" is, in order: higher rank; then finding over spine node; then **earlier** spine position (deeper in the chain); then earlier in the dictionary. List more proximate nodes first in a tier. For example, `act.pilot.decision` comes before `act.pilot.wx_planning`, so weather planning can attach under the decision.
 
 **4.7 Guarantees.** The result is a tree. Every non-outcome node has one *what* (test `every_node_has_exactly_one_what`). No cycles. Every edge carries its provenance.
 
@@ -140,13 +150,14 @@ Rules:
 
 1. Every cross-era result is also run split by era (`compare`, era=2008+ vs era=pre2008).
 2. A bucket with era q < 0.05 is published only after one of three steps: it is explained as a real trend; the dictionary is fixed (one node, or an equivalence group, planned as `[[equivalence]]`); or the bucket is reported per era.
-3. The dictionary file records every known asymmetry in a comment next to the affected nodes.
+3. The dictionary file records every known asymmetry in a comment next to the affected nodes, marked `ERA:`.
+4. Treat CAROL (about 2021+) as its own era for role-dependent results: its findings carry no cause/factor role (§4.2), so role filters and attribution weights do not mean the same thing there.
 
 ## 8. Sensitivity checks (mandatory before publishing a ranking)
 
 Re-run with each of the following:
 
-- Role filter `CausesOnly` and `All`
+- Role filter `CausesOnly`, `CausesAndFactors` and `All` (default is `Auto`)
 - `exclude_default = true`
 - Factor weight 1.0
 - `ctx = Exclude`
@@ -170,13 +181,20 @@ Never mix narrative edges into coded results without a filter flag.
 | Default-provenance share of finding edges | < 5 %; above that, `explains` rules are missing |
 | Inversions | Inspect any involvement with > 1 |
 | `(none recorded)` by tier and era | Track; large era gaps → §7 |
-| Golden tests | `cargo test` green |
+| Involvements with no end-tier node | Track. 30 % of avall involvements have none coded; their chains top out at a critical event |
+| Spines reordered, implied nodes, roles uncoded | Track per era; a jump means a dictionary `explains` or `implies` change needs review |
+| Golden tests | `cargo test` green; real-text fixture `tests/fixtures/node_golden_08.tsv` (≥ 400 cases) reviewed by hand |
+
+Tools: `dict-map` maps a TSV of raw texts with counts to nodes (diff two dictionaries to see every row that moves); `wwca-qa <csv dir>` builds every involvement from `jetdb` CSV exports and prints the §10 shares (`--defaults` lists the why→what pairs that fell back to Default; `--trees <ev_id,…>` prints chains). v0.2 on avall (31,149 involvements): unmapped 0.003 % (v0.1 dictionary: 7.2 %), Default-provenance finding edges 3.4 % (v0.1 dictionary: 15.9 %).
 
 ## 11. Limitations to state with every published number
 
 - **Counts are not rates.** Without exposure data (flight hours), this shows how accidents happen, not how risky a type or activity is. Add exposure in phase 3.
 - **NTSB coding choices drive results.** Coders' habits, and the 2008 coding change, are part of the signal.
 - **2008+ finding-to-occurrence links are inferred by rules.** Provenance makes that visible, and §8 tests how much the answers depend on it.
+- **CAROL-era records carry no cause/factor roles.** NTSB's probable-cause text says which findings were causes; the coded data does not (§4.2, §9).
+- **Implied nodes are inferences.** They are marked; exclude them when a result must rest on coded rows only.
+- **Endings are often not coded.** About 30 % of involvements have no end-tier node, so "how the flight ended" shares understate those endings.
 - **Accidents only.** There is no denominator of safe flights with the same why. Lethality is conditional on an accident having happened.
 - **Tree simplification.** Real causation is a graph. The tree keeps every cause; it only picks one parent for each.
 
@@ -184,16 +202,18 @@ Never mix narrative edges into coded results without a filter flag.
 
 | Item | Location |
 |---|---|
-| Dictionary loader + matchers | `crates/causal-chain/src/dict.rs` |
+| Dictionary loader + matchers (prio, attribute, implies) | `crates/causal-chain/src/dict.rs` |
+| Text normalisation (phase split, role suffix) | `crates/causal-chain/src/text.rs` |
 | Input records | `crates/causal-chain/src/model.rs` |
 | Chain builder | `crates/causal-chain/src/build.rs` |
 | All metrics, cohort filter, QA, CSV | `crates/causal-chain/src/metrics.rs` |
 | Demo on synthetic data | `crates/causal-chain/src/bin/wwca_demo.rs` → `examples/wwca_demo_output_SYNTHETIC.txt` |
-| Tests | `crates/causal-chain/tests/chain.rs` (8), `crates/causal-chain/tests/node_golden.rs` (84 text cases) |
+| Dictionary QA tools | `src/bin/dict_map.rs` (`dict-map`), `src/bin/wwca_qa.rs` (`wwca-qa`) |
+| Tests | `crates/causal-chain/tests/chain.rs` (13, incl. real record ERA25FA201), `tests/node_golden.rs` (84 hand-written + 403 real texts), `src/text.rs` (2) |
 
 Integration steps:
 
-1. **Adapter.** `core.*` (phase 1) → `Vec<Involvement>`. One SQL query per source table, grouped by (`ev_id`, `Aircraft_Key`). Decode pre-2008 codes with `core.codes`.
+1. **Adapter.** `core.*` (phase 1) → `Vec<Involvement>`. One SQL query per source table, grouped by (`ev_id`, `Aircraft_Key`). Decode pre-2008 codes with `core.codes`. Normalise 2008+ texts with `normalize_occ08` / `split_find08` (§3.1); `wwca_qa.rs` is a CSV-based reference for the 2008+ half.
 2. **Persist.** Write `causal.node_instance` (inv_id, node_id, tier, role, seq, spine, phase) and `causal.edge` (inv_id, what, why, prov) to DuckDB, so any UI can query without rebuilding.
 3. **CLI** `wwca`: `why`, `what`, `tiers`, `flow`, `chains`, `lethality`, `compare`, `qa`. Output as table, CSV, or JSON (`{title, n_focal, n_fatal, rows:[{bucket, n, incidence, inc_ci, attribution, attr_ci, fatal_rate, low_n}]}`).
 4. **Dictionary iteration** on real data until the §10 targets are met.

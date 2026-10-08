@@ -1,5 +1,6 @@
 use causal_chain::metrics::{self, Ctx, Depth, Query};
 use causal_chain::*;
+use causal_chain::{normalize_find08, normalize_occ08};
 use std::collections::BTreeMap;
 
 fn dict() -> Dict {
@@ -120,10 +121,10 @@ fn default_attachment_when_no_rule() {
         "HL/1",
         Injury::None,
         vec![occ08(1, "Hard landing")],
-        vec![f08("Personnel issues-Task performance-Use of equip/info-Checklist-Pilot", Role::Factor)],
+        vec![f08("Personnel issues-Task performance-Planning/preparation-Weight/balance calculations-Pilot", Role::Factor)],
     );
     let g = build(&d, &i, &BuildOpts::default());
-    let e = g.edges.iter().find(|e| d.nodes[g.nodes[e.why].node].id == "act.pilot.checklist").unwrap();
+    let e = g.edges.iter().find(|e| d.nodes[g.nodes[e.why].node].id == "act.pilot.wb_planning").unwrap();
     assert_eq!(e.prov, Prov::Default);
     assert_eq!(d.nodes[g.nodes[e.what].node].id, "end.hard_landing");
 }
@@ -137,6 +138,136 @@ fn sequence_inversion_is_repaired_by_rule() {
     assert_eq!(g.inversions, 1);
     let tree = causal_chain::build::render(&d, &g);
     assert_eq!(tree, "outcome.minor\n  end.collision  <Outcome>\n    crit.power_loss.total  <Rule>\n");
+}
+
+#[test]
+fn auto_role_filter_keeps_uncoded_findings() {
+    let d = dict();
+    let occ = vec![occ08(1, "Loss of control in flight"), occ08(2, "Collision with terr/obj (non-CFIT)")];
+    let aoa = "Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Angle of attack-Capability exceeded";
+    let ctl = "Personnel issues-Task performance-Use of equip/info-Aircraft control-Pilot";
+    // CAROL era: no Cause_Factor anywhere -> Auto keeps every finding
+    let carol = inv("C/1", Injury::Fatal, occ.clone(), vec![f08(aoa, Role::Finding), f08(ctl, Role::Finding)]);
+    let g = build(&d, &carol, &BuildOpts::default());
+    assert!(!g.roles_coded);
+    assert_eq!(g.roles, RoleFilter::All);
+    assert_eq!(g.nodes.len(), 5, "{}", causal_chain::build::render(&d, &g));
+    // coded record: Auto drops the plain finding
+    let coded = inv("X/1", Injury::Fatal, occ, vec![f08(aoa, Role::Cause), f08(ctl, Role::Finding)]);
+    let g = build(&d, &coded, &BuildOpts::default());
+    assert_eq!(g.roles, RoleFilter::CausesAndFactors);
+    assert!(!causal_chain::build::render(&d, &g).contains("act.pilot.aircraft_control"));
+}
+
+#[test]
+fn post_impact_fire_is_an_attribute() {
+    let d = dict();
+    // fire listed first and last: neither becomes the top of the spine
+    let i = inv(
+        "F/1",
+        Injury::Fatal,
+        vec![occ08(1, "Fire/smoke (post-impact)"), occ08(2, "Off-field or emergency landing"), occ08(3, "Collision with terr/obj (non-CFIT)"), occ08(4, "Fire/smoke (post-impact)")],
+        vec![],
+    );
+    let g = build(&d, &i, &BuildOpts::default());
+    let tree = causal_chain::build::render(&d, &g);
+    assert_eq!(tree, "outcome.fatal
+  end.collision  <Outcome>
+    end.forced_landing  <Sequence>
+[attribute] end.post_impact_fire
+");
+}
+
+#[test]
+fn fuel_mechanism_implies_power_loss() {
+    let d = dict();
+    let i = inv(
+        "FS/1",
+        Injury::Fatal,
+        vec![occ08(1, "Fuel starvation"), occ08(2, "Loss of control in flight"), occ08(3, "Collision with terr/obj (non-CFIT)")],
+        vec![],
+    );
+    let g = build(&d, &i, &BuildOpts::default());
+    let tree = causal_chain::build::render(&d, &g);
+    let expected = "outcome.fatal
+  end.collision  <Outcome>
+    crit.loc_inflight  <Sequence>
+      crit.power_loss.total (implied)  <Sequence>
+        mech.fuel.starvation  <Sequence>
+";
+    assert_eq!(tree, expected, "
+{tree}");
+    // a coded power loss suppresses the implied one
+    let j = inv("FS/2", Injury::Fatal, vec![occ08(1, "Loss of engine power (partial)")], vec![f08("Aircraft-Fluids/misc hardware-Fluids-Fuel-Fuel starvation", Role::Cause)]);
+    assert!(!causal_chain::build::render(&d, &build(&d, &j, &BuildOpts::default())).contains("implied"));
+}
+
+#[test]
+fn same_tier_sequence_is_put_in_causal_order() {
+    let d = dict();
+    // NTSB listed the loss of control before the stall that caused it
+    let i = inv(
+        "R/1",
+        Injury::Fatal,
+        vec![occ08(1, "Loss of control in flight"), occ08(2, "Aerodynamic stall/spin"), occ08(3, "Collision with terr/obj (non-CFIT)")],
+        vec![],
+    );
+    let g = build(&d, &i, &BuildOpts::default());
+    assert_eq!(g.reordered, 2);
+    let tree = causal_chain::build::render(&d, &g);
+    assert_eq!(tree, "outcome.fatal
+  end.collision  <Outcome>
+    crit.loc_inflight  <Sequence>
+      crit.stall_spin  <Sequence>
+");
+}
+
+/// ERA25FA201 (ev_id 20250510200140), Piper PA-32RT, 2025-05-10: nose baggage door opened on takeoff, stall/spin.
+/// Real CAROL-era rows, as the adapter normalises them (phase stripped, no Cause_Factor).
+#[test]
+fn era25fa201_real_record() {
+    let d = dict();
+    let occ: Vec<OccRec> = [
+        "Takeoff Preflight or dispatch event",
+        "Takeoff Miscellaneous/other",
+        "Initial climb Loss of control in flight",
+        "Initial climb Aerodynamic stall/spin",
+        "Initial climb Collision with terr/obj (non-CFIT)",
+    ]
+    .iter()
+    .enumerate()
+    .map(|(k, t)| OccRec { seq: k as u32 + 5, src: Source::Occ08, text: normalize_occ08(t).into(), defining: k == 2 })
+    .collect();
+    let finds = [
+        "Aircraft-Aircraft oper/perf/capability-Performance/control parameters-Angle of attack-Capability exceeded",
+        "Personnel issues-Psychological-Attention/monitoring-Monitoring environment-Pilot",
+        "Personnel issues-Psychological-Attention/monitoring-Attention-Pilot",
+        "Personnel issues-Action/decision-Info processing/decision-Decision making/judgment-Pilot",
+        "Personnel issues-Task performance-Use of equip/info-Aircraft control-Pilot",
+        "Environmental issues-Conditions/weather/phenomena-Convective weather-Thunderstorm-Contributed to outcome",
+        "Aircraft-Aircraft structures-Doors-Cargo/baggage doors-Unintentional use/operation",
+    ]
+    .iter()
+    .map(|t| f08(normalize_find08(t), Role::Finding))
+    .collect();
+    let g = build(&d, &inv("20250510200140/1", Injury::Fatal, occ, finds), &BuildOpts::default());
+    let tree = causal_chain::build::render(&d, &g);
+    assert!(g.unmapped.is_empty(), "{:?}", g.unmapped);
+    let expected = "outcome.fatal
+  end.collision  <Outcome>
+    crit.loc_inflight  <Sequence>
+      crit.stall_spin  <Sequence>
+        crit.other  <Sequence>
+          act.pilot.preflight  <Sequence>
+            act.pilot.decision [-]  <Rule>
+              env.wx.convective [-]  <Rule>
+          mech.door_open [-]  <Rule>
+        mech.aero.aoa_exceeded [-]  <Rule>
+          act.pilot.aircraft_control [-]  <Rule>
+            latent.pilot.attention [-]  <Rule>
+";
+    assert_eq!(tree, expected, "
+{tree}");
 }
 
 #[test]

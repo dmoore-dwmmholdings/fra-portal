@@ -21,7 +21,7 @@ config/
   causal_nodes.toml            causal node dictionary: tiers, explains rules, NTSB text matchers
 crates/
   aircraft-taxonomy/           taxonomy loader + matcher (golden test: 281 cases)
-  causal-chain/                chain builder + all WWCA metrics + synthetic demo (9 tests)
+  causal-chain/                chain builder + all WWCA metrics + synthetic demo; dict-map / wwca-qa QA tools
   ntsb-fetch/                  download avdata MDBs + docs, SHA-256 manifest, unzip
   ntsb-cli/                    `ntsb` binary (fetch; schema/load/classify to come)
 data/reference/
@@ -37,6 +37,7 @@ tools/taxonomy-gen/            Python source that generates aircraft_types.toml/
 cargo test --release                                   # all tests
 cargo run --release --bin ntsb -- fetch                # download NTSB MDBs to data/raw/<date>/ (~250 MB zipped, 1.5 GB unzipped)
 cargo run --release --bin wwca-demo                    # demo; reads config/causal_nodes.toml, writes ./wwca_demo_out/
+cargo run --release --bin wwca-qa -- <csv dir>         # §10 QA over `jetdb export` CSVs of avall (Events_Sequence, Findings, injury)
 ```
 
 Raw data is gitignored. Inspect the MDBs with `cargo install jetdb-cli`, then
@@ -73,5 +74,7 @@ cargo test -p aircraft-taxonomy
 - `ntsb fetch` works against data.ntsb.gov. Both MDBs (JET4) read with `jetdb`: avall 31,621 events,
   Pre2008 63,003. Both files contain the same table set (incl. `Findings`, `Events_Sequence`,
   `Occurrences`, `seq_of_events`), so the spec's per-era table split needs checking in M2.
-- Taxonomy and node-dictionary regexes are not yet iterated against real data.
+- Node dictionary v0.2 iterated against all avall (2008+) texts: 0.003 % unmapped, 3.4 % Default-provenance edges.
+  Pre-2008 matchers are still untested against real data.
+- 112 fatal 2024–25 airplane accidents analyzed and stored in the portal (method wwca-0.1).
 - Web app and MCP server are scaffolds; the analysis workflow comes next.

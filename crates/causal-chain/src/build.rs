@@ -2,8 +2,9 @@
 //!
 //! Every node except the outcome gets exactly ONE "what" (the node it explains), so the result is a tree:
 //! outcome <- end <- critical <- mechanism <- act <- latent, with context nodes hanging where rules put them.
+//! Severity attributes (post-impact fire, evacuation) are recorded on the graph, not placed in the tree.
 //! Edges point what <- why. See ANALYSIS_METHOD_SPEC.md §4.
-use crate::dict::{Dict, Source, Tier};
+use crate::dict::{has_prefix, Dict, Source, Tier};
 use crate::model::{Involvement, Role, RoleFilter};
 use std::collections::{BTreeMap, HashMap};
 
@@ -27,11 +28,16 @@ pub struct GNode {
     /// index into Dict::nodes
     pub node: usize,
     pub role: Role,
+    /// NTSB Occurrence_No (the first row, when two rows merged into one node)
     pub seq: Option<u32>,
+    /// position on the spine after causal reordering (§4.4); None for findings
+    pub pos: Option<u32>,
     /// came from an occurrence row
     pub spine: bool,
     pub defining: bool,
     pub occ_link: Option<u32>,
+    /// inserted by a dictionary `implies` rule, not coded by NTSB
+    pub implied: bool,
 }
 
 #[derive(Clone, Debug)]
@@ -52,6 +58,14 @@ pub struct Graph {
     pub unmapped: Vec<(Source, String)>,
     /// spine nodes that had no later node of equal-or-shallower tier (attached by rule instead)
     pub inversions: u32,
+    /// severity attributes coded as occurrences (post-impact fire, evacuation): Dict node indices
+    pub attributes: Vec<usize>,
+    /// any finding carried an NTSB cause/factor role (false for CAROL-era records)
+    pub roles_coded: bool,
+    /// the role filter actually applied (`Auto` resolved)
+    pub roles: RoleFilter,
+    /// spine nodes moved by causal reordering (§4.4)
+    pub reordered: u32,
 }
 
 impl Graph {
@@ -61,6 +75,10 @@ impl Graph {
     pub fn what_of(&self, g: usize) -> Option<&Edge> {
         self.edges.iter().find(|e| e.why == g)
     }
+    /// Does the chain record how the flight ended (any end-tier node)?
+    pub fn has_end(&self, dict: &Dict) -> bool {
+        self.nodes.iter().any(|n| dict.nodes[n.node].tier == Tier::End)
+    }
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -69,65 +87,144 @@ pub struct BuildOpts {
 }
 impl Default for BuildOpts {
     fn default() -> Self {
-        Self { roles: RoleFilter::CausesAndFactors }
+        Self { roles: RoleFilter::Auto }
     }
+}
+
+fn gnode(node: usize, role: Role) -> GNode {
+    GNode { node, role, seq: None, pos: None, spine: false, defining: false, occ_link: None, implied: false }
+}
+
+/// Order spine nodes so that, within one tier, a node that `explains` another comes before it (it is deeper in
+/// the chain). NTSB sometimes lists "Loss of control in flight" before the stall or power loss that caused it, and
+/// §4.4 would otherwise make the cause the effect's "what". Unconstrained nodes keep NTSB order; a cycle falls back
+/// to NTSB order. Returns the new order as indices into `spine`.
+fn causal_order(dict: &Dict, spine: &[GNode]) -> Vec<usize> {
+    let n = spine.len();
+    let rank = |i: usize| dict.nodes[spine[i].node].tier.rank();
+    let before = |a: usize, b: usize| {
+        rank(a) == rank(b) && dict.explains(spine[a].node, spine[b].node) && !dict.explains(spine[b].node, spine[a].node)
+    };
+    let mut done = vec![false; n];
+    let mut order = Vec::with_capacity(n);
+    while order.len() < n {
+        let free = (0..n).find(|&b| !done[b] && !(0..n).any(|a| !done[a] && a != b && before(a, b)));
+        let next = free.unwrap_or_else(|| (0..n).find(|&b| !done[b]).unwrap());
+        done[next] = true;
+        order.push(next);
+    }
+    order
 }
 
 pub fn build(dict: &Dict, inv: &Involvement, opts: &BuildOpts) -> Graph {
     let rank = |g: &GNode| dict.nodes[g.node].tier.rank();
     let tier = |g: &GNode| dict.nodes[g.node].tier;
-    let mut nodes: Vec<GNode> = Vec::new();
+    let roles = opts.roles.resolve(inv);
     let mut unmapped = Vec::new();
-    let mut occ_gnode: HashMap<u32, usize> = HashMap::new();
+    let mut attributes: Vec<usize> = Vec::new();
 
-    // 1. Spine from occurrences, in sequence order. Same canonical node twice -> merged.
+    // 1. Spine from occurrences, in sequence order. Same canonical node twice -> merged (first seq kept, defining
+    //    OR-ed). Attribute nodes are recorded on the graph instead of the spine.
     let mut occs = inv.occurrences.clone();
     occs.sort_by_key(|o| o.seq);
+    let mut spine: Vec<GNode> = Vec::new();
+    let mut occ_spine: HashMap<u32, usize> = HashMap::new();
     for o in &occs {
         match dict.map(o.src, &o.text) {
             None => unmapped.push((o.src, o.text.clone())),
+            Some(n) if dict.nodes[n].attribute => {
+                if !attributes.contains(&n) {
+                    attributes.push(n);
+                }
+            }
             Some(n) => {
-                if let Some(ex) = nodes.iter().position(|x| x.node == n) {
-                    occ_gnode.insert(o.seq, ex);
-                    nodes[ex].defining |= o.defining;
+                if let Some(ex) = spine.iter().position(|x| x.node == n) {
+                    occ_spine.insert(o.seq, ex);
+                    spine[ex].defining |= o.defining;
                     continue;
                 }
-                nodes.push(GNode { node: n, role: Role::Sequence, seq: Some(o.seq), spine: true, defining: o.defining, occ_link: None });
-                occ_gnode.insert(o.seq, nodes.len() - 1);
+                spine.push(GNode { seq: Some(o.seq), spine: true, defining: o.defining, ..gnode(n, Role::Sequence) });
+                occ_spine.insert(o.seq, spine.len() - 1);
             }
         }
     }
-    let n_spine = nodes.len();
 
     // 2. Findings (role-filtered). Same canonical node as an existing one -> merged, strongest role kept.
+    let mut finds: Vec<GNode> = Vec::new();
     for f in &inv.findings {
-        if !opts.roles.keep(f.role) {
+        if !roles.keep(f.role) {
             continue;
         }
         match dict.map(f.src, &f.text) {
             None => unmapped.push((f.src, f.text.clone())),
+            Some(n) if dict.nodes[n].attribute => {
+                if !attributes.contains(&n) {
+                    attributes.push(n);
+                }
+            }
             Some(n) => {
-                if let Some(ex) = nodes.iter().position(|x| x.node == n) {
-                    if !nodes[ex].spine && f.role > nodes[ex].role {
-                        nodes[ex].role = f.role;
-                    }
+                if spine.iter().any(|x| x.node == n) {
                     continue;
                 }
-                nodes.push(GNode { node: n, role: f.role, seq: None, spine: false, defining: false, occ_link: f.occ_link });
+                if let Some(ex) = finds.iter_mut().find(|x| x.node == n) {
+                    ex.role = ex.role.max(f.role);
+                    continue;
+                }
+                finds.push(GNode { occ_link: f.occ_link, ..gnode(n, f.role) });
             }
         }
     }
 
-    // 3. Outcome node.
+    // 3. Implied nodes: e.g. fuel starvation with no power-loss node of any kind -> insert crit.power_loss.total,
+    //    right after its source on the spine, or as a finding with the source's role.
+    let present = |imp: usize, spine: &[GNode], finds: &[GNode]| {
+        let group: String = dict.nodes[imp].id.split('.').take(2).collect::<Vec<_>>().join(".");
+        spine.iter().chain(finds).any(|x| has_prefix(&dict.nodes[x.node].id, &group))
+    };
+    let mut i = 0;
+    while i < spine.len() {
+        if let Some(imp) = dict.nodes[spine[i].node].implies {
+            if !present(imp, &spine, &finds) {
+                let src = spine[i].clone();
+                spine.insert(i + 1, GNode { node: imp, implied: true, defining: false, ..src });
+                occ_spine.values_mut().filter(|v| **v > i).for_each(|v| *v += 1);
+            }
+        }
+        i += 1;
+    }
+    for k in 0..finds.len() {
+        if let Some(imp) = dict.nodes[finds[k].node].implies {
+            if !present(imp, &spine, &finds) {
+                finds.push(GNode { implied: true, occ_link: finds[k].occ_link, ..gnode(imp, finds[k].role) });
+            }
+        }
+    }
+
+    // 4. Causal reordering of the spine (§4.4), then positions.
+    let order = causal_order(dict, &spine);
+    let reordered = order.iter().enumerate().filter(|&(p, &o)| p != o).count() as u32;
+    let mut new_index = vec![0; spine.len()];
+    for (p, &o) in order.iter().enumerate() {
+        new_index[o] = p;
+    }
+    let mut nodes: Vec<GNode> = order.iter().map(|&o| spine[o].clone()).collect();
+    for (p, n) in nodes.iter_mut().enumerate() {
+        n.pos = Some(p as u32);
+    }
+    let occ_gnode: HashMap<u32, usize> = occ_spine.into_iter().map(|(k, v)| (k, new_index[v])).collect();
+    let n_spine = nodes.len();
+    nodes.extend(finds);
+
+    // 5. Outcome node.
     let outcome_dict = dict.idx(inv.injury.node_id()).expect("outcome node");
-    nodes.push(GNode { node: outcome_dict, role: Role::Sequence, seq: None, spine: false, defining: false, occ_link: None });
+    nodes.push(gnode(outcome_dict, Role::Sequence));
     let outcome = nodes.len() - 1;
 
     let mut edges: Vec<Edge> = Vec::new();
     let mut placed = vec![false; nodes.len()];
     placed[outcome] = true;
 
-    // 4. Sequence edges: each spine node's "what" = nearest LATER spine node with rank <= its rank.
+    // 6. Sequence edges: each spine node's "what" = nearest LATER spine node with rank <= its rank.
     let mut tops = Vec::new();
     for i in 0..n_spine {
         let ra = rank(&nodes[i]);
@@ -139,10 +236,10 @@ pub fn build(dict: &Dict, inv: &Involvement, opts: &BuildOpts) -> Graph {
             None => tops.push(i),
         }
     }
-    // Primary top = shallowest tier, latest in sequence. Outcome <- primary top.
+    // Primary top = shallowest tier, latest on the spine. Outcome <- primary top.
     let mut inversions = 0;
     let mut pending: Vec<usize> = Vec::new();
-    if let Some(&primary) = tops.iter().min_by_key(|&&i| (rank(&nodes[i]), std::cmp::Reverse(nodes[i].seq))) {
+    if let Some(&primary) = tops.iter().min_by_key(|&&i| (rank(&nodes[i]), std::cmp::Reverse(nodes[i].pos))) {
         edges.push(Edge { what: outcome, why: primary, prov: Prov::Outcome });
         placed[primary] = true;
         for &t in &tops {
@@ -153,7 +250,7 @@ pub fn build(dict: &Dict, inv: &Involvement, opts: &BuildOpts) -> Graph {
         }
     }
 
-    // 5. Attach findings (and stray spine tops) by rank ascending, then dictionary order.
+    // 7. Attach findings (and stray spine tops) by rank ascending, then dictionary order.
     pending.extend(n_spine..outcome);
     pending.sort_by_key(|&i| (rank(&nodes[i]), nodes[i].node));
     for f in pending {
@@ -170,7 +267,7 @@ pub fn build(dict: &Dict, inv: &Involvement, opts: &BuildOpts) -> Graph {
         let pick = |cands: Vec<usize>, nodes: &Vec<GNode>| {
             cands.into_iter().max_by_key(|&c| {
                 let n = &nodes[c];
-                (rank(n), !n.spine, std::cmp::Reverse(n.seq.unwrap_or(0)), std::cmp::Reverse(n.node))
+                (rank(n), !n.spine, std::cmp::Reverse(n.pos.unwrap_or(0)), std::cmp::Reverse(n.node))
             })
         };
 
@@ -193,7 +290,7 @@ pub fn build(dict: &Dict, inv: &Involvement, opts: &BuildOpts) -> Graph {
             let spine: Vec<usize> = (0..n_spine).filter(|&c| placed[c] && (is_ctx || rank(&nodes[c]) <= rf)).collect();
             let t = spine
                 .into_iter()
-                .max_by_key(|&c| (rank(&nodes[c]), std::cmp::Reverse(nodes[c].seq)))
+                .max_by_key(|&c| (rank(&nodes[c]), std::cmp::Reverse(nodes[c].pos)))
                 .unwrap_or(outcome);
             chosen = Some((t, Prov::Default));
         }
@@ -211,6 +308,10 @@ pub fn build(dict: &Dict, inv: &Involvement, opts: &BuildOpts) -> Graph {
         outcome,
         unmapped,
         inversions,
+        attributes,
+        roles_coded: inv.roles_coded(),
+        roles,
+        reordered,
     }
 }
 
@@ -224,13 +325,17 @@ pub fn render(dict: &Dict, g: &Graph) -> String {
             Role::Finding => " [-]",
             Role::Sequence => "",
         };
+        let imp = if gn.implied { " (implied)" } else { "" };
         let p = prov.map(|p| format!("  <{p:?}>")).unwrap_or_default();
-        out.push_str(&format!("{}{}{}{}\n", "  ".repeat(depth), dict.nodes[gn.node].id, role, p));
+        out.push_str(&format!("{}{}{}{}{}\n", "  ".repeat(depth), dict.nodes[gn.node].id, role, imp, p));
         for e in g.whys(n) {
             walk(dict, g, e.why, depth + 1, out, Some(e.prov));
         }
     }
     let mut s = String::new();
     walk(dict, g, g.outcome, 0, &mut s, None);
+    for &a in &g.attributes {
+        s.push_str(&format!("[attribute] {}\n", dict.nodes[a].id));
+    }
     s
 }
