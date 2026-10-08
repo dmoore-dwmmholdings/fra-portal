@@ -18,9 +18,10 @@ function authorized(header: string | undefined): boolean {
 }
 
 // Stateless Streamable HTTP: a fresh server + transport per request, JSON responses (no SSE),
-// so it works behind the Hosting rewrite and needs no session affinity.
+// so it works behind the Hosting rewrite and needs no session affinity. Cloud Run access is public;
+// the bearer token is the access check.
 export const mcp = onRequest(
-  { secrets: [MCP_TOKEN], region: "us-central1", maxInstances: 3, timeoutSeconds: 60 },
+  { secrets: [MCP_TOKEN], region: "us-central1", invoker: "public", maxInstances: 3, timeoutSeconds: 60 },
   async (req, res) => {
     if (!authorized(req.get("authorization"))) {
       res.status(401).json({ error: "unauthorized" });
